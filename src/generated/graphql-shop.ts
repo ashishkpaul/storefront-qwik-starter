@@ -952,7 +952,13 @@ export type Facet = Node & {
 	name: Scalars['String']['output'];
 	translations: Array<FacetTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
+	/** Returns a paginated, sortable, filterable list of the Facet's values. Added in v2.1.0. */
+	valueList: FacetValueList;
 	values: Array<FacetValue>;
+};
+
+export type FacetValueListArgs = {
+	options?: InputMaybe<FacetValueListOptions>;
 };
 
 export type FacetFilterParameter = {
@@ -1006,6 +1012,7 @@ export type FacetValue = Node & {
 	createdAt: Scalars['DateTime']['output'];
 	customFields?: Maybe<Scalars['JSON']['output']>;
 	facet: Facet;
+	facetId: Scalars['ID']['output'];
 	id: Scalars['ID']['output'];
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
@@ -1026,6 +1033,35 @@ export type FacetValueFilterInput = {
 	or?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+export type FacetValueFilterParameter = {
+	code?: InputMaybe<StringOperators>;
+	createdAt?: InputMaybe<DateOperators>;
+	facetId?: InputMaybe<IdOperators>;
+	id?: InputMaybe<IdOperators>;
+	languageCode?: InputMaybe<StringOperators>;
+	name?: InputMaybe<StringOperators>;
+	updatedAt?: InputMaybe<DateOperators>;
+};
+
+export type FacetValueList = PaginatedList & {
+	__typename?: 'FacetValueList';
+	items: Array<FacetValue>;
+	totalItems: Scalars['Int']['output'];
+};
+
+export type FacetValueListOptions = {
+	/** Allows the results to be filtered */
+	filter?: InputMaybe<FacetValueFilterParameter>;
+	/** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+	filterOperator?: InputMaybe<LogicalOperator>;
+	/** Skips the first n results, for use in pagination */
+	skip?: InputMaybe<Scalars['Int']['input']>;
+	/** Specifies which properties to sort the results by */
+	sort?: InputMaybe<FacetValueSortParameter>;
+	/** Takes n results, for use in pagination */
+	take?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /**
  * Which FacetValues are present in the products returned
  * by the search, and in what quantity.
@@ -1034,6 +1070,15 @@ export type FacetValueResult = {
 	__typename?: 'FacetValueResult';
 	count: Scalars['Int']['output'];
 	facetValue: FacetValue;
+};
+
+export type FacetValueSortParameter = {
+	code?: InputMaybe<SortOrder>;
+	createdAt?: InputMaybe<SortOrder>;
+	facetId?: InputMaybe<SortOrder>;
+	id?: InputMaybe<SortOrder>;
+	name?: InputMaybe<SortOrder>;
+	updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type FacetValueTranslation = {
@@ -2054,6 +2099,7 @@ export type OrderLine = Node & {
 	proratedUnitPrice: Scalars['Money']['output'];
 	/** The proratedUnitPrice including tax */
 	proratedUnitPriceWithTax: Scalars['Money']['output'];
+	/** The quantity of items purchased */
 	quantity: Scalars['Int']['output'];
 	taxLines: Array<TaxLine>;
 	taxRate: Scalars['Float']['output'];
@@ -2711,6 +2757,7 @@ export type Promotion = Node & {
 	startsAt?: Maybe<Scalars['DateTime']['output']>;
 	translations: Array<PromotionTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
+	usageLimit?: Maybe<Scalars['Int']['output']>;
 };
 
 export type PromotionList = PaginatedList & {
@@ -2968,6 +3015,7 @@ export type SearchInput = {
 	collectionSlug?: InputMaybe<Scalars['String']['input']>;
 	facetValueFilters?: InputMaybe<Array<FacetValueFilterInput>>;
 	groupByProduct?: InputMaybe<Scalars['Boolean']['input']>;
+	inStock?: InputMaybe<Scalars['Boolean']['input']>;
 	skip?: InputMaybe<Scalars['Int']['input']>;
 	sort?: InputMaybe<SearchResultSortParameter>;
 	take?: InputMaybe<Scalars['Int']['input']>;
@@ -2981,22 +3029,10 @@ export type SearchReindexResponse = {
 
 export type SearchResponse = {
 	__typename?: 'SearchResponse';
-	cacheIdentifier?: Maybe<SearchResponseCacheIdentifier>;
 	collections: Array<CollectionResult>;
 	facetValues: Array<FacetValueResult>;
 	items: Array<SearchResult>;
 	totalItems: Scalars['Int']['output'];
-};
-
-/**
- * This type is here to allow us to easily purge the Stellate cache
- * of any search results where the collectionSlug is used. We cannot rely on
- * simply purging the SearchResult type, because in the case of an empty 'items'
- * array, Stellate cannot know that that particular query now needs to be purged.
- */
-export type SearchResponseCacheIdentifier = {
-	__typename?: 'SearchResponseCacheIdentifier';
-	collectionSlug?: Maybe<Scalars['String']['output']>;
 };
 
 export type SearchResult = {
@@ -3007,6 +3043,7 @@ export type SearchResult = {
 	description: Scalars['String']['output'];
 	facetIds: Array<Scalars['ID']['output']>;
 	facetValueIds: Array<Scalars['ID']['output']>;
+	inStock: Scalars['Boolean']['output'];
 	price: SearchResultPrice;
 	priceWithTax: SearchResultPrice;
 	productAsset?: Maybe<SearchResultAsset>;
@@ -3662,7 +3699,9 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
-export type CollectionsQueryVariables = Exact<{ [key: string]: never }>;
+export type CollectionsQueryVariables = Exact<{
+	options?: InputMaybe<CollectionListOptions>;
+}>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
@@ -5175,8 +5214,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections {
-		collections {
+	query collections($options: CollectionListOptions) {
+		collections(options: $options) {
 			items {
 				id
 				name

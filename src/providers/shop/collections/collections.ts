@@ -1,9 +1,12 @@
 import gql from 'graphql-tag';
-import { Collection } from '~/generated/graphql';
+import { Collection, CollectionListOptions } from '~/generated/graphql';
 import { shopSdk } from '~/graphql-wrapper';
 
 export const getCollections = async () => {
-	return await shopSdk.collections().then((res) => res?.collections.items as Collection[]);
+	// return await shopSdk.collections().then((res) => res?.collections.items as Collection[]);
+	return await shopSdk
+		.collections({ options: { take: 25 } })
+		.then((res) => res?.collections.items as Collection[]);
 };
 
 export const getCollectionBySlug = async (slug: string) => {
@@ -11,8 +14,8 @@ export const getCollectionBySlug = async (slug: string) => {
 };
 
 gql`
-	query collections {
-		collections {
+	query collections($options: CollectionListOptions) {
+		collections(options: $options) {
 			items {
 				id
 				name

@@ -906,6 +906,7 @@ export type CreatePromotionInput = {
 	perCustomerUsageLimit?: InputMaybe<Scalars['Int']['input']>;
 	startsAt?: InputMaybe<Scalars['DateTime']['input']>;
 	translations: Array<PromotionTranslationInput>;
+	usageLimit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreatePromotionResult = MissingConditionsError | Promotion;
@@ -1634,7 +1635,13 @@ export type Facet = Node & {
 	name: Scalars['String']['output'];
 	translations: Array<FacetTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
+	/** Returns a paginated, sortable, filterable list of the Facet's values. Added in v2.1.0. */
+	valueList: FacetValueList;
 	values: Array<FacetValue>;
+};
+
+export type FacetValueListArgs = {
+	options?: InputMaybe<FacetValueListOptions>;
 };
 
 export type FacetFilterParameter = {
@@ -1705,6 +1712,7 @@ export type FacetValue = Node & {
 	createdAt: Scalars['DateTime']['output'];
 	customFields?: Maybe<Scalars['JSON']['output']>;
 	facet: Facet;
+	facetId: Scalars['ID']['output'];
 	id: Scalars['ID']['output'];
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
@@ -1728,6 +1736,7 @@ export type FacetValueFilterInput = {
 export type FacetValueFilterParameter = {
 	code?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
+	facetId?: InputMaybe<IdOperators>;
 	id?: InputMaybe<IdOperators>;
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
@@ -1766,6 +1775,7 @@ export type FacetValueResult = {
 export type FacetValueSortParameter = {
 	code?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
+	facetId?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
@@ -3805,6 +3815,7 @@ export type OrderLine = Node & {
 	proratedUnitPrice: Scalars['Money']['output'];
 	/** The proratedUnitPrice including tax */
 	proratedUnitPriceWithTax: Scalars['Money']['output'];
+	/** The quantity of items purchased */
 	quantity: Scalars['Int']['output'];
 	taxLines: Array<TaxLine>;
 	taxRate: Scalars['Float']['output'];
@@ -4607,6 +4618,7 @@ export type Promotion = Node & {
 	startsAt?: Maybe<Scalars['DateTime']['output']>;
 	translations: Array<PromotionTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
+	usageLimit?: Maybe<Scalars['Int']['output']>;
 };
 
 export type PromotionFilterParameter = {
@@ -4620,6 +4632,7 @@ export type PromotionFilterParameter = {
 	perCustomerUsageLimit?: InputMaybe<NumberOperators>;
 	startsAt?: InputMaybe<DateOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
+	usageLimit?: InputMaybe<NumberOperators>;
 };
 
 export type PromotionList = PaginatedList & {
@@ -4651,6 +4664,7 @@ export type PromotionSortParameter = {
 	perCustomerUsageLimit?: InputMaybe<SortOrder>;
 	startsAt?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
+	usageLimit?: InputMaybe<SortOrder>;
 };
 
 export type PromotionTranslation = {
@@ -5303,6 +5317,7 @@ export type SearchInput = {
 	collectionSlug?: InputMaybe<Scalars['String']['input']>;
 	facetValueFilters?: InputMaybe<Array<FacetValueFilterInput>>;
 	groupByProduct?: InputMaybe<Scalars['Boolean']['input']>;
+	inStock?: InputMaybe<Scalars['Boolean']['input']>;
 	skip?: InputMaybe<Scalars['Int']['input']>;
 	sort?: InputMaybe<SearchResultSortParameter>;
 	take?: InputMaybe<Scalars['Int']['input']>;
@@ -5333,6 +5348,7 @@ export type SearchResult = {
 	enabled: Scalars['Boolean']['output'];
 	facetIds: Array<Scalars['ID']['output']>;
 	facetValueIds: Array<Scalars['ID']['output']>;
+	inStock: Scalars['Boolean']['output'];
 	price: SearchResultPrice;
 	priceWithTax: SearchResultPrice;
 	productAsset?: Maybe<SearchResultAsset>;
@@ -6153,6 +6169,7 @@ export type UpdatePromotionInput = {
 	perCustomerUsageLimit?: InputMaybe<Scalars['Int']['input']>;
 	startsAt?: InputMaybe<Scalars['DateTime']['input']>;
 	translations?: InputMaybe<Array<PromotionTranslationInput>>;
+	usageLimit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdatePromotionResult = MissingConditionsError | Promotion;
