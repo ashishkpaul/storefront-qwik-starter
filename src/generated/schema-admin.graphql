@@ -5715,7 +5715,7 @@ input ProductVariantListOptions {
 
 type ProductVariantPrice {
 	currencyCode: CurrencyCode!
-	price: Int!
+	price: Money!
 }
 
 """

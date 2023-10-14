@@ -4558,7 +4558,7 @@ export type ProductVariantListOptions = {
 export type ProductVariantPrice = {
 	__typename?: 'ProductVariantPrice';
 	currencyCode: CurrencyCode;
-	price: Scalars['Int']['output'];
+	price: Scalars['Money']['output'];
 };
 
 /**

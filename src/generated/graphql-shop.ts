@@ -3699,8 +3699,9 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
+// export type CollectionsQueryVariables = Exact<{  options?: InputMaybe<CollectionListOptions>;}>;
 export type CollectionsQueryVariables = Exact<{
-	options?: InputMaybe<CollectionListOptions>;
+	take: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type CollectionsQuery = {
@@ -5214,8 +5215,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections($options: CollectionListOptions) {
-		collections(options: $options) {
+	query collections($take: Int) {
+		collections(options: { take: $take }) {
 			items {
 				id
 				name
