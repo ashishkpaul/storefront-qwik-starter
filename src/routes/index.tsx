@@ -15,14 +15,14 @@ export default component$(() => {
 						width="800"
 						height="600"
 						src={HOMEPAGE_IMAGE}
-						alt="Background header photo of bicycle taken by Mikkel Bech"
+						alt="Buy From Your Local Trusted Online Store"
 					/>
-					<div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-700 mix-blend-overlay" />
+					<div class="absolute inset-0" />
 				</div>
 				<div class="absolute inset-0 bg-gray-900 opacity-50" />
 				<div class="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-64 lg:px-0">
 					<div class="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
-						<h1 class="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600">
+						<h1 class="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-600">
 							{$localize`Buy From Your Local Trusted Online Store`}
 						</h1>
 					</div>
@@ -32,7 +32,7 @@ export default component$(() => {
 						<a
 							href="https://www.dingpack.com"
 							target="_blank"
-							class="text-blue-300 hover:text-blue-500"
+							class="text-orange-300 hover:text-gold-500"
 						>
 							Dingpack!
 						</a>{' '}
@@ -40,7 +40,7 @@ export default component$(() => {
 						<a
 							href="https://www.saa9vi.com/"
 							target="_blank"
-							class="text-[#4092ff] hover:text-red-500"
+							class="text-orange-300 hover:text-gold-500"
 						>
 							Saa9vi Online Services
 						</a>

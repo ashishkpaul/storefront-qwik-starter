@@ -3,7 +3,6 @@ import { Link } from '@builder.io/qwik-city';
 import { APP_STATE, CUSTOMER_NOT_DEFINED_ID } from '~/constants';
 import { logoutMutation } from '~/providers/shop/account/account';
 import { getActiveCustomerQuery } from '~/providers/shop/customer/customer';
-import { GitHubLink } from '../GitHubLink/GitHubLink';
 import LogoutIcon from '../icons/LogoutIcon';
 import ShoppingBagIcon from '../icons/ShoppingBagIcon';
 import UserIcon from '../icons/UserIcon';
@@ -44,7 +43,7 @@ export default component$(() => {
 
 	return (
 		<div
-			class={`bg-gradient-to-r from-blue-700 to-indigo-900 transform shadow-xl sticky top-0 z-10 animate-dropIn`}
+			class={`bg-gradient-to-r from-yellow-700 to-orange-900 transform shadow-xl sticky top-0 z-10 animate-dropIn`}
 		>
 			<header>
 				<div class="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-1 px-2 xl:px-0">
@@ -52,17 +51,22 @@ export default component$(() => {
 						<div class="flex justify-between items-center w-full">
 							<div>
 								<p class="hidden sm:block">
-									{$localize`Exclusive: Get your own`}{' '}
-									<a
-										href="https://github.com/vendure-ecommerce/storefront-qwik-starter"
-										target="_blank"
-										class="underline"
-									>
-										{$localize`FREE storefront starter kit`}
-									</a>
+									<span style="text-decoration: underline;">
+										Email:{' '}
+										<a href="mailto:support@dingpack.com" class="underline">
+											support@dingpack.com
+										</a>
+									</span>
+									{' | '}
+									<span style="text-decoration: underline;">
+										Phone:{' '}
+										<a href="tel:+919996099227" class="underline">
+											+91 (999) 609-9227
+										</a>
+									</span>
 								</p>
 							</div>
-							<div class="flex mr-[60px] 2xl:mr-0">
+							<div class="flex">
 								<Link
 									href={appState.customer.id !== CUSTOMER_NOT_DEFINED_ID ? '/account' : '/sign-in'}
 									class="flex items-center space-x-1 pb-1 pr-2"
@@ -89,7 +93,12 @@ export default component$(() => {
 				<div class="max-w-6xl mx-auto p-4 flex items-center space-x-4">
 					<h1 class="text-white w-10">
 						<Link href="/">
-							<img src={`/cube-logo-small.webp`} width={40} height={31} alt="Vendure logo" />
+							<img
+								src={`/cube-logo-small.webp`}
+								width={40}
+								height={31}
+								alt="Saa9vi Online Services"
+							/>
 						</Link>
 					</h1>
 					<div class="flex space-x-4 sm:block">
@@ -124,7 +133,6 @@ export default component$(() => {
 						</button>
 					</div>
 				</div>
-				<GitHubLink />
 			</header>
 		</div>
 	);
