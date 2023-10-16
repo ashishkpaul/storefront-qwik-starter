@@ -23,6 +23,7 @@ export default component$(() => {
 				<div class="relative max-w-3xl mx-auto py-32 px-6 flex flex-col items-center text-center sm:py-64 lg:px-0">
 					<div class="relative bg-zinc-800 bg-opacity-0 rounded-lg p-0">
 						<h1 class="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-600">
+							{/* <h1 class="text-6xl text-transparent bg-clip-text font-extrabold tracking-normal lg:text-6xl bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600"> */}
 							{$localize`Buy From Your Local Trusted Online Store`}
 						</h1>
 					</div>

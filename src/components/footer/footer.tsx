@@ -109,7 +109,7 @@ export default component$(() => {
 						{/* Replace the GitHub link with the CopyrightIcon and website link */}
 						<CopyrightIcon />
 						<a target="_blank" href="https://www.saa9vi.com">
-							https://www.saa9vi.com
+							Saa9vi Online Services
 						</a>
 					</div>
 				</div>

@@ -43,6 +43,7 @@ export default component$(() => {
 
 	return (
 		<div
+			// class={`bg-gradient-to-r from-blue-700 to-indigo-900 transform shadow-xl sticky top-0 z-10 animate-dropIn`}
 			class={`bg-gradient-to-r from-yellow-700 to-orange-900 transform shadow-xl sticky top-0 z-10 animate-dropIn`}
 		>
 			<header>
