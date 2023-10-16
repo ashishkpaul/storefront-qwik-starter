@@ -64,8 +64,8 @@ export default component$(() => {
 							</p>
 						) : (
 							<p>
-								Account registration is not supported by the demo Vendure instance. In order to use
-								it, please connect to your own local / production instance.
+								Hi! Welcome. Please fill the form bellow, Then check you mail in all folders
+								including spam, then click on veryfiy account.
 							</p>
 						)}
 					</div>
