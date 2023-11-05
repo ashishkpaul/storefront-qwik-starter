@@ -12,12 +12,15 @@ import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug } from '~/providers/shop/products/products';
-import { Variant } from '~/types';
+import { Variant, ProductCustomFields } from '~/types';
 import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
 
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
+	{
+		/* console.log('Product Data:', product); */
+	}
 	if (product.assets.length === 1) {
 		product.assets.push({
 			id: 'placeholder_2',
@@ -214,6 +217,15 @@ export default component$(() => {
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
+				<h2 class="text-lg font-medium text-gray-900">Additional Info</h2>
+				<div
+					class="text-base text-gray-700"
+					dangerouslySetInnerHTML={
+						(productSignal.value.customFields as ProductCustomFields)?.additionalInfo ?? ''
+					}
+				/>
 			</div>
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">

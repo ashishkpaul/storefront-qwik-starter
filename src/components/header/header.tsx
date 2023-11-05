@@ -6,6 +6,8 @@ import { getActiveCustomerQuery } from '~/providers/shop/customer/customer';
 import LogoutIcon from '../icons/LogoutIcon';
 import ShoppingBagIcon from '../icons/ShoppingBagIcon';
 import UserIcon from '../icons/UserIcon';
+import EmailIcon from '../icons/EmailIcon';
+import CallIcon from '../icons/CallIcon';
 import SearchBar from '../search-bar/SearchBar';
 
 export default component$(() => {
@@ -50,22 +52,21 @@ export default component$(() => {
 				<div class="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-1 px-2 xl:px-0">
 					<div class="max-w-6xl mx-2 h-5 min-h-full md:mx-auto flex items-center justify-between my-1">
 						<div class="flex justify-between items-center w-full">
-							<div>
-								<p class="hidden sm:block">
-									<span style="text-decoration: underline;">
-										Email:{' '}
-										<a href="mailto:support@dingpack.com" class="underline">
-											support@dingpack.com
-										</a>
-									</span>
-									{' | '}
-									<span style="text-decoration: underline;">
-										Phone:{' '}
-										<a href="tel:+919996099227" class="underline">
-											+91 (999) 609-9227
-										</a>
-									</span>
-								</p>
+							<div class="flex items-center justify-center">
+								<a
+									href="mailto:support@dingpack.com"
+									class="flex items-center justify-center space-x-2 text-indigo-600 hover:text-indigo-700"
+								>
+									<EmailIcon />
+									<span>support@dingpack.com</span>
+								</a>
+								<a
+									href="tel:+919996099227"
+									class="flex items-center justify-center space-x-2 text-indigo-600 hover:text-indigo-700"
+								>
+									<CallIcon />
+									<span>+91 (999) 609-9227</span>
+								</a>
 							</div>
 							<div class="flex">
 								<Link

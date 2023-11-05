@@ -2764,6 +2764,7 @@ type Mutation {
 	shipping method will apply to.
 	"""
 	setOrderShippingMethod(shippingMethodId: [ID!]!): SetOrderShippingMethodResult!
+	submitProductReview(input: SubmitProductReviewInput!): ProductReview!
 
 	"""
 	Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`
@@ -2801,6 +2802,7 @@ type Mutation {
 	provided here.
 	"""
 	verifyCustomerAccount(password: String, token: String!): VerifyCustomerAccountResult!
+	voteOnReview(id: ID!, vote: Boolean!): ProductReview!
 }
 
 input NativeAuthInput {
@@ -2895,7 +2897,7 @@ type Order implements Node {
 	couponCodes: [String!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: OrderCustomFields
 	customer: Customer
 	discounts: [Discount!]!
 	fulfillments: [Fulfillment!]
@@ -2974,13 +2976,21 @@ type OrderAddress {
 	streetLine2: String
 }
 
+type OrderCustomFields {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input OrderFilterParameter {
 	active: BooleanOperators
 	code: StringOperators
 	createdAt: DateOperators
 	currencyCode: StringOperators
+	customerNote: StringOperators
 	id: IDOperators
 	orderPlacedAt: DateOperators
+	referralCode: StringOperators
 	shipping: NumberOperators
 	shippingWithTax: NumberOperators
 	state: StringOperators
@@ -2991,6 +3001,7 @@ input OrderFilterParameter {
 	totalWithTax: NumberOperators
 	type: StringOperators
 	updatedAt: DateOperators
+	vatId: StringOperators
 }
 
 """
@@ -3161,8 +3172,10 @@ type OrderPaymentStateError implements ErrorResult {
 input OrderSortParameter {
 	code: SortOrder
 	createdAt: SortOrder
+	customerNote: SortOrder
 	id: SortOrder
 	orderPlacedAt: SortOrder
+	referralCode: SortOrder
 	shipping: SortOrder
 	shippingWithTax: SortOrder
 	state: SortOrder
@@ -3172,6 +3185,7 @@ input OrderSortParameter {
 	totalQuantity: SortOrder
 	totalWithTax: SortOrder
 	updatedAt: SortOrder
+	vatId: SortOrder
 }
 
 """
@@ -3849,7 +3863,7 @@ type Product implements Node {
 	assets: [Asset!]!
 	collections: [Collection!]!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: ProductCustomFields
 	description: String!
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
@@ -3857,6 +3871,8 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
+	reviews(options: ProductReviewListOptions): ProductReviewList!
+	reviewsHistogram: [ProductReviewHistogramItem!]!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -3872,14 +3888,44 @@ type Product implements Node {
 	variants: [ProductVariant!]!
 }
 
+type ProductCustomFields {
+	additionalInfo: String
+	depth: Int
+	downloadable: Boolean
+	featuredReview: ProductReview
+	height: Int
+	infoUrl: String
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	reviewCount: Float
+	reviewRating: Float
+	shortName: String
+	weight: Int
+	width: Int
+}
+
 input ProductFilterParameter {
+	additionalInfo: StringOperators
 	createdAt: DateOperators
+	depth: NumberOperators
 	description: StringOperators
+	downloadable: BooleanOperators
+	height: NumberOperators
 	id: IDOperators
+	infoUrl: StringOperators
+	keywords: StringOperators
 	languageCode: StringOperators
+	metaDescription: StringOperators
+	metaTitle: StringOperators
 	name: StringOperators
+	reviewCount: NumberOperators
+	reviewRating: NumberOperators
+	shortName: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
+	width: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -3955,17 +4001,119 @@ type ProductOptionTranslation {
 	updatedAt: DateTime!
 }
 
-input ProductSortParameter {
+type ProductReview implements Node {
+	authorLocation: String
+	authorName: String!
+	body: String
+	createdAt: DateTime!
+	downvotes: Int!
+	id: ID!
+	product: Product!
+	productVariant: ProductVariant
+	rating: Float!
+	response: String
+	responseCreatedAt: DateTime
+	state: String!
+	summary: String!
+	updatedAt: DateTime!
+	upvotes: Int!
+}
+
+input ProductReviewFilterParameter {
+	authorLocation: StringOperators
+	authorName: StringOperators
+	body: StringOperators
+	createdAt: DateOperators
+	downvotes: NumberOperators
+	id: IDOperators
+	rating: NumberOperators
+	response: StringOperators
+	responseCreatedAt: DateOperators
+	state: StringOperators
+	summary: StringOperators
+	updatedAt: DateOperators
+	upvotes: NumberOperators
+}
+
+type ProductReviewHistogramItem {
+	bin: Int!
+	frequency: Int!
+}
+
+type ProductReviewList implements PaginatedList {
+	items: [ProductReview!]!
+	totalItems: Int!
+}
+
+input ProductReviewListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: ProductReviewFilterParameter
+
+	"""
+	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: ProductReviewSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
+input ProductReviewSortParameter {
+	authorLocation: SortOrder
+	authorName: SortOrder
+	body: SortOrder
 	createdAt: SortOrder
-	description: SortOrder
+	downvotes: SortOrder
 	id: SortOrder
+	rating: SortOrder
+	response: SortOrder
+	responseCreatedAt: SortOrder
+	state: SortOrder
+	summary: SortOrder
+	updatedAt: SortOrder
+	upvotes: SortOrder
+}
+
+input ProductSortParameter {
+	additionalInfo: SortOrder
+	createdAt: SortOrder
+	depth: SortOrder
+	description: SortOrder
+	downloadable: SortOrder
+	featuredReview: SortOrder
+	height: SortOrder
+	id: SortOrder
+	infoUrl: SortOrder
+	keywords: SortOrder
+	metaDescription: SortOrder
+	metaTitle: SortOrder
 	name: SortOrder
+	reviewCount: SortOrder
+	reviewRating: SortOrder
+	shortName: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
+	width: SortOrder
 }
 
 type ProductTranslation {
 	createdAt: DateTime!
+	customFields: ProductTranslationCustomFields
 	description: String!
 	id: ID!
 	languageCode: LanguageCode!
@@ -3974,11 +4122,18 @@ type ProductTranslation {
 	updatedAt: DateTime!
 }
 
+type ProductTranslationCustomFields {
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	shortName: String
+}
+
 type ProductVariant implements Node {
 	assets: [Asset!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: ProductVariantCustomFields
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
 	id: ID!
@@ -3997,6 +4152,10 @@ type ProductVariant implements Node {
 	updatedAt: DateTime!
 }
 
+type ProductVariantCustomFields {
+	releaseDate: DateTime
+}
+
 input ProductVariantFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
@@ -4006,6 +4165,7 @@ input ProductVariantFilterParameter {
 	price: NumberOperators
 	priceWithTax: NumberOperators
 	productId: IDOperators
+	releaseDate: DateOperators
 	sku: StringOperators
 	stockLevel: StringOperators
 	updatedAt: DateOperators
@@ -4050,6 +4210,7 @@ input ProductVariantSortParameter {
 	price: SortOrder
 	priceWithTax: SortOrder
 	productId: SortOrder
+	releaseDate: SortOrder
 	sku: SortOrder
 	stockLevel: SortOrder
 	updatedAt: SortOrder
@@ -4325,7 +4486,6 @@ input SearchInput {
 	collectionSlug: String
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
-	inStock: Boolean
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -4352,7 +4512,6 @@ type SearchResult {
 	description: String!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
-	inStock: Boolean!
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset
@@ -4514,6 +4673,17 @@ input StringOperators {
 	regex: String
 }
 
+input SubmitProductReviewInput {
+	authorLocation: String
+	authorName: String!
+	body: String!
+	customerId: ID
+	productId: ID!
+	rating: Float!
+	summary: String!
+	variantId: ID
+}
+
 """
 Indicates that an operation succeeded, where we do not want to return any more specific information.
 """
@@ -4627,8 +4797,14 @@ union UpdateCustomerPasswordResult =
 	| PasswordValidationError
 	| Success
 
+input UpdateOrderCustomFieldsInput {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input UpdateOrderInput {
-	customFields: JSON
+	customFields: UpdateOrderCustomFieldsInput
 }
 
 union UpdateOrderItemsResult =

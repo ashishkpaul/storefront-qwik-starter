@@ -20,6 +20,21 @@ export type Product = {
 	featuredAsset: FeaturedAsset;
 	assets: Asset[];
 	variants: Variant[];
+	customFields: ProductCustomFields[];
+};
+
+export type ProductCustomFields = {
+	additionalInfo: string;
+	width: number;
+	height: number;
+	depth: number;
+	weight: number;
+	infoUrl: string;
+	downloadable: boolean;
+	shortName: string;
+	metaTitle: string;
+	metaDescription: string;
+	keywords: string;
 };
 
 type Breadcrumb = {

@@ -882,9 +882,22 @@ input CreatePaymentMethodInput {
 	translations: [PaymentMethodTranslationInput!]!
 }
 
+input CreateProductCustomFieldsInput {
+	additionalInfo: String
+	depth: Int
+	downloadable: Boolean
+	featuredReviewId: ID
+	height: Int
+	infoUrl: String
+	reviewCount: Float
+	reviewRating: Float
+	weight: Int
+	width: Int
+}
+
 input CreateProductInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: CreateProductCustomFieldsInput
 	enabled: Boolean
 	facetValueIds: [ID!]
 	featuredAssetId: ID
@@ -905,9 +918,13 @@ input CreateProductOptionInput {
 	translations: [ProductOptionGroupTranslationInput!]!
 }
 
+input CreateProductVariantCustomFieldsInput {
+	releaseDate: DateTime
+}
+
 input CreateProductVariantInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: CreateProductVariantCustomFieldsInput
 	facetValueIds: [ID!]
 	featuredAssetId: ID
 	optionIds: [ID!]
@@ -3602,6 +3619,7 @@ input ModifyOrderInput {
 	addItems: [AddItemInput!]
 	adjustOrderLines: [OrderLineInput!]
 	couponCodes: [String!]
+	customFields: UpdateOrderCustomFieldsInput
 	dryRun: Boolean!
 	note: String
 	options: ModifyOrderOptions
@@ -3693,6 +3711,7 @@ type Mutation {
 	Applies the given coupon code to the draft Order
 	"""
 	applyCouponCodeToDraftOrder(couponCode: String!, orderId: ID!): ApplyCouponCodeResult!
+	approveProductReview(id: ID!): ProductReview
 
 	"""
 	Assign assets to channel
@@ -4101,6 +4120,7 @@ type Mutation {
 	moveCollection(input: MoveCollectionInput!): Collection!
 	refundOrder(input: RefundOrderInput!): RefundOrderResult!
 	reindex: Job!
+	rejectProductReview(id: ID!): ProductReview
 
 	"""
 	Removes Collections from the specified Channel
@@ -4292,6 +4312,7 @@ type Mutation {
 	Update an existing ProductOptionGroup
 	"""
 	updateProductOptionGroup(input: UpdateProductOptionGroupInput!): ProductOptionGroup!
+	updateProductReview(input: UpdateProductReviewInput!): ProductReview!
 
 	"""
 	Update existing ProductVariants
@@ -4444,7 +4465,7 @@ type Order implements Node {
 	couponCodes: [String!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: OrderCustomFields
 	customer: Customer
 	discounts: [Discount!]!
 	fulfillments: [Fulfillment!]
@@ -4526,6 +4547,12 @@ type OrderAddress {
 	streetLine2: String
 }
 
+type OrderCustomFields {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input OrderFilterParameter {
 	active: BooleanOperators
 	aggregateOrderId: IDOperators
@@ -4533,8 +4560,10 @@ input OrderFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	customerLastName: StringOperators
+	customerNote: StringOperators
 	id: IDOperators
 	orderPlacedAt: DateOperators
+	referralCode: StringOperators
 	shipping: NumberOperators
 	shippingWithTax: NumberOperators
 	state: StringOperators
@@ -4546,6 +4575,7 @@ input OrderFilterParameter {
 	transactionId: StringOperators
 	type: StringOperators
 	updatedAt: DateOperators
+	vatId: StringOperators
 }
 
 """
@@ -4749,8 +4779,10 @@ input OrderSortParameter {
 	code: SortOrder
 	createdAt: SortOrder
 	customerLastName: SortOrder
+	customerNote: SortOrder
 	id: SortOrder
 	orderPlacedAt: SortOrder
+	referralCode: SortOrder
 	shipping: SortOrder
 	shippingWithTax: SortOrder
 	state: SortOrder
@@ -4761,6 +4793,7 @@ input OrderSortParameter {
 	totalWithTax: SortOrder
 	transactionId: SortOrder
 	updatedAt: SortOrder
+	vatId: SortOrder
 }
 
 """
@@ -5469,7 +5502,7 @@ type Product implements Node {
 	channels: [Channel!]!
 	collections: [Collection!]!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: ProductCustomFields
 	description: String!
 	enabled: Boolean!
 	facetValues: [FacetValue!]!
@@ -5478,6 +5511,8 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
+	reviews(options: ProductReviewListOptions): ProductReviewList!
+	reviewsHistogram: [ProductReviewHistogramItem!]!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -5493,16 +5528,46 @@ type Product implements Node {
 	variants: [ProductVariant!]!
 }
 
+type ProductCustomFields {
+	additionalInfo: String
+	depth: Int
+	downloadable: Boolean
+	featuredReview: ProductReview
+	height: Int
+	infoUrl: String
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	reviewCount: Float
+	reviewRating: Float
+	shortName: String
+	weight: Int
+	width: Int
+}
+
 input ProductFilterParameter {
+	additionalInfo: StringOperators
 	createdAt: DateOperators
+	depth: NumberOperators
 	description: StringOperators
+	downloadable: BooleanOperators
 	enabled: BooleanOperators
 	facetValueId: IDOperators
+	height: NumberOperators
 	id: IDOperators
+	infoUrl: StringOperators
+	keywords: StringOperators
 	languageCode: StringOperators
+	metaDescription: StringOperators
+	metaTitle: StringOperators
 	name: StringOperators
+	reviewCount: NumberOperators
+	reviewRating: NumberOperators
+	shortName: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
+	width: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -5599,17 +5664,120 @@ input ProductOptionTranslationInput {
 	name: String
 }
 
-input ProductSortParameter {
+type ProductReview implements Node {
+	author: Customer
+	authorLocation: String
+	authorName: String!
+	body: String
+	createdAt: DateTime!
+	downvotes: Int!
+	id: ID!
+	product: Product!
+	productVariant: ProductVariant
+	rating: Float!
+	response: String
+	responseCreatedAt: DateTime
+	state: String!
+	summary: String!
+	updatedAt: DateTime!
+	upvotes: Int!
+}
+
+input ProductReviewFilterParameter {
+	authorLocation: StringOperators
+	authorName: StringOperators
+	body: StringOperators
+	createdAt: DateOperators
+	downvotes: NumberOperators
+	id: IDOperators
+	rating: NumberOperators
+	response: StringOperators
+	responseCreatedAt: DateOperators
+	state: StringOperators
+	summary: StringOperators
+	updatedAt: DateOperators
+	upvotes: NumberOperators
+}
+
+type ProductReviewHistogramItem {
+	bin: Int!
+	frequency: Int!
+}
+
+type ProductReviewList implements PaginatedList {
+	items: [ProductReview!]!
+	totalItems: Int!
+}
+
+input ProductReviewListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: ProductReviewFilterParameter
+
+	"""
+	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: ProductReviewSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
+input ProductReviewSortParameter {
+	authorLocation: SortOrder
+	authorName: SortOrder
+	body: SortOrder
 	createdAt: SortOrder
-	description: SortOrder
+	downvotes: SortOrder
 	id: SortOrder
+	rating: SortOrder
+	response: SortOrder
+	responseCreatedAt: SortOrder
+	state: SortOrder
+	summary: SortOrder
+	updatedAt: SortOrder
+	upvotes: SortOrder
+}
+
+input ProductSortParameter {
+	additionalInfo: SortOrder
+	createdAt: SortOrder
+	depth: SortOrder
+	description: SortOrder
+	downloadable: SortOrder
+	featuredReview: SortOrder
+	height: SortOrder
+	id: SortOrder
+	infoUrl: SortOrder
+	keywords: SortOrder
+	metaDescription: SortOrder
+	metaTitle: SortOrder
 	name: SortOrder
+	reviewCount: SortOrder
+	reviewRating: SortOrder
+	shortName: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
+	width: SortOrder
 }
 
 type ProductTranslation {
 	createdAt: DateTime!
+	customFields: ProductTranslationCustomFields
 	description: String!
 	id: ID!
 	languageCode: LanguageCode!
@@ -5618,8 +5786,15 @@ type ProductTranslation {
 	updatedAt: DateTime!
 }
 
+type ProductTranslationCustomFields {
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	shortName: String
+}
+
 input ProductTranslationInput {
-	customFields: JSON
+	customFields: ProductTranslationInputCustomFields
 	description: String
 	id: ID
 	languageCode: LanguageCode!
@@ -5627,12 +5802,19 @@ input ProductTranslationInput {
 	slug: String
 }
 
+input ProductTranslationInputCustomFields {
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	shortName: String
+}
+
 type ProductVariant implements Node {
 	assets: [Asset!]!
 	channels: [Channel!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: ProductVariantCustomFields
 	enabled: Boolean!
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
@@ -5660,6 +5842,10 @@ type ProductVariant implements Node {
 	useGlobalOutOfStockThreshold: Boolean!
 }
 
+type ProductVariantCustomFields {
+	releaseDate: DateTime
+}
+
 input ProductVariantFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
@@ -5672,6 +5858,7 @@ input ProductVariantFilterParameter {
 	price: NumberOperators
 	priceWithTax: NumberOperators
 	productId: IDOperators
+	releaseDate: DateOperators
 	sku: StringOperators
 	stockAllocated: NumberOperators
 	stockLevel: StringOperators
@@ -5736,6 +5923,7 @@ input ProductVariantSortParameter {
 	price: SortOrder
 	priceWithTax: SortOrder
 	productId: SortOrder
+	releaseDate: SortOrder
 	sku: SortOrder
 	stockAllocated: SortOrder
 	stockLevel: SortOrder
@@ -6009,6 +6197,8 @@ type Query {
 	product(id: ID, slug: String): Product
 	productOptionGroup(id: ID!): ProductOptionGroup
 	productOptionGroups(filterTerm: String): [ProductOptionGroup!]!
+	productReview(id: ID!): ProductReview
+	productReviews(options: ProductReviewListOptions): ProductReviewList!
 
 	"""
 	Get a ProductVariant by id
@@ -6299,7 +6489,6 @@ input SearchInput {
 	collectionSlug: String
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
-	inStock: Boolean
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -6332,7 +6521,6 @@ type SearchResult {
 	enabled: Boolean!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
-	inStock: Boolean!
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset
@@ -7131,8 +7319,14 @@ input UpdateOrderAddressInput {
 	streetLine2: String
 }
 
+input UpdateOrderCustomFieldsInput {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input UpdateOrderInput {
-	customFields: JSON
+	customFields: UpdateOrderCustomFieldsInput
 	id: ID!
 }
 
@@ -7159,9 +7353,22 @@ input UpdatePaymentMethodInput {
 	translations: [PaymentMethodTranslationInput!]
 }
 
+input UpdateProductCustomFieldsInput {
+	additionalInfo: String
+	depth: Int
+	downloadable: Boolean
+	featuredReviewId: ID
+	height: Int
+	infoUrl: String
+	reviewCount: Float
+	reviewRating: Float
+	weight: Int
+	width: Int
+}
+
 input UpdateProductInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: UpdateProductCustomFieldsInput
 	enabled: Boolean
 	facetValueIds: [ID!]
 	featuredAssetId: ID
@@ -7183,9 +7390,20 @@ input UpdateProductOptionInput {
 	translations: [ProductOptionGroupTranslationInput!]
 }
 
+input UpdateProductReviewInput {
+	body: String
+	id: ID!
+	response: String
+	summary: String
+}
+
+input UpdateProductVariantCustomFieldsInput {
+	releaseDate: DateTime
+}
+
 input UpdateProductVariantInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: UpdateProductVariantCustomFieldsInput
 	enabled: Boolean
 	facetValueIds: [ID!]
 	featuredAssetId: ID
