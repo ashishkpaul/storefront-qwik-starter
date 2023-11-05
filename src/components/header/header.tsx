@@ -55,14 +55,14 @@ export default component$(() => {
 							<div class="flex items-center justify-center">
 								<a
 									href="mailto:support@dingpack.com"
-									class="flex items-center justify-center space-x-2 text-indigo-600 hover:text-indigo-700"
+									class="flex items-center justify-center space-x-2 text-orange-800 hover:text-orange-600"
 								>
 									<EmailIcon />
-									<span>support@dingpack.com</span>
+									<span>support@dingpack.com;</span>
 								</a>
 								<a
 									href="tel:+919996099227"
-									class="flex items-center justify-center space-x-2 text-indigo-600 hover:text-indigo-700"
+									class="flex items-center justify-center space-x-2 text-orange-800 hover:text-orange-600"
 								>
 									<CallIcon />
 									<span>+91 (999) 609-9227</span>
@@ -71,10 +71,10 @@ export default component$(() => {
 							<div class="flex">
 								<Link
 									href={appState.customer.id !== CUSTOMER_NOT_DEFINED_ID ? '/account' : '/sign-in'}
-									class="flex items-center space-x-1 pb-1 pr-2"
+									class="flex items-center space-x-1 pb-1 pr-2 text-orange-800 hover:text-orange-600"
 								>
 									<UserIcon />
-									<span class="mt-1 text-gray-700">
+									<span class="mt-1 text-orange-800 hover:text-orange-600">
 										{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID
 											? $localize`My Account`
 											: $localize`Sign In`}
