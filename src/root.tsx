@@ -1,6 +1,9 @@
-import { $, component$, useOnDocument, useStyles$ } from '@builder.io/qwik';
+import { $, component$, useOnDocument, useStyles$, useVisibleTask$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
 import { Head } from './components/head/head';
+
+// import the Flowbite module
+import { initFlowbite } from 'flowbite';
 
 import globalStyles from './global.css?inline';
 import { useI18n } from './utils/i18n';
@@ -12,6 +15,11 @@ export default component$(() => {
 	 *
 	 * Don't remove the `<head>` and `<body>` elements.
 	 */
+	// initialise the event listeners for the data attributes on render
+	useVisibleTask$(() => {
+		initFlowbite();
+	});
+
 	useStyles$(globalStyles);
 	useOnDocument('qinit', $(useI18n));
 
