@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
-	"name": "DingPack: Local City Online Store",
+	"name": "DingPack",
 	"short_name": "Buy From Your Local Trusted Online Store",
 	"start_url": ".",
 	"display": "standalone",

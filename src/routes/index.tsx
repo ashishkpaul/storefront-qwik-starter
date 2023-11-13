@@ -9,7 +9,9 @@ export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
 	return (
 		<div>
-			<Carousel />
+			<div style={{ zIndex: 1, position: 'relative' }}>
+				<Carousel />
+			</div>
 
 			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 				<div class="mt-4 flow-root">

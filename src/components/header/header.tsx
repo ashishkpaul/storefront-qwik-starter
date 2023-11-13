@@ -92,7 +92,7 @@ export default component$(() => {
 						</div>
 					</div>
 				</div>
-				<div class="max-w-6xl mx-auto p-4 flex items-center space-x-4">
+				<div class="max-w-6xl mx-auto p-4 flex items-center space-x-4 relative z-20">
 					<h1 class="text-white w-10">
 						<Link href="/">
 							<img
@@ -121,7 +121,7 @@ export default component$(() => {
 						<button
 							name="Cart"
 							aria-label={`${totalQuantity} items in cart`}
-							class="relative w-9 h-9 bg-white bg-opacity-20 rounded text-white p-1"
+							class="relative w-9 h-9 bg-white bg-opacity-20 rounded text-white p-1 z-30"
 							onClick$={() => (appState.showCart = !appState.showCart)}
 						>
 							<ShoppingBagIcon />
