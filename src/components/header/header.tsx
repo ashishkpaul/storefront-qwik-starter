@@ -76,7 +76,7 @@ export default component$(() => {
 								{' '}
 								<Marquee />{' '}
 							</div>
-							<div class="flex sm:mr-[10px] 2xl:mr-0">
+							<div class="flex sm:mr-[60px] 2xl:mr-0">
 								<Link
 									href={appState.customer.id !== CUSTOMER_NOT_DEFINED_ID ? '/account' : '/sign-in'}
 									class="flex items-center space-x-1 pb-1 pr-2 text-orange-800 hover:text-orange-600"
