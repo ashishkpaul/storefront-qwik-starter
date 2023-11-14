@@ -9,6 +9,7 @@ import UserCircle from '../icons/UserCircle';
 import EmailIcon from '../icons/EmailIcon';
 import CallIcon from '../icons/CallIcon';
 import SearchBar from '../search-bar/SearchBar';
+import Marquee from '~/components/marquee/Marquee';
 
 export default component$(() => {
 	const appState = useContext(APP_STATE);
@@ -71,13 +72,17 @@ export default component$(() => {
 									</div>
 								</p>
 							</div>
-							<div class="flex mr-[60px] 2xl:mr-0">
+							<div class="ml-auto mb-2 sm:mb-0 sm:mr-4 overflow-hidden">
+								{' '}
+								<Marquee />{' '}
+							</div>
+							<div class="flex sm:mr-[10px] 2xl:mr-0">
 								<Link
 									href={appState.customer.id !== CUSTOMER_NOT_DEFINED_ID ? '/account' : '/sign-in'}
 									class="flex items-center space-x-1 pb-1 pr-2 text-orange-800 hover:text-orange-600"
 								>
 									<UserCircle />
-									<span class="mt-1 text-orange-800 hover:text-orange-600">
+									<span class="mt-1 text-orange-800 hover:text-orange-600 sm:inline">
 										{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID
 											? $localize`My Account`
 											: $localize`Sign In`}
