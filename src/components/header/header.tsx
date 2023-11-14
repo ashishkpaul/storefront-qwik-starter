@@ -73,8 +73,7 @@ export default component$(() => {
 								</p>
 							</div>
 							<div class="ml-auto mb-2 sm:mb-0 sm:mr-4 overflow-hidden">
-								{' '}
-								<Marquee />{' '}
+								<Marquee />
 							</div>
 							<div class="flex sm:mr-[10px] 2xl:mr-0">
 								<Link
