@@ -4,7 +4,7 @@ export default component$(() => {
 	return (
 		<div id="default-carousel" class="relative w-full" data-carousel="slide">
 			{/* Carousel wrapper */}
-			<div class="relative h-48 overflow-hidden rounded-lg md:h-96 flex items-center justify-center">
+			<div class="relative h-48 md:h-64 xl:h-80 2xl:h-96 overflow-hidden flex items-center justify-center">
 				{/* Item 1 */}
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
 					<a href="https://example.com">
