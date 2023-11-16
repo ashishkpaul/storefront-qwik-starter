@@ -84,7 +84,7 @@ export default component$(() => {
 									<span class="mt-1 text-orange-800 hover:text-orange-600 sm:inline">
 										{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID
 											? $localize`My Account`
-											: $localize`Sign In`}
+											: $localize`SignIn`}
 									</span>
 								</Link>
 								{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID && (
