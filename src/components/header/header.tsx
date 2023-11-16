@@ -1,15 +1,15 @@
 import { $, component$, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
+import Marquee from '~/components/marquee/Marquee';
 import { APP_STATE, CUSTOMER_NOT_DEFINED_ID } from '~/constants';
 import { logoutMutation } from '~/providers/shop/account/account';
 import { getActiveCustomerQuery } from '~/providers/shop/customer/customer';
+import CallIcon from '../icons/CallIcon';
+import EmailIcon from '../icons/EmailIcon';
 import LogoutIcon from '../icons/LogoutIcon';
 import ShoppingBagIcon from '../icons/ShoppingBagIcon';
 import UserCircle from '../icons/UserCircle';
-import EmailIcon from '../icons/EmailIcon';
-import CallIcon from '../icons/CallIcon';
 import SearchBar from '../search-bar/SearchBar';
-import Marquee from '~/components/marquee/Marquee';
 
 export default component$(() => {
 	const appState = useContext(APP_STATE);
@@ -72,7 +72,7 @@ export default component$(() => {
 									</div>
 								</p>
 							</div>
-							<div class="ml-auto mb-2 sm:mb-0 sm:mr-4 overflow-hidden">
+							<div class="flex overflow-hidden mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto 2xl:mx-auto max-w-2xl">
 								<Marquee />
 							</div>
 							<div class="flex sm:mr-[10px] 2xl:mr-0">

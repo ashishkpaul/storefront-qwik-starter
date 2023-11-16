@@ -4,11 +4,13 @@ export default component$(() => {
 	return (
 		<div class="overflow-x-hidden">
 			<div class="py-1 animate-marquee whitespace-nowrap">
-				<span class="text-1xl mx-1">Marquee Item 1</span>
-				<span class="text-1xl mx-1">Marquee Item 2</span>
-				<span class="text-1xl mx-1">Marquee Item 3</span>
-				<span class="text-1xl mx-1">Marquee Item 4</span>
-				<span class="text-1xl mx-1">Marquee Item 5</span>
+				<span class="text-1xl mx-1">
+					Offers that make you go 'Wow!' Your wallet will thank you.
+				</span>
+				<span class="text-1xl mx-1">Your wishes delivered. Today. Tomorrow. Always</span>
+				{/* <span class="text-1xl mx-1">Your favorite items,</span>
+				<span class="text-1xl mx-1">now at unbeatable prices.</span>
+				<span class="text-1xl mx-1">Your wishes delivered. Today. Tomorrow. Always.</span> */}
 			</div>
 		</div>
 	);

@@ -2,8 +2,9 @@ import { component$, useContext } from '@builder.io/qwik';
 // import { Image } from 'qwik-image';
 import CollectionCard from '~/components/collection-card/CollectionCard';
 // import { APP_STATE, HOMEPAGE_IMAGE } from '~/constants';
-import { APP_STATE } from '~/constants';
 import Carousel from '~/components/carousel/Carousel';
+import Marquee from '~/components/marquee/Marquee';
+import { APP_STATE } from '~/constants';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
@@ -12,7 +13,9 @@ export default component$(() => {
 			<div style={{ zIndex: 1, position: 'relative' }}>
 				<Carousel />
 			</div>
-
+			<div class="overflow-hidden mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto 2xl:mx-auto max-w-2xl">
+				<Marquee />
+			</div>
 			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 				<div class="mt-4 flow-root">
 					<div class="-my-2">
