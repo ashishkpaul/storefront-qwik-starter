@@ -4,30 +4,42 @@ export default component$(() => {
 	return (
 		<div id="default-carousel" class="relative w-full" data-carousel="slide">
 			{/* Carousel wrapper */}
-			<div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+			<div class="relative h-48 overflow-hidden rounded-lg md:h-96 flex items-center justify-center">
 				{/* Item 1 */}
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
-					<img
-						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-1.webp"
-						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-						alt="..."
-					/>
+					<a href="https://example.com">
+						<img
+							src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-1.webp"
+							class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+							alt="..."
+							width="500"
+							height="300"
+						/>
+					</a>
 				</div>
 				{/* Item 2 */}
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
-					<img
-						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-2.webp"
-						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-						alt="..."
-					/>
+					<a href="https://example.com">
+						<img
+							src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-2.webp"
+							class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+							alt="..."
+							width="500"
+							height="300"
+						/>
+					</a>
 				</div>
 				{/* Item 3 */}
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
-					<img
-						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-3.webp"
-						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-						alt="..."
-					/>
+					<a href="https://example.com">
+						<img
+							src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-3.webp"
+							class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+							alt="..."
+							width="500"
+							height="300"
+						/>
+					</a>
 				</div>
 				{/* Item 4 */}
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
@@ -35,6 +47,8 @@ export default component$(() => {
 						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-4.webp"
 						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
 						alt="..."
+						width="500"
+						height="300"
 					/>
 				</div>
 				{/* Item 5 */}
@@ -43,6 +57,8 @@ export default component$(() => {
 						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-5.webp"
 						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
 						alt="..."
+						width="500"
+						height="300"
 					/>
 				</div>
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
@@ -50,6 +66,8 @@ export default component$(() => {
 						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-6.webp"
 						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
 						alt="..."
+						width="500"
+						height="300"
 					/>
 				</div>
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
@@ -57,6 +75,8 @@ export default component$(() => {
 						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-7.webp"
 						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
 						alt="..."
+						width="500"
+						height="300"
 					/>
 				</div>
 				<div class="hidden duration-700 ease-in-out" data-carousel-item>
@@ -64,6 +84,8 @@ export default component$(() => {
 						src="https://cloud.dingpack.com/apps/sharingpath/ashish@dingpack.com/Desktop/Pictures/saa9vi-projects/slider-images/img-8.webp"
 						class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
 						alt="..."
+						width="500"
+						height="300"
 					/>
 				</div>
 			</div>
