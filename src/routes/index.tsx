@@ -13,8 +13,8 @@ export default component$(() => {
 			<div style={{ zIndex: 1, position: 'relative' }}>
 				<Carousel />
 			</div>
-			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
-				<div class="mt-4 flow-root">
+			<section class="pt-1 xl:max-w-7xl xl:mx-auto xl:px-8">
+				<div class="mt-1 flow-root">
 					<div class="-my-2">
 						<div class="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible">
 							<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">

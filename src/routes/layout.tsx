@@ -60,7 +60,10 @@ export default component$(() => {
 			id: '',
 			city: '',
 			company: '',
-			countryCode: availableCountriesSignal.value ? availableCountriesSignal.value[0].code : '',
+			countryCode:
+				availableCountriesSignal.value && availableCountriesSignal.value.length > 0
+					? availableCountriesSignal.value[0].code
+					: '',
 			fullName: '',
 			phoneNumber: '',
 			postalCode: '',
@@ -90,7 +93,7 @@ export default component$(() => {
 		<div>
 			<Header />
 			<Cart />
-			<main>
+			<main class="pb-12 bg-gray-50">
 				<Slot />
 			</main>
 			<Footer />

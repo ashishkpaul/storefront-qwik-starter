@@ -67,7 +67,7 @@ export default component$(() => {
 											class="flex items-center justify-center space-x-2 text-orange-800 hover:text-orange-600"
 										>
 											<CallIcon />
-											<span>+91 (999) 609-9227</span>
+											<span>+919996099227</span>
 										</a>
 									</div>
 								</p>
