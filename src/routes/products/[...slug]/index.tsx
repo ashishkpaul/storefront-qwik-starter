@@ -12,7 +12,7 @@ import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug } from '~/providers/shop/products/products';
-import { Variant, ProductCustomFields } from '~/types';
+import { ProductCustomFields, Variant } from '~/types';
 import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
 
 export const useProductLoader = routeLoader$(async ({ params }) => {
@@ -59,6 +59,12 @@ export default component$(() => {
 		tracker.track(() => appState.activeOrder);
 		quantitySignal.value = await calculateQuantities(productSignal.value);
 	});
+
+	console.log('Width:', (productSignal.value.customFields as ProductCustomFields)?.width);
+	console.log('Info URL:', (productSignal.value.customFields as ProductCustomFields)?.infoUrl);
+
+	console.log('Product Signal Value:', productSignal.value);
+	console.log('Custom Fields:', productSignal.value.customFields);
 
 	return (
 		<div>
@@ -218,9 +224,9 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
-			{/* {productSignal.value.customFields && productSignal.value.customFields.additionalInfo && ( */}
+			{/* Product Additonal Info Section */}
 			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
-				<h2 class="text-lg font-medium text-orange-900">Additional Info</h2>
+				<h2 class="text-lg font-medium text-orange-900">Details</h2>
 				<div
 					class="text-base text-gray-700"
 					dangerouslySetInnerHTML={
@@ -228,9 +234,64 @@ export default component$(() => {
 					}
 				/>
 			</div>
-			{/* )} */}
+
+			{/* Product Specification Section */}
+			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
+				<h2 class="text-lg font-medium text-orange-900">Specification</h2>
+				<ul>
+					<li>
+						<strong>Width:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.width ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Height:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.height ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Depth:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.depth ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Weight:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.weight ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Info URL:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.infoUrl ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Downloadable:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.downloadable ? 'Yes' : 'No'}
+					</li>
+					<li>
+						<strong>Short Name:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.shortName ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Meta Title:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.metaTitle ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Meta Description:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.metaDescription ||
+							'No Data Available'}
+					</li>
+					<li>
+						<strong>Keywords:</strong>{' '}
+						{(productSignal.value.customFields as ProductCustomFields)?.keywords ||
+							'No Data Available'}
+					</li>
+				</ul>
+			</div>
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
-				<div class="mt-24">
+				<div class="mt-4">
 					<TopReviews />
 				</div>
 			)}

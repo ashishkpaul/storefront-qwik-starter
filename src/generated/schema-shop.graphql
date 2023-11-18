@@ -2661,7 +2661,7 @@ type Mutation {
 	Create a new Customer Address
 	"""
 	createCustomerAddress(input: CreateAddressInput!): Address!
-	createStripePaymentIntent: String
+	createStripePaymentIntent: String!
 
 	"""
 	Delete an existing Address
@@ -2764,7 +2764,6 @@ type Mutation {
 	shipping method will apply to.
 	"""
 	setOrderShippingMethod(shippingMethodId: [ID!]!): SetOrderShippingMethodResult!
-	submitProductReview(input: SubmitProductReviewInput!): ProductReview!
 
 	"""
 	Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`
@@ -2802,7 +2801,6 @@ type Mutation {
 	provided here.
 	"""
 	verifyCustomerAccount(password: String, token: String!): VerifyCustomerAccountResult!
-	voteOnReview(id: ID!, vote: Boolean!): ProductReview!
 }
 
 input NativeAuthInput {
@@ -3871,8 +3869,6 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
-	reviews(options: ProductReviewListOptions): ProductReviewList!
-	reviewsHistogram: [ProductReviewHistogramItem!]!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -3892,14 +3888,11 @@ type ProductCustomFields {
 	additionalInfo: String
 	depth: Int
 	downloadable: Boolean
-	featuredReview: ProductReview
 	height: Int
 	infoUrl: String
 	keywords: String
 	metaDescription: String
 	metaTitle: String
-	reviewCount: Float
-	reviewRating: Float
 	shortName: String
 	weight: Int
 	width: Int
@@ -3919,8 +3912,6 @@ input ProductFilterParameter {
 	metaDescription: StringOperators
 	metaTitle: StringOperators
 	name: StringOperators
-	reviewCount: NumberOperators
-	reviewRating: NumberOperators
 	shortName: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
@@ -4001,100 +3992,12 @@ type ProductOptionTranslation {
 	updatedAt: DateTime!
 }
 
-type ProductReview implements Node {
-	authorLocation: String
-	authorName: String!
-	body: String
-	createdAt: DateTime!
-	downvotes: Int!
-	id: ID!
-	product: Product!
-	productVariant: ProductVariant
-	rating: Float!
-	response: String
-	responseCreatedAt: DateTime
-	state: String!
-	summary: String!
-	updatedAt: DateTime!
-	upvotes: Int!
-}
-
-input ProductReviewFilterParameter {
-	authorLocation: StringOperators
-	authorName: StringOperators
-	body: StringOperators
-	createdAt: DateOperators
-	downvotes: NumberOperators
-	id: IDOperators
-	rating: NumberOperators
-	response: StringOperators
-	responseCreatedAt: DateOperators
-	state: StringOperators
-	summary: StringOperators
-	updatedAt: DateOperators
-	upvotes: NumberOperators
-}
-
-type ProductReviewHistogramItem {
-	bin: Int!
-	frequency: Int!
-}
-
-type ProductReviewList implements PaginatedList {
-	items: [ProductReview!]!
-	totalItems: Int!
-}
-
-input ProductReviewListOptions {
-	"""
-	Allows the results to be filtered
-	"""
-	filter: ProductReviewFilterParameter
-
-	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
-	"""
-	filterOperator: LogicalOperator
-
-	"""
-	Skips the first n results, for use in pagination
-	"""
-	skip: Int
-
-	"""
-	Specifies which properties to sort the results by
-	"""
-	sort: ProductReviewSortParameter
-
-	"""
-	Takes n results, for use in pagination
-	"""
-	take: Int
-}
-
-input ProductReviewSortParameter {
-	authorLocation: SortOrder
-	authorName: SortOrder
-	body: SortOrder
-	createdAt: SortOrder
-	downvotes: SortOrder
-	id: SortOrder
-	rating: SortOrder
-	response: SortOrder
-	responseCreatedAt: SortOrder
-	state: SortOrder
-	summary: SortOrder
-	updatedAt: SortOrder
-	upvotes: SortOrder
-}
-
 input ProductSortParameter {
 	additionalInfo: SortOrder
 	createdAt: SortOrder
 	depth: SortOrder
 	description: SortOrder
 	downloadable: SortOrder
-	featuredReview: SortOrder
 	height: SortOrder
 	id: SortOrder
 	infoUrl: SortOrder
@@ -4102,8 +4005,6 @@ input ProductSortParameter {
 	metaDescription: SortOrder
 	metaTitle: SortOrder
 	name: SortOrder
-	reviewCount: SortOrder
-	reviewRating: SortOrder
 	shortName: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
@@ -4486,6 +4387,7 @@ input SearchInput {
 	collectionSlug: String
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
+	inStock: Boolean
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -4512,6 +4414,7 @@ type SearchResult {
 	description: String!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
+	inStock: Boolean!
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset
@@ -4671,17 +4574,6 @@ input StringOperators {
 	notEq: String
 	notIn: [String!]
 	regex: String
-}
-
-input SubmitProductReviewInput {
-	authorLocation: String
-	authorName: String!
-	body: String!
-	customerId: ID
-	productId: ID!
-	rating: Float!
-	summary: String!
-	variantId: ID
 }
 
 """

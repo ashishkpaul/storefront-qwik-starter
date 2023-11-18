@@ -886,11 +886,8 @@ input CreateProductCustomFieldsInput {
 	additionalInfo: String
 	depth: Int
 	downloadable: Boolean
-	featuredReviewId: ID
 	height: Int
 	infoUrl: String
-	reviewCount: Float
-	reviewRating: Float
 	weight: Int
 	width: Int
 }
@@ -1883,7 +1880,7 @@ type CustomFields {
 type Customer implements Node {
 	addresses: [Address!]
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: CustomerCustomFields
 	emailAddress: String!
 	firstName: String!
 	groups: [CustomerGroup!]!
@@ -1897,6 +1894,10 @@ type Customer implements Node {
 	user: User
 }
 
+type CustomerCustomFields {
+	stripeCustomerId: String
+}
+
 input CustomerFilterParameter {
 	createdAt: DateOperators
 	emailAddress: StringOperators
@@ -1905,6 +1906,7 @@ input CustomerFilterParameter {
 	lastName: StringOperators
 	phoneNumber: StringOperators
 	postalCode: StringOperators
+	stripeCustomerId: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
 }
@@ -2003,6 +2005,7 @@ input CustomerSortParameter {
 	id: SortOrder
 	lastName: SortOrder
 	phoneNumber: SortOrder
+	stripeCustomerId: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
 }
@@ -3711,7 +3714,6 @@ type Mutation {
 	Applies the given coupon code to the draft Order
 	"""
 	applyCouponCodeToDraftOrder(couponCode: String!, orderId: ID!): ApplyCouponCodeResult!
-	approveProductReview(id: ID!): ProductReview
 
 	"""
 	Assign assets to channel
@@ -4120,7 +4122,6 @@ type Mutation {
 	moveCollection(input: MoveCollectionInput!): Collection!
 	refundOrder(input: RefundOrderInput!): RefundOrderResult!
 	reindex: Job!
-	rejectProductReview(id: ID!): ProductReview
 
 	"""
 	Removes Collections from the specified Channel
@@ -4312,7 +4313,6 @@ type Mutation {
 	Update an existing ProductOptionGroup
 	"""
 	updateProductOptionGroup(input: UpdateProductOptionGroupInput!): ProductOptionGroup!
-	updateProductReview(input: UpdateProductReviewInput!): ProductReview!
 
 	"""
 	Update existing ProductVariants
@@ -5511,8 +5511,6 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
-	reviews(options: ProductReviewListOptions): ProductReviewList!
-	reviewsHistogram: [ProductReviewHistogramItem!]!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -5532,14 +5530,11 @@ type ProductCustomFields {
 	additionalInfo: String
 	depth: Int
 	downloadable: Boolean
-	featuredReview: ProductReview
 	height: Int
 	infoUrl: String
 	keywords: String
 	metaDescription: String
 	metaTitle: String
-	reviewCount: Float
-	reviewRating: Float
 	shortName: String
 	weight: Int
 	width: Int
@@ -5561,8 +5556,6 @@ input ProductFilterParameter {
 	metaDescription: StringOperators
 	metaTitle: StringOperators
 	name: StringOperators
-	reviewCount: NumberOperators
-	reviewRating: NumberOperators
 	shortName: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
@@ -5664,101 +5657,12 @@ input ProductOptionTranslationInput {
 	name: String
 }
 
-type ProductReview implements Node {
-	author: Customer
-	authorLocation: String
-	authorName: String!
-	body: String
-	createdAt: DateTime!
-	downvotes: Int!
-	id: ID!
-	product: Product!
-	productVariant: ProductVariant
-	rating: Float!
-	response: String
-	responseCreatedAt: DateTime
-	state: String!
-	summary: String!
-	updatedAt: DateTime!
-	upvotes: Int!
-}
-
-input ProductReviewFilterParameter {
-	authorLocation: StringOperators
-	authorName: StringOperators
-	body: StringOperators
-	createdAt: DateOperators
-	downvotes: NumberOperators
-	id: IDOperators
-	rating: NumberOperators
-	response: StringOperators
-	responseCreatedAt: DateOperators
-	state: StringOperators
-	summary: StringOperators
-	updatedAt: DateOperators
-	upvotes: NumberOperators
-}
-
-type ProductReviewHistogramItem {
-	bin: Int!
-	frequency: Int!
-}
-
-type ProductReviewList implements PaginatedList {
-	items: [ProductReview!]!
-	totalItems: Int!
-}
-
-input ProductReviewListOptions {
-	"""
-	Allows the results to be filtered
-	"""
-	filter: ProductReviewFilterParameter
-
-	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
-	"""
-	filterOperator: LogicalOperator
-
-	"""
-	Skips the first n results, for use in pagination
-	"""
-	skip: Int
-
-	"""
-	Specifies which properties to sort the results by
-	"""
-	sort: ProductReviewSortParameter
-
-	"""
-	Takes n results, for use in pagination
-	"""
-	take: Int
-}
-
-input ProductReviewSortParameter {
-	authorLocation: SortOrder
-	authorName: SortOrder
-	body: SortOrder
-	createdAt: SortOrder
-	downvotes: SortOrder
-	id: SortOrder
-	rating: SortOrder
-	response: SortOrder
-	responseCreatedAt: SortOrder
-	state: SortOrder
-	summary: SortOrder
-	updatedAt: SortOrder
-	upvotes: SortOrder
-}
-
 input ProductSortParameter {
 	additionalInfo: SortOrder
 	createdAt: SortOrder
 	depth: SortOrder
 	description: SortOrder
 	downloadable: SortOrder
-	featuredReview: SortOrder
 	height: SortOrder
 	id: SortOrder
 	infoUrl: SortOrder
@@ -5766,8 +5670,6 @@ input ProductSortParameter {
 	metaDescription: SortOrder
 	metaTitle: SortOrder
 	name: SortOrder
-	reviewCount: SortOrder
-	reviewRating: SortOrder
 	shortName: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
@@ -6197,8 +6099,6 @@ type Query {
 	product(id: ID, slug: String): Product
 	productOptionGroup(id: ID!): ProductOptionGroup
 	productOptionGroups(filterTerm: String): [ProductOptionGroup!]!
-	productReview(id: ID!): ProductReview
-	productReviews(options: ProductReviewListOptions): ProductReviewList!
 
 	"""
 	Get a ProductVariant by id
@@ -6489,6 +6389,7 @@ input SearchInput {
 	collectionSlug: String
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
+	inStock: Boolean
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -6521,6 +6422,7 @@ type SearchResult {
 	enabled: Boolean!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
+	inStock: Boolean!
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset
@@ -7357,11 +7259,8 @@ input UpdateProductCustomFieldsInput {
 	additionalInfo: String
 	depth: Int
 	downloadable: Boolean
-	featuredReviewId: ID
 	height: Int
 	infoUrl: String
-	reviewCount: Float
-	reviewRating: Float
 	weight: Int
 	width: Int
 }
@@ -7388,13 +7287,6 @@ input UpdateProductOptionInput {
 	customFields: JSON
 	id: ID!
 	translations: [ProductOptionGroupTranslationInput!]
-}
-
-input UpdateProductReviewInput {
-	body: String
-	id: ID!
-	response: String
-	summary: String
 }
 
 input UpdateProductVariantCustomFieldsInput {

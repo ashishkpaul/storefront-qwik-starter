@@ -853,11 +853,8 @@ export type CreateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
 	depth?: InputMaybe<Scalars['Int']['input']>;
 	downloadable?: InputMaybe<Scalars['Boolean']['input']>;
-	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
 	height?: InputMaybe<Scalars['Int']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
-	reviewCount?: InputMaybe<Scalars['Float']['input']>;
-	reviewRating?: InputMaybe<Scalars['Float']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
 	width?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1385,7 +1382,7 @@ export type Customer = Node & {
 	__typename?: 'Customer';
 	addresses?: Maybe<Array<Address>>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<CustomerCustomFields>;
 	emailAddress: Scalars['String']['output'];
 	firstName: Scalars['String']['output'];
 	groups: Array<CustomerGroup>;
@@ -1407,6 +1404,11 @@ export type CustomerOrdersArgs = {
 	options?: InputMaybe<OrderListOptions>;
 };
 
+export type CustomerCustomFields = {
+	__typename?: 'CustomerCustomFields';
+	stripeCustomerId?: Maybe<Scalars['String']['output']>;
+};
+
 export type CustomerFilterParameter = {
 	createdAt?: InputMaybe<DateOperators>;
 	emailAddress?: InputMaybe<StringOperators>;
@@ -1415,6 +1417,7 @@ export type CustomerFilterParameter = {
 	lastName?: InputMaybe<StringOperators>;
 	phoneNumber?: InputMaybe<StringOperators>;
 	postalCode?: InputMaybe<StringOperators>;
+	stripeCustomerId?: InputMaybe<StringOperators>;
 	title?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 };
@@ -1492,6 +1495,7 @@ export type CustomerSortParameter = {
 	id?: InputMaybe<SortOrder>;
 	lastName?: InputMaybe<SortOrder>;
 	phoneNumber?: InputMaybe<SortOrder>;
+	stripeCustomerId?: InputMaybe<SortOrder>;
 	title?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
@@ -2659,7 +2663,6 @@ export type Mutation = {
 	adjustDraftOrderLine: UpdateOrderItemsResult;
 	/** Applies the given coupon code to the draft Order */
 	applyCouponCodeToDraftOrder: ApplyCouponCodeResult;
-	approveProductReview?: Maybe<ProductReview>;
 	/** Assign assets to channel */
 	assignAssetsToChannel: Array<Asset>;
 	/** Assigns Collections to the specified Channel */
@@ -2836,7 +2839,6 @@ export type Mutation = {
 	moveCollection: Collection;
 	refundOrder: RefundOrderResult;
 	reindex: Job;
-	rejectProductReview?: Maybe<ProductReview>;
 	/** Removes Collections from the specified Channel */
 	removeCollectionsFromChannel: Array<Collection>;
 	/** Removes the given coupon code from the draft Order */
@@ -2919,7 +2921,6 @@ export type Mutation = {
 	updateProductOption: ProductOption;
 	/** Update an existing ProductOptionGroup */
 	updateProductOptionGroup: ProductOptionGroup;
-	updateProductReview: ProductReview;
 	/** Update existing ProductVariants */
 	updateProductVariants: Array<Maybe<ProductVariant>>;
 	/** Update multiple existing Products */
@@ -2988,10 +2989,6 @@ export type MutationAdjustDraftOrderLineArgs = {
 export type MutationApplyCouponCodeToDraftOrderArgs = {
 	couponCode: Scalars['String']['input'];
 	orderId: Scalars['ID']['input'];
-};
-
-export type MutationApproveProductReviewArgs = {
-	id: Scalars['ID']['input'];
 };
 
 export type MutationAssignAssetsToChannelArgs = {
@@ -3369,10 +3366,6 @@ export type MutationRefundOrderArgs = {
 	input: RefundOrderInput;
 };
 
-export type MutationRejectProductReviewArgs = {
-	id: Scalars['ID']['input'];
-};
-
 export type MutationRemoveCollectionsFromChannelArgs = {
 	input: RemoveCollectionsFromChannelInput;
 };
@@ -3559,10 +3552,6 @@ export type MutationUpdateProductOptionArgs = {
 
 export type MutationUpdateProductOptionGroupArgs = {
 	input: UpdateProductOptionGroupInput;
-};
-
-export type MutationUpdateProductReviewArgs = {
-	input: UpdateProductReviewInput;
 };
 
 export type MutationUpdateProductVariantsArgs = {
@@ -4381,8 +4370,6 @@ export type Product = Node & {
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
 	optionGroups: Array<ProductOptionGroup>;
-	reviews: ProductReviewList;
-	reviewsHistogram: Array<ProductReviewHistogramItem>;
 	slug: Scalars['String']['output'];
 	translations: Array<ProductTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
@@ -4390,10 +4377,6 @@ export type Product = Node & {
 	variantList: ProductVariantList;
 	/** Returns all ProductVariants */
 	variants: Array<ProductVariant>;
-};
-
-export type ProductReviewsArgs = {
-	options?: InputMaybe<ProductReviewListOptions>;
 };
 
 export type ProductVariantListArgs = {
@@ -4405,14 +4388,11 @@ export type ProductCustomFields = {
 	additionalInfo?: Maybe<Scalars['String']['output']>;
 	depth?: Maybe<Scalars['Int']['output']>;
 	downloadable?: Maybe<Scalars['Boolean']['output']>;
-	featuredReview?: Maybe<ProductReview>;
 	height?: Maybe<Scalars['Int']['output']>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	keywords?: Maybe<Scalars['String']['output']>;
 	metaDescription?: Maybe<Scalars['String']['output']>;
 	metaTitle?: Maybe<Scalars['String']['output']>;
-	reviewCount?: Maybe<Scalars['Float']['output']>;
-	reviewRating?: Maybe<Scalars['Float']['output']>;
 	shortName?: Maybe<Scalars['String']['output']>;
 	weight?: Maybe<Scalars['Int']['output']>;
 	width?: Maybe<Scalars['Int']['output']>;
@@ -4434,8 +4414,6 @@ export type ProductFilterParameter = {
 	metaDescription?: InputMaybe<StringOperators>;
 	metaTitle?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
-	reviewCount?: InputMaybe<NumberOperators>;
-	reviewRating?: InputMaybe<NumberOperators>;
 	shortName?: InputMaybe<StringOperators>;
 	slug?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
@@ -4529,90 +4507,12 @@ export type ProductOptionTranslationInput = {
 	name?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type ProductReview = Node & {
-	__typename?: 'ProductReview';
-	author?: Maybe<Customer>;
-	authorLocation?: Maybe<Scalars['String']['output']>;
-	authorName: Scalars['String']['output'];
-	body?: Maybe<Scalars['String']['output']>;
-	createdAt: Scalars['DateTime']['output'];
-	downvotes: Scalars['Int']['output'];
-	id: Scalars['ID']['output'];
-	product: Product;
-	productVariant?: Maybe<ProductVariant>;
-	rating: Scalars['Float']['output'];
-	response?: Maybe<Scalars['String']['output']>;
-	responseCreatedAt?: Maybe<Scalars['DateTime']['output']>;
-	state: Scalars['String']['output'];
-	summary: Scalars['String']['output'];
-	updatedAt: Scalars['DateTime']['output'];
-	upvotes: Scalars['Int']['output'];
-};
-
-export type ProductReviewFilterParameter = {
-	authorLocation?: InputMaybe<StringOperators>;
-	authorName?: InputMaybe<StringOperators>;
-	body?: InputMaybe<StringOperators>;
-	createdAt?: InputMaybe<DateOperators>;
-	downvotes?: InputMaybe<NumberOperators>;
-	id?: InputMaybe<IdOperators>;
-	rating?: InputMaybe<NumberOperators>;
-	response?: InputMaybe<StringOperators>;
-	responseCreatedAt?: InputMaybe<DateOperators>;
-	state?: InputMaybe<StringOperators>;
-	summary?: InputMaybe<StringOperators>;
-	updatedAt?: InputMaybe<DateOperators>;
-	upvotes?: InputMaybe<NumberOperators>;
-};
-
-export type ProductReviewHistogramItem = {
-	__typename?: 'ProductReviewHistogramItem';
-	bin: Scalars['Int']['output'];
-	frequency: Scalars['Int']['output'];
-};
-
-export type ProductReviewList = PaginatedList & {
-	__typename?: 'ProductReviewList';
-	items: Array<ProductReview>;
-	totalItems: Scalars['Int']['output'];
-};
-
-export type ProductReviewListOptions = {
-	/** Allows the results to be filtered */
-	filter?: InputMaybe<ProductReviewFilterParameter>;
-	/** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
-	filterOperator?: InputMaybe<LogicalOperator>;
-	/** Skips the first n results, for use in pagination */
-	skip?: InputMaybe<Scalars['Int']['input']>;
-	/** Specifies which properties to sort the results by */
-	sort?: InputMaybe<ProductReviewSortParameter>;
-	/** Takes n results, for use in pagination */
-	take?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type ProductReviewSortParameter = {
-	authorLocation?: InputMaybe<SortOrder>;
-	authorName?: InputMaybe<SortOrder>;
-	body?: InputMaybe<SortOrder>;
-	createdAt?: InputMaybe<SortOrder>;
-	downvotes?: InputMaybe<SortOrder>;
-	id?: InputMaybe<SortOrder>;
-	rating?: InputMaybe<SortOrder>;
-	response?: InputMaybe<SortOrder>;
-	responseCreatedAt?: InputMaybe<SortOrder>;
-	state?: InputMaybe<SortOrder>;
-	summary?: InputMaybe<SortOrder>;
-	updatedAt?: InputMaybe<SortOrder>;
-	upvotes?: InputMaybe<SortOrder>;
-};
-
 export type ProductSortParameter = {
 	additionalInfo?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	depth?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
 	downloadable?: InputMaybe<SortOrder>;
-	featuredReview?: InputMaybe<SortOrder>;
 	height?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	infoUrl?: InputMaybe<SortOrder>;
@@ -4620,8 +4520,6 @@ export type ProductSortParameter = {
 	metaDescription?: InputMaybe<SortOrder>;
 	metaTitle?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
-	reviewCount?: InputMaybe<SortOrder>;
-	reviewRating?: InputMaybe<SortOrder>;
 	shortName?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
@@ -5004,8 +4902,6 @@ export type Query = {
 	product?: Maybe<Product>;
 	productOptionGroup?: Maybe<ProductOptionGroup>;
 	productOptionGroups: Array<ProductOptionGroup>;
-	productReview?: Maybe<ProductReview>;
-	productReviews: ProductReviewList;
 	/** Get a ProductVariant by id */
 	productVariant?: Maybe<ProductVariant>;
 	/** List ProductVariants either all or for the specific product. */
@@ -5166,14 +5062,6 @@ export type QueryProductOptionGroupArgs = {
 
 export type QueryProductOptionGroupsArgs = {
 	filterTerm?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryProductReviewArgs = {
-	id: Scalars['ID']['input'];
-};
-
-export type QueryProductReviewsArgs = {
-	options?: InputMaybe<ProductReviewListOptions>;
 };
 
 export type QueryProductVariantArgs = {
@@ -5524,6 +5412,7 @@ export type SearchInput = {
 	collectionSlug?: InputMaybe<Scalars['String']['input']>;
 	facetValueFilters?: InputMaybe<Array<FacetValueFilterInput>>;
 	groupByProduct?: InputMaybe<Scalars['Boolean']['input']>;
+	inStock?: InputMaybe<Scalars['Boolean']['input']>;
 	skip?: InputMaybe<Scalars['Int']['input']>;
 	sort?: InputMaybe<SearchResultSortParameter>;
 	take?: InputMaybe<Scalars['Int']['input']>;
@@ -5554,6 +5443,7 @@ export type SearchResult = {
 	enabled: Scalars['Boolean']['output'];
 	facetIds: Array<Scalars['ID']['output']>;
 	facetValueIds: Array<Scalars['ID']['output']>;
+	inStock: Scalars['Boolean']['output'];
 	price: SearchResultPrice;
 	priceWithTax: SearchResultPrice;
 	productAsset?: Maybe<SearchResultAsset>;
@@ -6327,11 +6217,8 @@ export type UpdateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
 	depth?: InputMaybe<Scalars['Int']['input']>;
 	downloadable?: InputMaybe<Scalars['Boolean']['input']>;
-	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
 	height?: InputMaybe<Scalars['Int']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
-	reviewCount?: InputMaybe<Scalars['Float']['input']>;
-	reviewRating?: InputMaybe<Scalars['Float']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
 	width?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6358,13 +6245,6 @@ export type UpdateProductOptionInput = {
 	customFields?: InputMaybe<Scalars['JSON']['input']>;
 	id: Scalars['ID']['input'];
 	translations?: InputMaybe<Array<ProductOptionGroupTranslationInput>>;
-};
-
-export type UpdateProductReviewInput = {
-	body?: InputMaybe<Scalars['String']['input']>;
-	id: Scalars['ID']['input'];
-	response?: InputMaybe<Scalars['String']['input']>;
-	summary?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateProductVariantCustomFieldsInput = {

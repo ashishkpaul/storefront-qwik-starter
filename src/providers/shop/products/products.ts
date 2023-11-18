@@ -28,6 +28,16 @@ export const detailedProductFragment = gql`
 		description
 		customFields {
 			additionalInfo
+			width
+			height
+			depth
+			weight
+			infoUrl
+			downloadable
+			shortName
+			metaTitle
+			metaDescription
+			keywords
 		}
 		collections {
 			id
