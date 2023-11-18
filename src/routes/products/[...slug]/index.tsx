@@ -60,11 +60,13 @@ export default component$(() => {
 		quantitySignal.value = await calculateQuantities(productSignal.value);
 	});
 
-	console.log('Width:', (productSignal.value.customFields as ProductCustomFields)?.width);
-	console.log('Info URL:', (productSignal.value.customFields as ProductCustomFields)?.infoUrl);
+	// console.log('Width:', (productSignal.value.customFields as ProductCustomFields)?.width);
+	// console.log('Info URL:', (productSignal.value.customFields as ProductCustomFields)?.infoUrl);
 
-	console.log('Product Signal Value:', productSignal.value);
-	console.log('Custom Fields:', productSignal.value.customFields);
+	// console.log('Product Signal Value:', productSignal.value);
+	// console.log('Custom Fields:', productSignal.value.customFields);
+
+	const activeTabSignal = useSignal('details'); // Set the default active tab
 
 	return (
 		<div>
@@ -224,77 +226,161 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
-			{/* Product Additonal Info Section */}
-			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
-				<h2 class="text-lg font-medium text-orange-900">Details</h2>
-				<div
-					class="text-base text-gray-700"
-					dangerouslySetInnerHTML={
-						(productSignal.value.customFields as ProductCustomFields)?.additionalInfo ?? ''
-					}
-				/>
-			</div>
-
-			{/* Product Specification Section */}
-			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
-				<h2 class="text-lg font-medium text-orange-900">Specification</h2>
-				<ul>
-					<li>
-						<strong>Width:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.width ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Height:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.height ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Depth:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.depth ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Weight:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.weight ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Info URL:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.infoUrl ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Downloadable:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.downloadable ? 'Yes' : 'No'}
-					</li>
-					<li>
-						<strong>Short Name:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.shortName ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Meta Title:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.metaTitle ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Meta Description:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.metaDescription ||
-							'No Data Available'}
-					</li>
-					<li>
-						<strong>Keywords:</strong>{' '}
-						{(productSignal.value.customFields as ProductCustomFields)?.keywords ||
-							'No Data Available'}
-					</li>
-				</ul>
-			</div>
-			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
-				<div class="mt-4">
-					<TopReviews />
+			{/* Tabs starting here */}
+			<div class="mt-4">
+				<div class="border-b border-gray-200">
+					<nav class="-mb-px flex space-x-8 justify-center">
+						<a
+							href="#details"
+							class={`${
+								activeTabSignal.value === 'details'
+									? 'border-primary-500 text-primary-600'
+									: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+							} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+							onClick$={() => (activeTabSignal.value = 'details')}
+						>
+							Details
+						</a>
+						<a
+							href="#specifications"
+							class={`${
+								activeTabSignal.value === 'specifications'
+									? 'border-primary-500 text-primary-600'
+									: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+							} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+							onClick$={() => (activeTabSignal.value = 'specifications')}
+						>
+							Specifications
+						</a>
+						<a
+							href="#reviews"
+							class={`${
+								activeTabSignal.value === 'reviews'
+									? 'border-primary-500 text-primary-600'
+									: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+							} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+							onClick$={() => (activeTabSignal.value = 'reviews')}
+						>
+							Reviews
+						</a>
+					</nav>
 				</div>
-			)}
+				<div class="bg-white p-8 mx-4">
+					<div
+						id="details"
+						class={`tab-content ${activeTabSignal.value === 'details' ? '' : 'hidden'}`}
+					>
+						{/* Details content */}
+						<h2 class="text-lg font-medium text-orange-900">Details</h2>
+						<div
+							class="text-base text-gray-700"
+							dangerouslySetInnerHTML={
+								(productSignal.value.customFields as ProductCustomFields)?.additionalInfo ?? ''
+							}
+						/>
+					</div>
+					<div
+						id="specifications"
+						class={`tab-content ${activeTabSignal.value === 'specifications' ? '' : 'hidden'}`}
+					>
+						{/* Specifications content */}
+						<h2 class="text-lg font-medium text-orange-900">Specifications</h2>
+						<ul>
+							<li>
+								<strong>Width:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.width ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Height:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.height ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Depth:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.depth ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Weight:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.weight ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Info URL:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.infoUrl ? (
+									// Check if the URL starts with 'http://' or 'https://'
+									(productSignal.value.customFields as ProductCustomFields)?.infoUrl.startsWith(
+										'http://'
+									) ||
+									(productSignal.value.customFields as ProductCustomFields)?.infoUrl.startsWith(
+										'https://'
+									) ? (
+										<a
+											href={(productSignal.value.customFields as ProductCustomFields)?.infoUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{(productSignal.value.customFields as ProductCustomFields)?.infoUrl}
+										</a>
+									) : (
+										// If it doesn't start with 'http://' or 'https://', prepend 'http://'
+										<a
+											href={
+												'http://' +
+												(productSignal.value.customFields as ProductCustomFields)?.infoUrl
+											}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{(productSignal.value.customFields as ProductCustomFields)?.infoUrl}
+										</a>
+									)
+								) : (
+									'No Data Available'
+								)}
+							</li>
+							<li>
+								<strong>Downloadable:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.downloadable
+									? 'Yes'
+									: 'No'}
+							</li>
+							<li>
+								<strong>Short Name:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.shortName ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Meta Title:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.metaTitle ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Meta Description:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.metaDescription ||
+									'No Data Available'}
+							</li>
+							<li>
+								<strong>Keywords:</strong>{' '}
+								{(productSignal.value.customFields as ProductCustomFields)?.keywords ||
+									'No Data Available'}
+							</li>
+						</ul>
+					</div>
+					<div
+						id="reviews"
+						class={`tab-content ${activeTabSignal.value === 'reviews' ? '' : 'hidden'}`}
+					>
+						{/* Reviews content */}
+						{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
+							<div class="mt-4">
+								<TopReviews />
+							</div>
+						)}
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 });
