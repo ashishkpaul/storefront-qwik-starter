@@ -162,7 +162,7 @@ export type Collection = Node & {
 	breadcrumbs: Array<CollectionBreadcrumb>;
 	children?: Maybe<Array<Collection>>;
 	createdAt: Scalars['DateTime'];
-	customFields?: Maybe<Scalars['JSON']>;
+	customFields?: Maybe<CollectionCustomFields>;
 	description: Scalars['String'];
 	featuredAsset?: Maybe<Asset>;
 	filters: Array<ConfigurableOperation>;
@@ -186,6 +186,11 @@ export type CollectionBreadcrumb = {
 	id: Scalars['ID'];
 	name: Scalars['String'];
 	slug: Scalars['String'];
+};
+
+export type CollectionCustomFields = {
+	__typename?: 'CollectionCustomFields';
+	carouselImage?: Maybe<Asset>;
 };
 
 export type CollectionFilterParameter = {
@@ -3702,6 +3707,14 @@ export type CollectionQuery = {
 			name: string;
 			slug: string;
 		}>;
+		customFields?: {
+			__typename?: 'CollectionCustomFields';
+			carouselImage?: {
+				__typename?: 'Asset';
+				id: string;
+				preview: string;
+			} | null;
+		} | null;
 		children?: Array<{
 			__typename?: 'Collection';
 			id: string;
@@ -4949,6 +4962,12 @@ export const DetailedProductFragmentDoc = gql`
 				name
 				slug
 			}
+			customFields {
+				carouselImage {
+					id
+					preview
+				}
+			}
 		}
 		facetValues {
 			facet {
@@ -5189,6 +5208,12 @@ export const CollectionsDocument = gql`
 				parent {
 					name
 				}
+				customFields {
+					carouselImage {
+						id
+						preview
+					}
+				}
 				featuredAsset {
 					id
 					preview
@@ -5207,6 +5232,12 @@ export const CollectionDocument = gql`
 				id
 				name
 				slug
+			}
+			customFields {
+				carouselImage {
+					id
+					preview
+				}
 			}
 			children {
 				id

@@ -490,7 +490,7 @@ type Collection implements Node {
 	breadcrumbs: [CollectionBreadcrumb!]!
 	children: [Collection!]
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: CollectionCustomFields
 	description: String!
 	featuredAsset: Asset
 	filters: [ConfigurableOperation!]!
@@ -512,6 +512,10 @@ type CollectionBreadcrumb {
 	id: ID!
 	name: String!
 	slug: String!
+}
+
+type CollectionCustomFields {
+	carouselImage: Asset
 }
 
 input CollectionFilterParameter {
@@ -571,6 +575,7 @@ type CollectionResult {
 }
 
 input CollectionSortParameter {
+	carouselImage: SortOrder
 	createdAt: SortOrder
 	description: SortOrder
 	id: SortOrder
@@ -796,9 +801,13 @@ input CreateChannelInput {
 
 union CreateChannelResult = Channel | LanguageNotAvailableError
 
+input CreateCollectionCustomFieldsInput {
+	carouselImageId: ID
+}
+
 input CreateCollectionInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: CreateCollectionCustomFieldsInput
 	featuredAssetId: ID
 	filters: [ConfigurableOperationInput!]!
 	inheritFilters: Boolean
@@ -7133,9 +7142,13 @@ input UpdateChannelInput {
 
 union UpdateChannelResult = Channel | LanguageNotAvailableError
 
+input UpdateCollectionCustomFieldsInput {
+	carouselImageId: ID
+}
+
 input UpdateCollectionInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: UpdateCollectionCustomFieldsInput
 	featuredAssetId: ID
 	filters: [ConfigurableOperationInput!]
 	id: ID!

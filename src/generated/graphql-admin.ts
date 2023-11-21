@@ -476,7 +476,7 @@ export type Collection = Node & {
 	breadcrumbs: Array<CollectionBreadcrumb>;
 	children?: Maybe<Array<Collection>>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<CollectionCustomFields>;
 	description: Scalars['String']['output'];
 	featuredAsset?: Maybe<Asset>;
 	filters: Array<ConfigurableOperation>;
@@ -503,6 +503,11 @@ export type CollectionBreadcrumb = {
 	id: Scalars['ID']['output'];
 	name: Scalars['String']['output'];
 	slug: Scalars['String']['output'];
+};
+
+export type CollectionCustomFields = {
+	__typename?: 'CollectionCustomFields';
+	carouselImage?: Maybe<Asset>;
 };
 
 export type CollectionFilterParameter = {
@@ -550,6 +555,7 @@ export type CollectionResult = {
 };
 
 export type CollectionSortParameter = {
+	carouselImage?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
@@ -764,9 +770,13 @@ export type CreateChannelInput = {
 
 export type CreateChannelResult = Channel | LanguageNotAvailableError;
 
+export type CreateCollectionCustomFieldsInput = {
+	carouselImageId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type CreateCollectionInput = {
 	assetIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateCollectionCustomFieldsInput>;
 	featuredAssetId?: InputMaybe<Scalars['ID']['input']>;
 	filters: Array<ConfigurableOperationInput>;
 	inheritFilters?: InputMaybe<Scalars['Boolean']['input']>;
@@ -6091,9 +6101,13 @@ export type UpdateChannelInput = {
 
 export type UpdateChannelResult = Channel | LanguageNotAvailableError;
 
+export type UpdateCollectionCustomFieldsInput = {
+	carouselImageId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type UpdateCollectionInput = {
 	assetIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateCollectionCustomFieldsInput>;
 	featuredAssetId?: InputMaybe<Scalars['ID']['input']>;
 	filters?: InputMaybe<Array<ConfigurableOperationInput>>;
 	id: Scalars['ID']['input'];

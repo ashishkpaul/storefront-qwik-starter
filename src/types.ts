@@ -51,6 +51,11 @@ export type Collection = {
 	parent?: { name: '__root_collection__' };
 	featuredAsset?: { id: string; preview: string };
 	children: any[];
+	customFields?: CollectionCustomFields;
+};
+
+type CollectionCustomFields = {
+	carouselImage: Asset;
 };
 
 type Facet = {

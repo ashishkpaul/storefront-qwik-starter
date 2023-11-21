@@ -186,7 +186,7 @@ export type Collection = Node & {
 	breadcrumbs: Array<CollectionBreadcrumb>;
 	children?: Maybe<Array<Collection>>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<CollectionCustomFields>;
 	description: Scalars['String']['output'];
 	featuredAsset?: Maybe<Asset>;
 	filters: Array<ConfigurableOperation>;
@@ -211,6 +211,11 @@ export type CollectionBreadcrumb = {
 	id: Scalars['ID']['output'];
 	name: Scalars['String']['output'];
 	slug: Scalars['String']['output'];
+};
+
+export type CollectionCustomFields = {
+	__typename?: 'CollectionCustomFields';
+	carouselImage?: Maybe<Asset>;
 };
 
 export type CollectionFilterParameter = {
@@ -256,6 +261,7 @@ export type CollectionResult = {
 };
 
 export type CollectionSortParameter = {
+	carouselImage?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
@@ -3771,7 +3777,7 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
-export type CollectionsQueryVariables = Exact<{ take: InputMaybe<Scalars['Int']['input']> }>;
+export type CollectionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
@@ -3784,6 +3790,10 @@ export type CollectionsQuery = {
 			slug: string;
 			parent?: { __typename?: 'Collection'; name: string } | null;
 			featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+			customFields?: {
+				__typename?: 'CollectionCustomFields';
+				carouselImage?: { __typename?: 'Asset'; id: string; preview: string } | null;
+			} | null;
 		}>;
 	};
 };
@@ -3806,6 +3816,10 @@ export type CollectionQuery = {
 			name: string;
 			slug: string;
 		}>;
+		customFields?: {
+			__typename?: 'CollectionCustomFields';
+			carouselImage?: { __typename?: 'Asset'; id: string; preview: string } | null;
+		} | null;
 		children?: Array<{
 			__typename?: 'Collection';
 			id: string;
@@ -5325,8 +5339,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections($take: Int) {
-		collections(options: { take: $take }) {
+	query collections {
+		collections {
 			items {
 				id
 				name
@@ -5337,6 +5351,12 @@ export const CollectionsDocument = gql`
 				featuredAsset {
 					id
 					preview
+				}
+				customFields {
+					carouselImage {
+						id
+						preview
+					}
 				}
 			}
 		}
@@ -5352,6 +5372,12 @@ export const CollectionDocument = gql`
 				id
 				name
 				slug
+			}
+			customFields {
+				carouselImage {
+					id
+					preview
+				}
 			}
 			children {
 				id

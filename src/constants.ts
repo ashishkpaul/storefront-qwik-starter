@@ -16,9 +16,11 @@ export const DEFAULT_METADATA_DESCRIPTION =
 export const DEFAULT_METADATA_IMAGE = '/social-image.png';
 export const DEFAULT_LOCALE = 'en';
 // TODO: replace DEV_API and PROD_API with your dev and prod API urls.
-export const DEV_API = 'http://192.168.1.32:3001';
-// export const PROD_API = 'https://ecom.saa9vi.com';
+
+// export const DEV_API = 'http://192.168.1.32:3001';
 export const PROD_API = 'http://192.168.1.32:3001';
+// export const PROD_API = 'https://ecom.saa9vi.com';
+export const DEV_API = 'https://ecom.saa9vi.com';
 export const LOCAL_API = 'http://192.168.1.32:3001';
 
 export const PORT = '3010';

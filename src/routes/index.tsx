@@ -1,9 +1,9 @@
 import { component$, useContext } from '@builder.io/qwik';
 // import { Image } from 'qwik-image';
-import CollectionCard from '~/components/collection-card/CollectionCard';
-// import { APP_STATE, HOMEPAGE_IMAGE } from '~/constants';
 import Carousel from '~/components/carousel/Carousel';
+import CollectionCard from '~/components/collection-card/CollectionCard';
 // import Marquee from '~/components/marquee/Marquee';
+// import { APP_STATE, HOMEPAGE_IMAGE } from '~/constants';
 import { APP_STATE } from '~/constants';
 
 export default component$(() => {
@@ -11,7 +11,7 @@ export default component$(() => {
 	return (
 		<div>
 			<div style={{ zIndex: 1, position: 'relative' }}>
-				<Carousel />
+				<Carousel collections={collections} />
 			</div>
 			<section class="pt-1 xl:max-w-7xl xl:mx-auto xl:px-8">
 				<div class="mt-1 flow-root">
