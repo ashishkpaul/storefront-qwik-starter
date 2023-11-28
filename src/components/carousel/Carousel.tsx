@@ -10,10 +10,13 @@ interface IProps {
 export default component$(({ collections }: IProps) => {
 	return (
 		<div id="default-carousel" class="relative w-full" data-carousel="slide">
-			{/* Carousel wrapper */}
-			<div class="relative h-48 md:h-64 lg:h-96 xl:h-600 2xl:h-600 overflow-hidden flex items-center justify-center">
+			<div class="relative h-48 md:h-64 lg:h-80 xl:h-96 2xl:h-96 overflow-hidden flex items-center justify-center">
 				{collections.map((collection) => (
-					<div class="hidden duration-700 ease-in-out" data-carousel-item key={collection.id}>
+					<div
+						class="hidden duration-700 ease-in-out md:block"
+						data-carousel-item
+						key={collection.id}
+					>
 						<CarouselImage collection={collection} />
 					</div>
 				))}
