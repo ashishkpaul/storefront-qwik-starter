@@ -8,7 +8,7 @@ interface IProps {
 
 export default component$(({ collections }: IProps) => {
 	// Specify the maximum number of items to display in the carousel
-	const maxItemsToShow = 3; // Adjust this number based on your needs
+	const maxItemsToShow = 9; // Adjust this number based on your needs
 
 	return (
 		<div id="default-carousel" class="relative w-full" data-carousel="slide">
