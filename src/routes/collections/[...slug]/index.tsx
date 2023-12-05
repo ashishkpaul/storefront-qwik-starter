@@ -97,7 +97,7 @@ export default component$(() => {
 			}}
 		>
 			<div class="flex justify-between items-center">
-				<h2 class="text-3xl sm:text-5xl font-light tracking-tight text-orange-900 my-8">
+				<h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
 					{collectionSignal.value.name}
 				</h2>
 				<div>

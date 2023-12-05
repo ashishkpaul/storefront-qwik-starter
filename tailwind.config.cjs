@@ -5,7 +5,7 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				primary: colors.orange,
+				primary: colors.blue,
 			},
 			animation: {
 				marquee: 'marquee 25s linear infinite',

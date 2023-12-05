@@ -47,10 +47,10 @@ export default component$(() => {
 
 	return (
 		<div
-			class={`bg-gradient-to-r from-yellow-700 to-orange-900 transform shadow-xl sticky top-0 z-10 animate-dropIn`}
+			class={`bg-gradient-to-r from-blue-700 to-indigo-900 transform shadow-xl sticky top-0 z-10 animate-dropIn`}
 		>
 			<header>
-				<div class="bg-zinc-100 text-orange-600 shadow-inner text-center text-sm py-1 px-2 xl:px-0">
+				<div class="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-1 px-2 xl:px-0">
 					<div class="max-w-6xl mx-2 h-5 min-h-full md:mx-auto flex items-center justify-between my-1">
 						<div class="flex justify-between items-center w-full">
 							<div>
@@ -58,14 +58,14 @@ export default component$(() => {
 									<div class="flex items-center justify-center space-x-2">
 										<a
 											href="mailto:support@dingpack.com"
-											class="flex items-center justify-center space-x-2 text-orange-800 hover:text-orange-600"
+											class="flex items-center justify-center space-x-2 text-gray-800 hover:text-gray-600"
 										>
 											<EmailIcon />
 											<span>support@dingpack.com</span>
 										</a>
 										<a
 											href="tel:+919996099227"
-											class="flex items-center justify-center space-x-2 text-orange-800 hover:text-orange-600"
+											class="flex items-center justify-center space-x-2 text-gray-800 hover:text-gray-600"
 										>
 											<CallIcon />
 											<span>+919996099227</span>
@@ -79,17 +79,17 @@ export default component$(() => {
 							<div class="flex sm:mr-[10px] 2xl:mr-0">
 								<Link
 									href={appState.customer.id !== CUSTOMER_NOT_DEFINED_ID ? '/account' : '/sign-in'}
-									class="flex items-center space-x-1 pb-1 pr-2 text-orange-800 hover:text-orange-600"
+									class="flex items-center space-x-1 pb-1 pr-2 text-gray-800 hover:text-gray-600"
 								>
 									<UserCircle />
-									<span class="mt-1 text-orange-800 hover:text-orange-600 sm:inline">
+									<span class="mt-1 text-gray-800 hover:text-gray-600 sm:inline">
 										{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID
 											? $localize`My Account`
 											: $localize`SignIn`}
 									</span>
 								</Link>
 								{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID && (
-									<button onClick$={logout} class="text-orange-700">
+									<button onClick$={logout} class="text-gray-700">
 										<div class="flex items-center cursor-pointer">
 											<span class="mr-2">{$localize`Logout`}</span>
 											<LogoutIcon />
@@ -120,7 +120,7 @@ export default component$(() => {
 					<div class="hidden space-x-4 sm:block">
 						{collections.map((collection) => (
 							<Link
-								class="text-sm md:text-base text-orange-200 hover:text-white"
+								class="text-sm md:text-base text-gray-200 hover:text-white"
 								href={`/collections/${collection.slug}`}
 								key={collection.id}
 							>

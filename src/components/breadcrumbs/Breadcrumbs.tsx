@@ -9,7 +9,7 @@ export default component$<{ items: { name: string; slug: string; id: string }[] 
 			<ol class="flex items-center space-x-1 md:space-x-4">
 				<li>
 					<div>
-						<Link href="/" class="text-orange-800 hover:text-orange-700">
+						<Link href="/" class="text-gray-800 hover:text-gray-700">
 							<HomeIcon />
 							<span class="sr-only">Home</span>
 						</Link>
@@ -23,7 +23,7 @@ export default component$<{ items: { name: string; slug: string; id: string }[] 
 								<SlashIcon />
 								<Link
 									href={`/collections/${item.slug}`}
-									class="ml-2 md:ml-4 text-xs md:text-sm font-medium text-orange-800 hover:text-orange-600"
+									class="ml-2 md:ml-4 text-xs md:text-sm font-medium text-gray-800 hover:text-gray-600"
 								>
 									{item.name}
 								</Link>
