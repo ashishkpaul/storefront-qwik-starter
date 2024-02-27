@@ -1,4 +1,12 @@
-import { $, component$, useComputed$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
+import {
+	$,
+	component$,
+	useComputed$,
+	useContext,
+	useSignal,
+	useStore,
+	useTask$,
+} from '@builder.io/qwik';
 import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
 import Alert from '~/components/alert/Alert';
@@ -7,13 +15,13 @@ import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
 import Price from '~/components/products/Price';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
-import TopReviews from '~/components/top-reviews/TopReviews';
+// import TopReviews from '~/components/top-reviews/TopReviews';
 import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
-import { getProductBySlug } from '~/providers/shop/products/products';
+import { getProductBySlug, getRelatedProductsBySlug } from '~/providers/shop/products/products';
 import { Variant } from '~/types';
-import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
+import { cleanUpParams, generateDocumentHead } from '~/utils';
 
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
@@ -26,6 +34,12 @@ export const useProductLoader = routeLoader$(async ({ params }) => {
 		});
 	}
 	return product;
+});
+
+export const useRelatedProductsLoader = routeLoader$(async ({ params }) => {
+	const { slug } = cleanUpParams(params);
+	const relatedProducts = await getRelatedProductsBySlug(slug); // Fetch related products by slug
+	return relatedProducts;
 });
 
 export default component$(() => {
@@ -52,9 +66,16 @@ export default component$(() => {
 	const addItemToOrderErrorSignal = useSignal('');
 	const quantitySignal = useSignal<Record<string, number>>({});
 
-	useTask$(async (tracker) => {
-		tracker.track(() => appState.activeOrder);
+	const relatedProductsSignal = useRelatedProductsLoader();
+
+	const state = useStore<{ relatedProducts: any[] }>({
+		relatedProducts: relatedProductsSignal.value,
+	});
+
+	useTask$(async ({ track }) => {
+		track(() => relatedProductsSignal.value);
 		quantitySignal.value = await calculateQuantities(productSignal.value);
+		state.relatedProducts = relatedProductsSignal.value;
 	});
 
 	return (
@@ -215,11 +236,36 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
-			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
-				<div class="mt-24">
-					<TopReviews />
+
+			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
+				<h2>Related Products</h2>
+				<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+					{state.relatedProducts.map((relatedProduct) => (
+						<div key={relatedProduct.id}>
+							<div class="group cursor-pointer">
+								<a href={`/products/${relatedProduct.slug}`}>
+									<Image
+										layout="fixed" // Add layout prop here
+										class="rounded-xl object-cover aspect-[7/8]"
+										width={200}
+										height={200}
+										src={relatedProduct.featuredAsset.preview}
+										alt={relatedProduct.name}
+									/>
+									<div class="text-sm text-gray-700">{relatedProduct.name}</div>
+									<div class="text-sm font-medium text-gray-900">
+										<Price
+											priceWithTax={relatedProduct.variants[0].priceWithTax}
+											currencyCode={relatedProduct.variants[0].currencyCode}
+											forcedClass="text-sm font-medium text-gray-900"
+										/>
+									</div>
+								</a>
+							</div>
+						</div>
+					))}
 				</div>
-			)}
+			</section>
 		</div>
 	);
 });

@@ -5,6 +5,7 @@ import Price from './Price';
 
 export default component$(
 	({ productAsset, productName, slug, priceWithTax, currencyCode }: any) => {
+		console.log('ProductCard rendered with slug:', slug);
 		return (
 			<Link class="flex flex-col mx-auto" href={`/products/${slug}/`}>
 				<Image

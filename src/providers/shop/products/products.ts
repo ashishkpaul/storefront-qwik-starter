@@ -21,6 +21,16 @@ export const getProductBySlug = async (slug: string) => {
 	return shopSdk.product({ slug }).then((res: ProductQuery) => res.product as Product);
 };
 
+export const getRelatedProductsBySlug = async (slug: string) => {
+	// Fetch the product details using getProductBySlug function
+	const product = await getProductBySlug(slug);
+
+	// Extract related products from the fetched product
+	const relatedProducts = product.customFields?.relatedProducts || [];
+
+	return relatedProducts;
+};
+
 export const detailedProductFragment = gql`
 	fragment DetailedProduct on Product {
 		id
@@ -64,6 +74,44 @@ export const detailedProductFragment = gql`
 			featuredAsset {
 				id
 				preview
+			}
+		}
+		customFields {
+			relatedProducts {
+				id
+				name
+				slug
+				description
+				facetValues {
+					facet {
+						id
+						code
+						name
+					}
+					id
+					code
+					name
+				}
+				featuredAsset {
+					id
+					preview
+				}
+				assets {
+					id
+					preview
+				}
+				variants {
+					id
+					name
+					priceWithTax
+					currencyCode
+					sku
+					stockLevel
+					featuredAsset {
+						id
+						preview
+					}
+				}
 			}
 		}
 	}
