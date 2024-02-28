@@ -15,13 +15,13 @@ import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
 import Price from '~/components/products/Price';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
-// import TopReviews from '~/components/top-reviews/TopReviews';
+import TopReviews from '~/components/top-reviews/TopReviews';
 import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug, getRelatedProductsBySlug } from '~/providers/shop/products/products';
 import { Variant } from '~/types';
-import { cleanUpParams, generateDocumentHead } from '~/utils';
+import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
 
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
@@ -73,6 +73,7 @@ export default component$(() => {
 	});
 
 	useTask$(async ({ track }) => {
+		track(() => appState.activeOrder);
 		track(() => relatedProductsSignal.value);
 		quantitySignal.value = await calculateQuantities(productSignal.value);
 		state.relatedProducts = relatedProductsSignal.value;
@@ -266,6 +267,11 @@ export default component$(() => {
 					))}
 				</div>
 			</section>
+			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
+				<div class="mt-24">
+					<TopReviews />
+				</div>
+			)}
 		</div>
 	);
 });
