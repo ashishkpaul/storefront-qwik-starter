@@ -25,6 +25,7 @@ export const detailedProductFragment = gql`
 	fragment DetailedProduct on Product {
 		id
 		name
+		slug
 		description
 		collections {
 			id
@@ -64,6 +65,44 @@ export const detailedProductFragment = gql`
 			featuredAsset {
 				id
 				preview
+			}
+		}
+		customFields {
+			relatedProducts {
+				id
+				name
+				slug
+				description
+				facetValues {
+					facet {
+						id
+						code
+						name
+					}
+					id
+					code
+					name
+				}
+				featuredAsset {
+					id
+					preview
+				}
+				assets {
+					id
+					preview
+				}
+				variants {
+					id
+					name
+					priceWithTax
+					currencyCode
+					sku
+					stockLevel
+					featuredAsset {
+						id
+						preview
+					}
+				}
 			}
 		}
 	}

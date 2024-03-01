@@ -14,6 +14,6 @@ export const DEFAULT_METADATA_DESCRIPTION =
 export const DEFAULT_METADATA_IMAGE = 'https://qwik-storefront.vendure.io/social-image.png';
 export const DEFAULT_LOCALE = 'en';
 // TODO: replace DEV_API and PROD_API with your dev and prod API urls.
-export const DEV_API = 'https://readonlydemo.vendure.io';
-export const PROD_API = 'https://readonlydemo.vendure.io';
+export const DEV_API = 'https://demo.dingpack.store';
+export const PROD_API = 'https://demo.dingpack.store';
 export const LOCAL_API = 'http://localhost:3000';

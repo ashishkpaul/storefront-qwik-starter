@@ -1,7 +1,7 @@
 union ActiveOrderResult = NoActiveOrderError | Order
 
 union AddPaymentToOrderResult =
-	  IneligiblePaymentMethodError
+	| IneligiblePaymentMethodError
 	| NoActiveOrderError
 	| Order
 	| OrderPaymentStateError
@@ -50,7 +50,7 @@ type AlreadyLoggedInError implements ErrorResult {
 }
 
 union ApplyCouponCodeResult =
-	  CouponCodeExpiredError
+	| CouponCodeExpiredError
 	| CouponCodeInvalidError
 	| CouponCodeLimitError
 	| Order
@@ -129,7 +129,7 @@ type Channel implements Node {
 	code: String!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode! @deprecated(reason: "Use defaultCurrencyCode instead")
-	customFields: JSON
+	customFields: ChannelCustomFields
 	defaultCurrencyCode: CurrencyCode!
 	defaultLanguageCode: LanguageCode!
 	defaultShippingZone: Zone
@@ -151,12 +151,16 @@ type Channel implements Node {
 	updatedAt: DateTime!
 }
 
+type ChannelCustomFields {
+	postalPinCode: Int
+}
+
 type Collection implements Node {
 	assets: [Asset!]!
 	breadcrumbs: [CollectionBreadcrumb!]!
 	children: [Collection!]
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: CollectionCustomFields
 	description: String!
 	featuredAsset: Asset
 	filters: [ConfigurableOperation!]!
@@ -167,6 +171,7 @@ type Collection implements Node {
 	parentId: ID!
 	position: Int!
 	productVariants(options: ProductVariantListOptions): ProductVariantList!
+	seo: Seo!
 	slug: String!
 	translations: [CollectionTranslation!]!
 	updatedAt: DateTime!
@@ -178,6 +183,12 @@ type CollectionBreadcrumb {
 	slug: String!
 }
 
+type CollectionCustomFields {
+	popularityScore: Int
+	promoBanner: Asset
+	promoBannerStatus: Boolean
+}
+
 input CollectionFilterParameter {
 	createdAt: DateOperators
 	description: StringOperators
@@ -185,7 +196,9 @@ input CollectionFilterParameter {
 	languageCode: StringOperators
 	name: StringOperators
 	parentId: IDOperators
+	popularityScore: NumberOperators
 	position: NumberOperators
+	promoBannerStatus: BooleanOperators
 	slug: StringOperators
 	updatedAt: DateOperators
 }
@@ -238,7 +251,10 @@ input CollectionSortParameter {
 	id: SortOrder
 	name: SortOrder
 	parentId: SortOrder
+	popularityScore: SortOrder
 	position: SortOrder
+	promoBanner: SortOrder
+	promoBannerStatus: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
 }
@@ -369,6 +385,14 @@ input CreateCustomerInput {
 	lastName: String!
 	phoneNumber: String
 	title: String
+}
+
+input CreateSellerInput {
+	customFields: JSON
+	emailAddress: String!
+	firstName: String!
+	lastName: String!
+	password: String!
 }
 
 """
@@ -1190,7 +1214,7 @@ interface CustomField {
 }
 
 union CustomFieldConfig =
-	  BooleanCustomFieldConfig
+	| BooleanCustomFieldConfig
 	| DateTimeCustomFieldConfig
 	| FloatCustomFieldConfig
 	| IntCustomFieldConfig
@@ -1396,6 +1420,10 @@ interface ErrorResult {
 	message: String!
 }
 
+type ExampleType {
+	name: String
+}
+
 type Facet implements Node {
 	code: String!
 	createdAt: DateTime!
@@ -1405,6 +1433,11 @@ type Facet implements Node {
 	name: String!
 	translations: [FacetTranslation!]!
 	updatedAt: DateTime!
+
+	"""
+	Returns a paginated, sortable, filterable list of the Facet's values. Added in v2.1.0.
+	"""
+	valueList(options: FacetValueListOptions): FacetValueList!
 	values: [FacetValue!]!
 }
 
@@ -1470,6 +1503,7 @@ type FacetValue implements Node {
 	createdAt: DateTime!
 	customFields: JSON
 	facet: Facet!
+	facetId: ID!
 	id: ID!
 	languageCode: LanguageCode!
 	name: String!
@@ -1490,6 +1524,48 @@ input FacetValueFilterInput {
 	or: [ID!]
 }
 
+input FacetValueFilterParameter {
+	code: StringOperators
+	createdAt: DateOperators
+	facetId: IDOperators
+	id: IDOperators
+	languageCode: StringOperators
+	name: StringOperators
+	updatedAt: DateOperators
+}
+
+type FacetValueList implements PaginatedList {
+	items: [FacetValue!]!
+	totalItems: Int!
+}
+
+input FacetValueListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: FacetValueFilterParameter
+
+	"""
+	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: FacetValueSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
 """
 Which FacetValues are present in the products returned
 by the search, and in what quantity.
@@ -1497,6 +1573,15 @@ by the search, and in what quantity.
 type FacetValueResult {
 	count: Int!
 	facetValue: FacetValue!
+}
+
+input FacetValueSortParameter {
+	code: SortOrder
+	createdAt: SortOrder
+	facetId: SortOrder
+	id: SortOrder
+	name: SortOrder
+	updatedAt: SortOrder
 }
 
 type FacetValueTranslation {
@@ -1524,7 +1609,7 @@ type FloatCustomFieldConfig implements CustomField {
 
 type Fulfillment implements Node {
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: FulfillmentCustomFields
 	id: ID!
 	lines: [FulfillmentLine!]!
 	method: String!
@@ -1532,6 +1617,10 @@ type Fulfillment implements Node {
 	summary: [FulfillmentLine!]! @deprecated(reason: "Use the `lines` field instead")
 	trackingCode: String
 	updatedAt: DateTime!
+}
+
+type FulfillmentCustomFields {
+	downloadUrls: [String!]
 }
 
 type FulfillmentLine {
@@ -2578,17 +2667,27 @@ type Mutation {
 	"""
 	Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available.
 	"""
-	addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
+	addItemToOrder(
+		customFields: OrderLineCustomFieldsInput = null
+		productVariantId: ID!
+		quantity: Int!
+	): UpdateOrderItemsResult!
 
 	"""
 	Add a Payment to the Order
 	"""
 	addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult!
+	addSelectedGiftToOrder(productVariantId: ID!): UpdateOrderItemsResult!
+	addToWishlist(productVariantId: ID!): [WishlistItem!]!
 
 	"""
 	Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available.
 	"""
-	adjustOrderLine(orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
+	adjustOrderLine(
+		customFields: OrderLineCustomFieldsInput = null
+		orderLineId: ID!
+		quantity: Int!
+	): UpdateOrderItemsResult!
 
 	"""
 	Applies the given coupon code to the active Order
@@ -2643,6 +2742,7 @@ type Mutation {
 	3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
 	"""
 	registerCustomerAccount(input: RegisterCustomerInput!): RegisterCustomerAccountResult!
+	registerNewSeller(input: RegisterSellerInput!): Channel
 
 	"""
 	Remove all OrderLine from the Order
@@ -2653,6 +2753,7 @@ type Mutation {
 	Removes the given coupon code from the active Order
 	"""
 	removeCouponCode(couponCode: String!): Order
+	removeFromWishlist(itemId: ID!): [WishlistItem!]!
 
 	"""
 	Remove an OrderLine from the Order
@@ -2707,6 +2808,7 @@ type Mutation {
 	shipping method will apply to.
 	"""
 	setOrderShippingMethod(shippingMethodId: [ID!]!): SetOrderShippingMethodResult!
+	submitProductReview(input: SubmitProductReviewInput!): ProductReview!
 
 	"""
 	Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`
@@ -2744,6 +2846,7 @@ type Mutation {
 	provided here.
 	"""
 	verifyCustomerAccount(password: String, token: String!): VerifyCustomerAccountResult!
+	voteOnReview(id: ID!, vote: Boolean!): ProductReview!
 }
 
 input NativeAuthInput {
@@ -2760,7 +2863,7 @@ type NativeAuthStrategyError implements ErrorResult {
 }
 
 union NativeAuthenticationResult =
-	  CurrentUser
+	| CurrentUser
 	| InvalidCredentialsError
 	| NativeAuthStrategyError
 	| NotVerifiedError
@@ -2838,7 +2941,7 @@ type Order implements Node {
 	couponCodes: [String!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: OrderCustomFields
 	customer: Customer
 	discounts: [Discount!]!
 	fulfillments: [Fulfillment!]
@@ -2917,13 +3020,21 @@ type OrderAddress {
 	streetLine2: String
 }
 
+type OrderCustomFields {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input OrderFilterParameter {
 	active: BooleanOperators
 	code: StringOperators
 	createdAt: DateOperators
 	currencyCode: StringOperators
+	customerNote: StringOperators
 	id: IDOperators
 	orderPlacedAt: DateOperators
+	referralCode: StringOperators
 	shipping: NumberOperators
 	shippingWithTax: NumberOperators
 	state: StringOperators
@@ -2934,6 +3045,7 @@ input OrderFilterParameter {
 	totalWithTax: NumberOperators
 	type: StringOperators
 	updatedAt: DateOperators
+	vatId: StringOperators
 }
 
 """
@@ -2947,7 +3059,7 @@ type OrderLimitError implements ErrorResult {
 
 type OrderLine implements Node {
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: OrderLineCustomFields
 
 	"""
 	The price of the line including discounts, excluding tax
@@ -3023,6 +3135,10 @@ type OrderLine implements Node {
 	The proratedUnitPrice including tax
 	"""
 	proratedUnitPriceWithTax: Money!
+
+	"""
+	The quantity of items purchased
+	"""
 	quantity: Int!
 	taxLines: [TaxLine!]!
 	taxRate: Float!
@@ -3047,6 +3163,14 @@ type OrderLine implements Node {
 	"""
 	unitPriceWithTaxChangeSinceAdded: Money!
 	updatedAt: DateTime!
+}
+
+type OrderLineCustomFields {
+	isSelectedAsGift: Boolean
+}
+
+input OrderLineCustomFieldsInput {
+	isSelectedAsGift: Boolean
 }
 
 type OrderList implements PaginatedList {
@@ -3100,8 +3224,10 @@ type OrderPaymentStateError implements ErrorResult {
 input OrderSortParameter {
 	code: SortOrder
 	createdAt: SortOrder
+	customerNote: SortOrder
 	id: SortOrder
 	orderPlacedAt: SortOrder
+	referralCode: SortOrder
 	shipping: SortOrder
 	shippingWithTax: SortOrder
 	state: SortOrder
@@ -3111,6 +3237,7 @@ input OrderSortParameter {
 	totalQuantity: SortOrder
 	totalWithTax: SortOrder
 	updatedAt: SortOrder
+	vatId: SortOrder
 }
 
 """
@@ -3536,6 +3663,11 @@ enum Permission {
 	DeleteZone
 
 	"""
+	Allows administrator to export orders
+	"""
+	ExportOrders
+
+	"""
 	Owner means the user owns this entity, e.g. a Customer's own Order
 	"""
 	Owner
@@ -3654,6 +3786,16 @@ enum Permission {
 	Grants permission to read Zone
 	"""
 	ReadZone
+
+	"""
+	Allows setting SendCloud configuration
+	"""
+	SetSendCloudConfig
+
+	"""
+	Allows setting a webhook URL
+	"""
+	SetWebhook
 
 	"""
 	SuperAdmin has unrestricted access to all operations
@@ -3788,7 +3930,7 @@ type Product implements Node {
 	assets: [Asset!]!
 	collections: [Collection!]!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: ProductCustomFields
 	description: String!
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
@@ -3796,6 +3938,10 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
+	primaryCollection: Collection
+	reviews(options: ProductReviewListOptions): ProductReviewList!
+	reviewsHistogram: [ProductReviewHistogramItem!]!
+	seo: Seo!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -3811,14 +3957,34 @@ type Product implements Node {
 	variants: [ProductVariant!]!
 }
 
+type ProductCustomFields {
+	additionalInfo: String
+	featuredReview: ProductReview
+	infoUrl: String
+	popularityScore: Int
+	primaryCollection: Collection
+	productPhysicalDimensions: String
+	relatedProducts: [Product!]
+	reviewCount: Float
+	reviewRating: Float
+	weight: Int
+}
+
 input ProductFilterParameter {
+	additionalInfo: StringOperators
 	createdAt: DateOperators
 	description: StringOperators
 	id: IDOperators
+	infoUrl: StringOperators
 	languageCode: StringOperators
 	name: StringOperators
+	popularityScore: NumberOperators
+	productPhysicalDimensions: StringOperators
+	reviewCount: NumberOperators
+	reviewRating: NumberOperators
 	slug: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -3894,13 +4060,109 @@ type ProductOptionTranslation {
 	updatedAt: DateTime!
 }
 
+type ProductReview implements Node {
+	authorLocation: String
+	authorName: String!
+	body: String
+	createdAt: DateTime!
+	downvotes: Int!
+	id: ID!
+	product: Product!
+	productVariant: ProductVariant
+	rating: Float!
+	response: String
+	responseCreatedAt: DateTime
+	state: String!
+	summary: String!
+	updatedAt: DateTime!
+	upvotes: Int!
+}
+
+input ProductReviewFilterParameter {
+	authorLocation: StringOperators
+	authorName: StringOperators
+	body: StringOperators
+	createdAt: DateOperators
+	downvotes: NumberOperators
+	id: IDOperators
+	rating: NumberOperators
+	response: StringOperators
+	responseCreatedAt: DateOperators
+	state: StringOperators
+	summary: StringOperators
+	updatedAt: DateOperators
+	upvotes: NumberOperators
+}
+
+type ProductReviewHistogramItem {
+	bin: Int!
+	frequency: Int!
+}
+
+type ProductReviewList implements PaginatedList {
+	items: [ProductReview!]!
+	totalItems: Int!
+}
+
+input ProductReviewListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: ProductReviewFilterParameter
+
+	"""
+	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: ProductReviewSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
+input ProductReviewSortParameter {
+	authorLocation: SortOrder
+	authorName: SortOrder
+	body: SortOrder
+	createdAt: SortOrder
+	downvotes: SortOrder
+	id: SortOrder
+	rating: SortOrder
+	response: SortOrder
+	responseCreatedAt: SortOrder
+	state: SortOrder
+	summary: SortOrder
+	updatedAt: SortOrder
+	upvotes: SortOrder
+}
+
 input ProductSortParameter {
+	additionalInfo: SortOrder
 	createdAt: SortOrder
 	description: SortOrder
+	featuredReview: SortOrder
 	id: SortOrder
+	infoUrl: SortOrder
 	name: SortOrder
+	popularityScore: SortOrder
+	primaryCollection: SortOrder
+	productPhysicalDimensions: SortOrder
+	reviewCount: SortOrder
+	reviewRating: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductTranslation {
@@ -3917,7 +4179,7 @@ type ProductVariant implements Node {
 	assets: [Asset!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: ProductVariantCustomFields
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
 	id: ID!
@@ -3936,18 +4198,29 @@ type ProductVariant implements Node {
 	updatedAt: DateTime!
 }
 
+type ProductVariantCustomFields {
+	isDigital: Boolean
+	maxPerOrder: Int
+	releaseDate: DateTime
+	weight: Int
+}
+
 input ProductVariantFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	id: IDOperators
+	isDigital: BooleanOperators
 	languageCode: StringOperators
+	maxPerOrder: NumberOperators
 	name: StringOperators
 	price: NumberOperators
 	priceWithTax: NumberOperators
 	productId: IDOperators
+	releaseDate: DateOperators
 	sku: StringOperators
 	stockLevel: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -3985,13 +4258,17 @@ input ProductVariantListOptions {
 input ProductVariantSortParameter {
 	createdAt: SortOrder
 	id: SortOrder
+	isDigital: SortOrder
+	maxPerOrder: SortOrder
 	name: SortOrder
 	price: SortOrder
 	priceWithTax: SortOrder
 	productId: SortOrder
+	releaseDate: SortOrder
 	sku: SortOrder
 	stockLevel: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -4017,6 +4294,7 @@ type Promotion implements Node {
 	startsAt: DateTime
 	translations: [PromotionTranslation!]!
 	updatedAt: DateTime!
+	usageLimit: Int
 }
 
 type PromotionList implements PaginatedList {
@@ -4063,6 +4341,7 @@ type Query {
 	The active Customer
 	"""
 	activeCustomer: Customer
+	activeCustomerWishlist: [WishlistItem!]!
 
 	"""
 	The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
@@ -4085,6 +4364,7 @@ type Query {
 	A list of Collections available to the shop
 	"""
 	collections(options: CollectionListOptions): CollectionList!
+	eligibleGifts: [ProductVariant!]!
 
 	"""
 	Returns a list of payment methods and their eligibility based on the current active Order
@@ -4197,7 +4477,7 @@ type RegionTranslation {
 }
 
 union RegisterCustomerAccountResult =
-	  MissingPasswordError
+	| MissingPasswordError
 	| NativeAuthStrategyError
 	| PasswordValidationError
 	| Success
@@ -4209,6 +4489,11 @@ input RegisterCustomerInput {
 	password: String
 	phoneNumber: String
 	title: String
+}
+
+input RegisterSellerInput {
+	seller: CreateSellerInput!
+	shopName: String!
 }
 
 type RelationCustomFieldConfig implements CustomField {
@@ -4230,13 +4515,13 @@ union RemoveOrderItemsResult = Order | OrderModificationError
 union RequestPasswordResetResult = NativeAuthStrategyError | Success
 
 union RequestUpdateCustomerEmailAddressResult =
-	  EmailAddressConflictError
+	| EmailAddressConflictError
 	| InvalidCredentialsError
 	| NativeAuthStrategyError
 	| Success
 
 union ResetPasswordResult =
-	  CurrentUser
+	| CurrentUser
 	| NativeAuthStrategyError
 	| NotVerifiedError
 	| PasswordResetTokenExpiredError
@@ -4263,6 +4548,7 @@ input SearchInput {
 	collectionSlug: String
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
+	inStock: Boolean
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -4274,21 +4560,10 @@ type SearchReindexResponse {
 }
 
 type SearchResponse {
-	cacheIdentifier: SearchResponseCacheIdentifier
 	collections: [CollectionResult!]!
 	facetValues: [FacetValueResult!]!
 	items: [SearchResult!]!
 	totalItems: Int!
-}
-
-"""
-This type is here to allow us to easily purge the Stellate cache
-of any search results where the collectionSlug is used. We cannot rely on
-simply purging the SearchResult type, because in the case of an empty 'items'
-array, Stellate cannot know that that particular query now needs to be purged.
-"""
-type SearchResponseCacheIdentifier {
-	collectionSlug: String
 }
 
 type SearchResult {
@@ -4300,6 +4575,7 @@ type SearchResult {
 	description: String!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
+	inStock: Boolean!
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset
@@ -4341,15 +4617,22 @@ type Seller implements Node {
 	updatedAt: DateTime!
 }
 
+type Seo {
+	description: String
+	facebookImage: Asset
+	title: String!
+	twitterImage: Asset
+}
+
 union SetCustomerForOrderResult =
-	  AlreadyLoggedInError
+	| AlreadyLoggedInError
 	| EmailAddressConflictError
 	| GuestCheckoutError
 	| NoActiveOrderError
 	| Order
 
 union SetOrderShippingMethodResult =
-	  IneligibleShippingMethodError
+	| IneligibleShippingMethodError
 	| NoActiveOrderError
 	| Order
 	| OrderModificationError
@@ -4369,7 +4652,7 @@ type ShippingMethod implements Node {
 	checker: ConfigurableOperation!
 	code: String!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: ShippingMethodCustomFields
 	description: String!
 	fulfillmentHandlerCode: String!
 	id: ID!
@@ -4379,6 +4662,10 @@ type ShippingMethod implements Node {
 	updatedAt: DateTime!
 }
 
+type ShippingMethodCustomFields {
+	isDigital: Boolean
+}
+
 type ShippingMethodList implements PaginatedList {
 	items: [ShippingMethod!]!
 	totalItems: Int!
@@ -4386,7 +4673,7 @@ type ShippingMethodList implements PaginatedList {
 
 type ShippingMethodQuote {
 	code: String!
-	customFields: JSON
+	customFields: ShippingMethodCustomFields
 	description: String!
 	id: ID!
 
@@ -4459,6 +4746,17 @@ input StringOperators {
 	notEq: String
 	notIn: [String!]
 	regex: String
+}
+
+input SubmitProductReviewInput {
+	authorLocation: String
+	authorName: String!
+	body: String!
+	customerId: ID
+	productId: ID!
+	rating: Float!
+	summary: String!
+	variantId: ID
 }
 
 """
@@ -4555,7 +4853,7 @@ input UpdateAddressInput {
 }
 
 union UpdateCustomerEmailAddressResult =
-	  IdentifierChangeTokenExpiredError
+	| IdentifierChangeTokenExpiredError
 	| IdentifierChangeTokenInvalidError
 	| NativeAuthStrategyError
 	| Success
@@ -4569,17 +4867,23 @@ input UpdateCustomerInput {
 }
 
 union UpdateCustomerPasswordResult =
-	  InvalidCredentialsError
+	| InvalidCredentialsError
 	| NativeAuthStrategyError
 	| PasswordValidationError
 	| Success
 
+input UpdateOrderCustomFieldsInput {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input UpdateOrderInput {
-	customFields: JSON
+	customFields: UpdateOrderCustomFieldsInput
 }
 
 union UpdateOrderItemsResult =
-	  InsufficientStockError
+	| InsufficientStockError
 	| NegativeQuantityError
 	| Order
 	| OrderLimitError
@@ -4621,13 +4925,21 @@ type VerificationTokenInvalidError implements ErrorResult {
 }
 
 union VerifyCustomerAccountResult =
-	  CurrentUser
+	| CurrentUser
 	| MissingPasswordError
 	| NativeAuthStrategyError
 	| PasswordAlreadySetError
 	| PasswordValidationError
 	| VerificationTokenExpiredError
 	| VerificationTokenInvalidError
+
+type WishlistItem implements Node {
+	createdAt: DateTime!
+	id: ID!
+	productVariant: ProductVariant!
+	productVariantId: ID!
+	updatedAt: DateTime!
+}
 
 type Zone implements Node {
 	createdAt: DateTime!

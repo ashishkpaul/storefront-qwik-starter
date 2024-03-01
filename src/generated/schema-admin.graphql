@@ -1,5 +1,5 @@
 union AddFulfillmentToOrderResult =
-	  CreateFulfillmentError
+	| CreateFulfillmentError
 	| EmptyOrderLineSelectionError
 	| Fulfillment
 	| FulfillmentStateTransitionError
@@ -8,11 +8,13 @@ union AddFulfillmentToOrderResult =
 	| ItemsAlreadyFulfilledError
 
 input AddItemInput {
+	customFields: OrderLineCustomFieldsInput
 	productVariantId: ID!
 	quantity: Int!
 }
 
 input AddItemToDraftOrderInput {
+	customFields: OrderLineCustomFieldsInput
 	productVariantId: ID!
 	quantity: Int!
 }
@@ -50,6 +52,7 @@ type Address implements Node {
 }
 
 input AdjustDraftOrderLineInput {
+	customFields: OrderLineCustomFieldsInput
 	orderLineId: ID!
 	quantity: Int!
 }
@@ -159,7 +162,7 @@ type AlreadyRefundedError implements ErrorResult {
 }
 
 union ApplyCouponCodeResult =
-	  CouponCodeExpiredError
+	| CouponCodeExpiredError
 	| CouponCodeInvalidError
 	| CouponCodeLimitError
 	| Order
@@ -363,7 +366,7 @@ input CancelOrderInput {
 }
 
 union CancelOrderResult =
-	  CancelActiveOrderError
+	| CancelActiveOrderError
 	| EmptyOrderLineSelectionError
 	| MultipleOrderError
 	| Order
@@ -397,7 +400,7 @@ type Channel implements Node {
 	code: String!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode! @deprecated(reason: "Use defaultCurrencyCode instead")
-	customFields: JSON
+	customFields: ChannelCustomFields
 	defaultCurrencyCode: CurrencyCode!
 	defaultLanguageCode: LanguageCode!
 	defaultShippingZone: Zone
@@ -419,6 +422,10 @@ type Channel implements Node {
 	updatedAt: DateTime!
 }
 
+type ChannelCustomFields {
+	postalPinCode: Int
+}
+
 """
 Returned when the default LanguageCode of a Channel is no longer found in the `availableLanguages`
 of the GlobalSettings
@@ -438,6 +445,7 @@ input ChannelFilterParameter {
 	defaultLanguageCode: StringOperators
 	id: IDOperators
 	outOfStockThreshold: NumberOperators
+	postalPinCode: NumberOperators
 	pricesIncludeTax: BooleanOperators
 	token: StringOperators
 	trackInventory: BooleanOperators
@@ -481,6 +489,7 @@ input ChannelSortParameter {
 	createdAt: SortOrder
 	id: SortOrder
 	outOfStockThreshold: SortOrder
+	postalPinCode: SortOrder
 	token: SortOrder
 	updatedAt: SortOrder
 }
@@ -490,7 +499,7 @@ type Collection implements Node {
 	breadcrumbs: [CollectionBreadcrumb!]!
 	children: [Collection!]
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: CollectionCustomFields
 	description: String!
 	featuredAsset: Asset
 	filters: [ConfigurableOperation!]!
@@ -514,6 +523,16 @@ type CollectionBreadcrumb {
 	slug: String!
 }
 
+type CollectionCustomFields {
+	facebookImage: Asset
+	popularityScore: Int
+	promoBanner: Asset
+	promoBannerStatus: Boolean
+	seoDescription: String
+	seoTitle: String
+	twitterImage: Asset
+}
+
 input CollectionFilterParameter {
 	createdAt: DateOperators
 	description: StringOperators
@@ -523,7 +542,11 @@ input CollectionFilterParameter {
 	languageCode: StringOperators
 	name: StringOperators
 	parentId: IDOperators
+	popularityScore: NumberOperators
 	position: NumberOperators
+	promoBannerStatus: BooleanOperators
+	seoDescription: StringOperators
+	seoTitle: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
 }
@@ -573,22 +596,35 @@ type CollectionResult {
 input CollectionSortParameter {
 	createdAt: SortOrder
 	description: SortOrder
+	facebookImage: SortOrder
 	id: SortOrder
 	name: SortOrder
 	parentId: SortOrder
+	popularityScore: SortOrder
 	position: SortOrder
+	promoBanner: SortOrder
+	promoBannerStatus: SortOrder
+	seoDescription: SortOrder
+	seoTitle: SortOrder
 	slug: SortOrder
+	twitterImage: SortOrder
 	updatedAt: SortOrder
 }
 
 type CollectionTranslation {
 	createdAt: DateTime!
+	customFields: CollectionTranslationCustomFields
 	description: String!
 	id: ID!
 	languageCode: LanguageCode!
 	name: String!
 	slug: String!
 	updatedAt: DateTime!
+}
+
+type CollectionTranslationCustomFields {
+	seoDescription: String
+	seoTitle: String
 }
 
 type ConfigArg {
@@ -778,11 +814,15 @@ input CreateAssetInput {
 
 union CreateAssetResult = Asset | MimeTypeError
 
+input CreateChannelCustomFieldsInput {
+	postalPinCode: Int
+}
+
 input CreateChannelInput {
 	availableCurrencyCodes: [CurrencyCode!]
 	availableLanguageCodes: [LanguageCode!]
 	code: String!
-	customFields: JSON
+	customFields: CreateChannelCustomFieldsInput
 	defaultCurrencyCode: CurrencyCode
 	defaultLanguageCode: LanguageCode!
 	defaultShippingZoneId: ID!
@@ -796,9 +836,17 @@ input CreateChannelInput {
 
 union CreateChannelResult = Channel | LanguageNotAvailableError
 
+input CreateCollectionCustomFieldsInput {
+	facebookImageId: ID
+	popularityScore: Int
+	promoBannerId: ID
+	promoBannerStatus: Boolean
+	twitterImageId: ID
+}
+
 input CreateCollectionInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: CreateCollectionCustomFieldsInput
 	featuredAssetId: ID
 	filters: [ConfigurableOperationInput!]!
 	inheritFilters: Boolean
@@ -808,11 +856,16 @@ input CreateCollectionInput {
 }
 
 input CreateCollectionTranslationInput {
-	customFields: JSON
+	customFields: CreateCollectionTranslationInputCustomFields
 	description: String!
 	languageCode: LanguageCode!
 	name: String!
 	slug: String!
+}
+
+input CreateCollectionTranslationInputCustomFields {
+	seoDescription: String
+	seoTitle: String
 }
 
 input CreateCountryInput {
@@ -882,9 +935,24 @@ input CreatePaymentMethodInput {
 	translations: [PaymentMethodTranslationInput!]!
 }
 
+input CreateProductCustomFieldsInput {
+	additionalInfo: String
+	facebookImageId: ID
+	featuredReviewId: ID
+	infoUrl: String
+	popularityScore: Int
+	primaryCollectionId: ID
+	productPhysicalDimensions: String
+	relatedProductsIds: [ID!]
+	reviewCount: Float
+	reviewRating: Float
+	twitterImageId: ID
+	weight: Int
+}
+
 input CreateProductInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: CreateProductCustomFieldsInput
 	enabled: Boolean
 	facetValueIds: [ID!]
 	featuredAssetId: ID
@@ -905,9 +973,16 @@ input CreateProductOptionInput {
 	translations: [ProductOptionGroupTranslationInput!]!
 }
 
+input CreateProductVariantCustomFieldsInput {
+	isDigital: Boolean
+	maxPerOrder: Int
+	releaseDate: DateTime
+	weight: Int
+}
+
 input CreateProductVariantInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: CreateProductVariantCustomFieldsInput
 	facetValueIds: [ID!]
 	featuredAssetId: ID
 	optionIds: [ID!]
@@ -939,6 +1014,7 @@ input CreatePromotionInput {
 	perCustomerUsageLimit: Int
 	startsAt: DateTime
 	translations: [PromotionTranslationInput!]!
+	usageLimit: Int
 }
 
 union CreatePromotionResult = MissingConditionsError | Promotion
@@ -957,16 +1033,24 @@ input CreateRoleInput {
 	permissions: [Permission!]!
 }
 
+input CreateSellerCustomFieldsInput {
+	connectedAccountId: String
+}
+
 input CreateSellerInput {
-	customFields: JSON
+	customFields: CreateSellerCustomFieldsInput
 	name: String!
+}
+
+input CreateShippingMethodCustomFieldsInput {
+	isDigital: Boolean
 }
 
 input CreateShippingMethodInput {
 	calculator: ConfigurableOperationInput!
 	checker: ConfigurableOperationInput!
 	code: String!
-	customFields: JSON
+	customFields: CreateShippingMethodCustomFieldsInput
 	fulfillmentHandler: String!
 	translations: [ShippingMethodTranslationInput!]!
 }
@@ -1822,7 +1906,7 @@ interface CustomField {
 }
 
 union CustomFieldConfig =
-	  BooleanCustomFieldConfig
+	| BooleanCustomFieldConfig
 	| DateTimeCustomFieldConfig
 	| FloatCustomFieldConfig
 	| IntCustomFieldConfig
@@ -2155,6 +2239,11 @@ type Facet implements Node {
 	name: String!
 	translations: [FacetTranslation!]!
 	updatedAt: DateTime!
+
+	"""
+	Returns a paginated, sortable, filterable list of the Facet's values. Added in v2.1.0.
+	"""
+	valueList(options: FacetValueListOptions): FacetValueList!
 	values: [FacetValue!]!
 }
 
@@ -2236,6 +2325,7 @@ type FacetValue implements Node {
 	createdAt: DateTime!
 	customFields: JSON
 	facet: Facet!
+	facetId: ID!
 	id: ID!
 	languageCode: LanguageCode!
 	name: String!
@@ -2259,6 +2349,7 @@ input FacetValueFilterInput {
 input FacetValueFilterParameter {
 	code: StringOperators
 	createdAt: DateOperators
+	facetId: IDOperators
 	id: IDOperators
 	languageCode: StringOperators
 	name: StringOperators
@@ -2309,6 +2400,7 @@ type FacetValueResult {
 input FacetValueSortParameter {
 	code: SortOrder
 	createdAt: SortOrder
+	facetId: SortOrder
 	id: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
@@ -2351,7 +2443,7 @@ input FulfillOrderInput {
 
 type Fulfillment implements Node {
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: FulfillmentCustomFields
 	id: ID!
 	lines: [FulfillmentLine!]!
 	method: String!
@@ -2360,6 +2452,10 @@ type Fulfillment implements Node {
 	summary: [FulfillmentLine!]! @deprecated(reason: "Use the `lines` field instead")
 	trackingCode: String
 	updatedAt: DateTime!
+}
+
+type FulfillmentCustomFields {
+	downloadUrls: [String!]
 }
 
 type FulfillmentLine {
@@ -2488,6 +2584,7 @@ enum HistoryEntryType {
 	ORDER_PAYMENT_TRANSITION
 	ORDER_REFUND_TRANSITION
 	ORDER_STATE_TRANSITION
+	SENDCLOUD_NOTIFICATION
 }
 
 """
@@ -3593,6 +3690,7 @@ input ModifyOrderInput {
 	addItems: [AddItemInput!]
 	adjustOrderLines: [OrderLineInput!]
 	couponCodes: [String!]
+	customFields: UpdateOrderCustomFieldsInput
 	dryRun: Boolean!
 	note: String
 	options: ModifyOrderOptions
@@ -3609,7 +3707,7 @@ input ModifyOrderOptions {
 }
 
 union ModifyOrderResult =
-	  CouponCodeExpiredError
+	| CouponCodeExpiredError
 	| CouponCodeInvalidError
 	| CouponCodeLimitError
 	| InsufficientStockError
@@ -3684,6 +3782,7 @@ type Mutation {
 	Applies the given coupon code to the draft Order
 	"""
 	applyCouponCodeToDraftOrder(couponCode: String!, orderId: ID!): ApplyCouponCodeResult!
+	approveProductReview(id: ID!): ProductReview
 
 	"""
 	Assign assets to channel
@@ -4092,6 +4191,7 @@ type Mutation {
 	moveCollection(input: MoveCollectionInput!): Collection!
 	refundOrder(input: RefundOrderInput!): RefundOrderResult!
 	reindex: Job!
+	rejectProductReview(id: ID!): ProductReview
 
 	"""
 	Removes Collections from the specified Channel
@@ -4174,6 +4274,7 @@ type Mutation {
 	"""
 	removeStockLocationsFromChannel(input: RemoveStockLocationsFromChannelInput!): [StockLocation!]!
 	runPendingSearchIndexUpdates: Success!
+	sendToSendCloud(orderId: ID!): Boolean!
 	setCustomerForDraftOrder(
 		customerId: ID
 		input: CreateCustomerInput
@@ -4200,6 +4301,11 @@ type Mutation {
 	"""
 	setDraftOrderShippingMethod(orderId: ID!, shippingMethodId: ID!): SetOrderShippingMethodResult!
 	setOrderCustomFields(input: UpdateOrderInput!): Order
+
+	"""
+	Set all webhooks for the current channel. This will overwrite any existing webhooks.
+	"""
+	setWebhooks(webhooks: [WebhookInput!]!): [Webhook!]!
 	settlePayment(id: ID!): SettlePaymentResult!
 	settleRefund(input: SettleRefundInput!): SettleRefundResult!
 	transitionFulfillmentToState(id: ID!, state: String!): TransitionFulfillmentToStateResult!
@@ -4283,6 +4389,7 @@ type Mutation {
 	Update an existing ProductOptionGroup
 	"""
 	updateProductOptionGroup(input: UpdateProductOptionGroupInput!): ProductOptionGroup!
+	updateProductReview(input: UpdateProductReviewInput!): ProductReview!
 
 	"""
 	Update existing ProductVariants
@@ -4309,6 +4416,7 @@ type Mutation {
 	Update an existing Seller
 	"""
 	updateSeller(input: UpdateSellerInput!): Seller!
+	updateSendCloudConfig(input: SendCloudConfigInput): SendCloudConfig!
 
 	"""
 	Update an existing ShippingMethod
@@ -4435,7 +4543,7 @@ type Order implements Node {
 	couponCodes: [String!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: OrderCustomFields
 	customer: Customer
 	discounts: [Discount!]!
 	fulfillments: [Fulfillment!]
@@ -4517,6 +4625,12 @@ type OrderAddress {
 	streetLine2: String
 }
 
+type OrderCustomFields {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input OrderFilterParameter {
 	active: BooleanOperators
 	aggregateOrderId: IDOperators
@@ -4524,8 +4638,10 @@ input OrderFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	customerLastName: StringOperators
+	customerNote: StringOperators
 	id: IDOperators
 	orderPlacedAt: DateOperators
+	referralCode: StringOperators
 	shipping: NumberOperators
 	shippingWithTax: NumberOperators
 	state: StringOperators
@@ -4537,6 +4653,7 @@ input OrderFilterParameter {
 	transactionId: StringOperators
 	type: StringOperators
 	updatedAt: DateOperators
+	vatId: StringOperators
 }
 
 """
@@ -4550,7 +4667,7 @@ type OrderLimitError implements ErrorResult {
 
 type OrderLine implements Node {
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: OrderLineCustomFields
 
 	"""
 	The price of the line including discounts, excluding tax
@@ -4626,6 +4743,10 @@ type OrderLine implements Node {
 	The proratedUnitPrice including tax
 	"""
 	proratedUnitPriceWithTax: Money!
+
+	"""
+	The quantity of items purchased
+	"""
 	quantity: Int!
 	taxLines: [TaxLine!]!
 	taxRate: Float!
@@ -4652,7 +4773,16 @@ type OrderLine implements Node {
 	updatedAt: DateTime!
 }
 
+type OrderLineCustomFields {
+	isSelectedAsGift: Boolean
+}
+
+input OrderLineCustomFieldsInput {
+	isSelectedAsGift: Boolean
+}
+
 input OrderLineInput {
+	customFields: OrderLineCustomFieldsInput
 	orderLineId: ID!
 	quantity: Int!
 }
@@ -4736,8 +4866,10 @@ input OrderSortParameter {
 	code: SortOrder
 	createdAt: SortOrder
 	customerLastName: SortOrder
+	customerNote: SortOrder
 	id: SortOrder
 	orderPlacedAt: SortOrder
+	referralCode: SortOrder
 	shipping: SortOrder
 	shippingWithTax: SortOrder
 	state: SortOrder
@@ -4748,6 +4880,7 @@ input OrderSortParameter {
 	totalWithTax: SortOrder
 	transactionId: SortOrder
 	updatedAt: SortOrder
+	vatId: SortOrder
 }
 
 """
@@ -5191,6 +5324,11 @@ enum Permission {
 	DeleteZone
 
 	"""
+	Allows administrator to export orders
+	"""
+	ExportOrders
+
+	"""
 	Owner means the user owns this entity, e.g. a Customer's own Order
 	"""
 	Owner
@@ -5309,6 +5447,16 @@ enum Permission {
 	Grants permission to read Zone
 	"""
 	ReadZone
+
+	"""
+	Allows setting SendCloud configuration
+	"""
+	SetSendCloudConfig
+
+	"""
+	Allows setting a webhook URL
+	"""
+	SetWebhook
 
 	"""
 	SuperAdmin has unrestricted access to all operations
@@ -5456,7 +5604,7 @@ type Product implements Node {
 	channels: [Channel!]!
 	collections: [Collection!]!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: ProductCustomFields
 	description: String!
 	enabled: Boolean!
 	facetValues: [FacetValue!]!
@@ -5465,6 +5613,8 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
+	reviews(options: ProductReviewListOptions): ProductReviewList!
+	reviewsHistogram: [ProductReviewHistogramItem!]!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -5480,16 +5630,42 @@ type Product implements Node {
 	variants: [ProductVariant!]!
 }
 
+type ProductCustomFields {
+	additionalInfo: String
+	facebookImage: Asset
+	featuredReview: ProductReview
+	infoUrl: String
+	popularityScore: Int
+	primaryCollection: Collection
+	productPhysicalDimensions: String
+	relatedProducts: [Product!]
+	reviewCount: Float
+	reviewRating: Float
+	seoDescription: String
+	seoTitle: String
+	twitterImage: Asset
+	weight: Int
+}
+
 input ProductFilterParameter {
+	additionalInfo: StringOperators
 	createdAt: DateOperators
 	description: StringOperators
 	enabled: BooleanOperators
 	facetValueId: IDOperators
 	id: IDOperators
+	infoUrl: StringOperators
 	languageCode: StringOperators
 	name: StringOperators
+	popularityScore: NumberOperators
+	productPhysicalDimensions: StringOperators
+	reviewCount: NumberOperators
+	reviewRating: NumberOperators
+	seoDescription: StringOperators
+	seoTitle: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -5586,17 +5762,119 @@ input ProductOptionTranslationInput {
 	name: String
 }
 
+type ProductReview implements Node {
+	author: Customer
+	authorLocation: String
+	authorName: String!
+	body: String
+	createdAt: DateTime!
+	downvotes: Int!
+	id: ID!
+	product: Product!
+	productVariant: ProductVariant
+	rating: Float!
+	response: String
+	responseCreatedAt: DateTime
+	state: String!
+	summary: String!
+	updatedAt: DateTime!
+	upvotes: Int!
+}
+
+input ProductReviewFilterParameter {
+	authorLocation: StringOperators
+	authorName: StringOperators
+	body: StringOperators
+	createdAt: DateOperators
+	downvotes: NumberOperators
+	id: IDOperators
+	rating: NumberOperators
+	response: StringOperators
+	responseCreatedAt: DateOperators
+	state: StringOperators
+	summary: StringOperators
+	updatedAt: DateOperators
+	upvotes: NumberOperators
+}
+
+type ProductReviewHistogramItem {
+	bin: Int!
+	frequency: Int!
+}
+
+type ProductReviewList implements PaginatedList {
+	items: [ProductReview!]!
+	totalItems: Int!
+}
+
+input ProductReviewListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: ProductReviewFilterParameter
+
+	"""
+	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: ProductReviewSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
+input ProductReviewSortParameter {
+	authorLocation: SortOrder
+	authorName: SortOrder
+	body: SortOrder
+	createdAt: SortOrder
+	downvotes: SortOrder
+	id: SortOrder
+	rating: SortOrder
+	response: SortOrder
+	responseCreatedAt: SortOrder
+	state: SortOrder
+	summary: SortOrder
+	updatedAt: SortOrder
+	upvotes: SortOrder
+}
+
 input ProductSortParameter {
+	additionalInfo: SortOrder
 	createdAt: SortOrder
 	description: SortOrder
+	facebookImage: SortOrder
+	featuredReview: SortOrder
 	id: SortOrder
+	infoUrl: SortOrder
 	name: SortOrder
+	popularityScore: SortOrder
+	primaryCollection: SortOrder
+	productPhysicalDimensions: SortOrder
+	reviewCount: SortOrder
+	reviewRating: SortOrder
+	seoDescription: SortOrder
+	seoTitle: SortOrder
 	slug: SortOrder
+	twitterImage: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductTranslation {
 	createdAt: DateTime!
+	customFields: ProductTranslationCustomFields
 	description: String!
 	id: ID!
 	languageCode: LanguageCode!
@@ -5605,8 +5883,13 @@ type ProductTranslation {
 	updatedAt: DateTime!
 }
 
+type ProductTranslationCustomFields {
+	seoDescription: String
+	seoTitle: String
+}
+
 input ProductTranslationInput {
-	customFields: JSON
+	customFields: ProductTranslationInputCustomFields
 	description: String
 	id: ID
 	languageCode: LanguageCode!
@@ -5614,12 +5897,17 @@ input ProductTranslationInput {
 	slug: String
 }
 
+input ProductTranslationInputCustomFields {
+	seoDescription: String
+	seoTitle: String
+}
+
 type ProductVariant implements Node {
 	assets: [Asset!]!
 	channels: [Channel!]!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode!
-	customFields: JSON
+	customFields: ProductVariantCustomFields
 	enabled: Boolean!
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
@@ -5647,18 +5935,28 @@ type ProductVariant implements Node {
 	useGlobalOutOfStockThreshold: Boolean!
 }
 
+type ProductVariantCustomFields {
+	isDigital: Boolean
+	maxPerOrder: Int
+	releaseDate: DateTime
+	weight: Int
+}
+
 input ProductVariantFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	enabled: BooleanOperators
 	facetValueId: IDOperators
 	id: IDOperators
+	isDigital: BooleanOperators
 	languageCode: StringOperators
+	maxPerOrder: NumberOperators
 	name: StringOperators
 	outOfStockThreshold: NumberOperators
 	price: NumberOperators
 	priceWithTax: NumberOperators
 	productId: IDOperators
+	releaseDate: DateOperators
 	sku: StringOperators
 	stockAllocated: NumberOperators
 	stockLevel: StringOperators
@@ -5666,6 +5964,7 @@ input ProductVariantFilterParameter {
 	trackInventory: StringOperators
 	updatedAt: DateOperators
 	useGlobalOutOfStockThreshold: BooleanOperators
+	weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -5702,7 +6001,7 @@ input ProductVariantListOptions {
 
 type ProductVariantPrice {
 	currencyCode: CurrencyCode!
-	price: Int!
+	price: Money!
 }
 
 """
@@ -5718,16 +6017,20 @@ input ProductVariantPriceInput {
 input ProductVariantSortParameter {
 	createdAt: SortOrder
 	id: SortOrder
+	isDigital: SortOrder
+	maxPerOrder: SortOrder
 	name: SortOrder
 	outOfStockThreshold: SortOrder
 	price: SortOrder
 	priceWithTax: SortOrder
 	productId: SortOrder
+	releaseDate: SortOrder
 	sku: SortOrder
 	stockAllocated: SortOrder
 	stockLevel: SortOrder
 	stockOnHand: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -5760,6 +6063,7 @@ type Promotion implements Node {
 	startsAt: DateTime
 	translations: [PromotionTranslation!]!
 	updatedAt: DateTime!
+	usageLimit: Int
 }
 
 input PromotionFilterParameter {
@@ -5773,6 +6077,7 @@ input PromotionFilterParameter {
 	perCustomerUsageLimit: NumberOperators
 	startsAt: DateOperators
 	updatedAt: DateOperators
+	usageLimit: NumberOperators
 }
 
 type PromotionList implements PaginatedList {
@@ -5817,6 +6122,7 @@ input PromotionSortParameter {
 	perCustomerUsageLimit: SortOrder
 	startsAt: SortOrder
 	updatedAt: SortOrder
+	usageLimit: SortOrder
 }
 
 type PromotionTranslation {
@@ -5935,6 +6241,18 @@ type Query {
 	Get a list of Assets
 	"""
 	assets(options: AssetListOptions): AssetList!
+	availableOrderExportStrategies: [String!]!
+
+	"""
+	Get all available Vendure events that can be used to trigger webhooks
+	"""
+	availableWebhookEvents: [String!]!
+
+	"""
+	"
+	Get all available webhook request transformers
+	"""
+	availableWebhookRequestTransformers: [WebhookRequestTransformer!]!
 	channel(id: ID!): Channel
 	channels(options: ChannelListOptions): ChannelList!
 
@@ -5993,6 +6311,8 @@ type Query {
 	product(id: ID, slug: String): Product
 	productOptionGroup(id: ID!): ProductOptionGroup
 	productOptionGroups(filterTerm: String): [ProductOptionGroup!]!
+	productReview(id: ID!): ProductReview
+	productReviews(options: ProductReviewListOptions): ProductReviewList!
 
 	"""
 	Get a ProductVariant by id
@@ -6003,6 +6323,7 @@ type Query {
 	List ProductVariants either all or for the specific product.
 	"""
 	productVariants(options: ProductVariantListOptions, productId: ID): ProductVariantList!
+	productVariantsWithLowStock: [ProductVariant!]!
 
 	"""
 	List Products
@@ -6019,6 +6340,7 @@ type Query {
 	search(input: SearchInput!): SearchResponse!
 	seller(id: ID!): Seller
 	sellers(options: SellerListOptions): SellerList!
+	sendCloudConfig: SendCloudConfig
 	shippingCalculators: [ConfigurableOperationDefinition!]!
 	shippingEligibilityCheckers: [ConfigurableOperationDefinition!]!
 	shippingMethod(id: ID!): ShippingMethod
@@ -6033,6 +6355,11 @@ type Query {
 	taxRates(options: TaxRateListOptions): TaxRateList!
 	testEligibleShippingMethods(input: TestEligibleShippingMethodsInput!): [ShippingMethodQuote!]!
 	testShippingMethod(input: TestShippingMethodInput!): TestShippingMethodResult!
+
+	"""
+	Get all webhooks for the current channel
+	"""
+	webhooks: [Webhook!]!
 	zone(id: ID!): Zone
 	zones(options: ZoneListOptions): ZoneList!
 }
@@ -6071,7 +6398,7 @@ input RefundOrderInput {
 }
 
 union RefundOrderResult =
-	  AlreadyRefundedError
+	| AlreadyRefundedError
 	| MultipleOrderError
 	| NothingToRefundError
 	| OrderStateTransitionError
@@ -6283,6 +6610,7 @@ input SearchInput {
 	collectionSlug: String
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
+	inStock: Boolean
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -6315,6 +6643,7 @@ type SearchResult {
 	enabled: Boolean!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
+	inStock: Boolean!
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset
@@ -6350,13 +6679,18 @@ input SearchResultSortParameter {
 
 type Seller implements Node {
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: SellerCustomFields
 	id: ID!
 	name: String!
 	updatedAt: DateTime!
 }
 
+type SellerCustomFields {
+	connectedAccountId: String
+}
+
 input SellerFilterParameter {
+	connectedAccountId: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
 	name: StringOperators
@@ -6396,10 +6730,24 @@ input SellerListOptions {
 }
 
 input SellerSortParameter {
+	connectedAccountId: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
+}
+
+type SendCloudConfig {
+	defaultPhoneNr: String
+	id: ID!
+	publicKey: String
+	secret: String
+}
+
+input SendCloudConfigInput {
+	defaultPhoneNr: String
+	publicKey: String
+	secret: String
 }
 
 type ServerConfig {
@@ -6412,7 +6760,7 @@ type ServerConfig {
 union SetCustomerForDraftOrderResult = EmailAddressConflictError | Order
 
 union SetOrderShippingMethodResult =
-	  IneligibleShippingMethodError
+	| IneligibleShippingMethodError
 	| NoActiveOrderError
 	| Order
 	| OrderModificationError
@@ -6427,7 +6775,7 @@ type SettlePaymentError implements ErrorResult {
 }
 
 union SettlePaymentResult =
-	  OrderStateTransitionError
+	| OrderStateTransitionError
 	| Payment
 	| PaymentStateTransitionError
 	| SettlePaymentError
@@ -6454,7 +6802,7 @@ type ShippingMethod implements Node {
 	checker: ConfigurableOperation!
 	code: String!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: ShippingMethodCustomFields
 	description: String!
 	fulfillmentHandlerCode: String!
 	id: ID!
@@ -6464,12 +6812,17 @@ type ShippingMethod implements Node {
 	updatedAt: DateTime!
 }
 
+type ShippingMethodCustomFields {
+	isDigital: Boolean
+}
+
 input ShippingMethodFilterParameter {
 	code: StringOperators
 	createdAt: DateOperators
 	description: StringOperators
 	fulfillmentHandlerCode: StringOperators
 	id: IDOperators
+	isDigital: BooleanOperators
 	languageCode: StringOperators
 	name: StringOperators
 	updatedAt: DateOperators
@@ -6509,7 +6862,7 @@ input ShippingMethodListOptions {
 
 type ShippingMethodQuote {
 	code: String!
-	customFields: JSON
+	customFields: ShippingMethodCustomFields
 	description: String!
 	id: ID!
 
@@ -6528,6 +6881,7 @@ input ShippingMethodSortParameter {
 	description: SortOrder
 	fulfillmentHandlerCode: SortOrder
 	id: SortOrder
+	isDigital: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
 }
@@ -7006,11 +7360,15 @@ input UpdateAssetInput {
 	tags: [String!]
 }
 
+input UpdateChannelCustomFieldsInput {
+	postalPinCode: Int
+}
+
 input UpdateChannelInput {
 	availableCurrencyCodes: [CurrencyCode!]
 	availableLanguageCodes: [LanguageCode!]
 	code: String
-	customFields: JSON
+	customFields: UpdateChannelCustomFieldsInput
 	defaultCurrencyCode: CurrencyCode
 	defaultLanguageCode: LanguageCode
 	defaultShippingZoneId: ID
@@ -7025,9 +7383,17 @@ input UpdateChannelInput {
 
 union UpdateChannelResult = Channel | LanguageNotAvailableError
 
+input UpdateCollectionCustomFieldsInput {
+	facebookImageId: ID
+	popularityScore: Int
+	promoBannerId: ID
+	promoBannerStatus: Boolean
+	twitterImageId: ID
+}
+
 input UpdateCollectionInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: UpdateCollectionCustomFieldsInput
 	featuredAssetId: ID
 	filters: [ConfigurableOperationInput!]
 	id: ID!
@@ -7038,12 +7404,17 @@ input UpdateCollectionInput {
 }
 
 input UpdateCollectionTranslationInput {
-	customFields: JSON
+	customFields: UpdateCollectionTranslationInputCustomFields
 	description: String
 	id: ID
 	languageCode: LanguageCode!
 	name: String
 	slug: String
+}
+
+input UpdateCollectionTranslationInputCustomFields {
+	seoDescription: String
+	seoTitle: String
 }
 
 input UpdateCountryInput {
@@ -7113,13 +7484,19 @@ input UpdateOrderAddressInput {
 	streetLine2: String
 }
 
+input UpdateOrderCustomFieldsInput {
+	customerNote: String
+	referralCode: String
+	vatId: String
+}
+
 input UpdateOrderInput {
-	customFields: JSON
+	customFields: UpdateOrderCustomFieldsInput
 	id: ID!
 }
 
 union UpdateOrderItemsResult =
-	  InsufficientStockError
+	| InsufficientStockError
 	| NegativeQuantityError
 	| Order
 	| OrderLimitError
@@ -7141,9 +7518,24 @@ input UpdatePaymentMethodInput {
 	translations: [PaymentMethodTranslationInput!]
 }
 
+input UpdateProductCustomFieldsInput {
+	additionalInfo: String
+	facebookImageId: ID
+	featuredReviewId: ID
+	infoUrl: String
+	popularityScore: Int
+	primaryCollectionId: ID
+	productPhysicalDimensions: String
+	relatedProductsIds: [ID!]
+	reviewCount: Float
+	reviewRating: Float
+	twitterImageId: ID
+	weight: Int
+}
+
 input UpdateProductInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: UpdateProductCustomFieldsInput
 	enabled: Boolean
 	facetValueIds: [ID!]
 	featuredAssetId: ID
@@ -7165,9 +7557,23 @@ input UpdateProductOptionInput {
 	translations: [ProductOptionGroupTranslationInput!]
 }
 
+input UpdateProductReviewInput {
+	body: String
+	id: ID!
+	response: String
+	summary: String
+}
+
+input UpdateProductVariantCustomFieldsInput {
+	isDigital: Boolean
+	maxPerOrder: Int
+	releaseDate: DateTime
+	weight: Int
+}
+
 input UpdateProductVariantInput {
 	assetIds: [ID!]
-	customFields: JSON
+	customFields: UpdateProductVariantCustomFieldsInput
 	enabled: Boolean
 	facetValueIds: [ID!]
 	featuredAssetId: ID
@@ -7204,6 +7610,7 @@ input UpdatePromotionInput {
 	perCustomerUsageLimit: Int
 	startsAt: DateTime
 	translations: [PromotionTranslationInput!]
+	usageLimit: Int
 }
 
 union UpdatePromotionResult = MissingConditionsError | Promotion
@@ -7224,17 +7631,25 @@ input UpdateRoleInput {
 	permissions: [Permission!]
 }
 
+input UpdateSellerCustomFieldsInput {
+	connectedAccountId: String
+}
+
 input UpdateSellerInput {
-	customFields: JSON
+	customFields: UpdateSellerCustomFieldsInput
 	id: ID!
 	name: String
+}
+
+input UpdateShippingMethodCustomFieldsInput {
+	isDigital: Boolean
 }
 
 input UpdateShippingMethodInput {
 	calculator: ConfigurableOperationInput
 	checker: ConfigurableOperationInput
 	code: String
-	customFields: JSON
+	customFields: UpdateShippingMethodCustomFieldsInput
 	fulfillmentHandler: String
 	id: ID!
 	translations: [ShippingMethodTranslationInput!]!
@@ -7291,6 +7706,24 @@ type User implements Node {
 	roles: [Role!]!
 	updatedAt: DateTime!
 	verified: Boolean!
+}
+
+type Webhook {
+	event: String!
+	id: ID!
+	requestTransformer: WebhookRequestTransformer
+	url: String!
+}
+
+input WebhookInput {
+	event: String!
+	transformerName: String
+	url: String!
+}
+
+type WebhookRequestTransformer {
+	name: String!
+	supportedEvents: [String!]!
 }
 
 type Zone implements Node {

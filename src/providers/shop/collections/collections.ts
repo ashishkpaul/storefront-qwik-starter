@@ -24,6 +24,12 @@ gql`
 					id
 					preview
 				}
+				customFields {
+					promoBanner {
+						id
+						preview
+					}
+				}
 			}
 		}
 	}

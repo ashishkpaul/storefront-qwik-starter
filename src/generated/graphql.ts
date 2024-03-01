@@ -188,13 +188,23 @@ export type CollectionBreadcrumb = {
 	slug: Scalars['String'];
 };
 
+export type CollectionCustomFields = {
+	__typename?: 'CollectionCustomFields';
+	popularityScore?: Maybe<Scalars['Int']>;
+	promoBanner?: Maybe<Asset>;
+	promoBannerStatus?: Maybe<Scalars['Boolean']>;
+};
+
 export type CollectionFilterParameter = {
 	createdAt?: InputMaybe<DateOperators>;
 	description?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
+	parentId?: InputMaybe<IdOperators>;
+	popularityScore?: InputMaybe<NumberOperators>;
 	position?: InputMaybe<NumberOperators>;
+	promoBannerStatus?: InputMaybe<BooleanOperators>;
 	slug?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 };
@@ -233,7 +243,11 @@ export type CollectionSortParameter = {
 	description?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
+	parentId?: InputMaybe<SortOrder>;
+	popularityScore?: InputMaybe<SortOrder>;
 	position?: InputMaybe<SortOrder>;
+	promoBanner?: InputMaybe<SortOrder>;
+	promoBannerStatus?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
@@ -2527,6 +2541,7 @@ export type ProductVariantListArgs = {
 export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	printfulProductId?: Maybe<Scalars['String']>;
+	relatedProducts?: Maybe<Array<Product>>;
 };
 
 export type ProductFilterParameter = {

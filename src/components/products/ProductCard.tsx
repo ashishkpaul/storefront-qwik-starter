@@ -1,12 +1,19 @@
-import { component$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { $, component$ } from '@builder.io/qwik';
 import { Image } from 'qwik-image';
+import { getProductBySlug } from '~/providers/shop/products/products';
+import { changeUrlParamsWithoutRefresh } from '~/utils';
 import Price from './Price';
 
 export default component$(
-	({ productAsset, productName, slug, priceWithTax, currencyCode }: any) => {
+	({ productAsset, productName, slug, priceWithTax, currencyCode, productSignalSetter }: any) => {
+		const handleProductClick = $(async () => {
+			const product = await getProductBySlug(slug);
+			productSignalSetter(product);
+			changeUrlParamsWithoutRefresh(productName, [slug]);
+		});
+
 		return (
-			<Link class="flex flex-col mx-auto" href={`/products/${slug}/`}>
+			<a class="flex flex-col mx-auto" href={`/products/${slug}/`} onClick$={handleProductClick}>
 				<Image
 					layout="fixed"
 					class="rounded-xl flex-grow object-cover aspect-[7/8]"
@@ -22,7 +29,7 @@ export default component$(
 					currencyCode={currencyCode}
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
-			</Link>
+			</a>
 		);
 	}
 );

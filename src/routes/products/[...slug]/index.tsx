@@ -6,6 +6,7 @@ import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
 import Price from '~/components/products/Price';
+import ProductCard from '~/components/products/ProductCard';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
 import TopReviews from '~/components/top-reviews/TopReviews';
 import { APP_STATE } from '~/constants';
@@ -18,7 +19,8 @@ import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/uti
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
-	if (product.assets.length === 1) {
+	// console.log('Product Data:', product);
+	if (product && product.assets && product.assets.length === 1) {
 		product.assets.push({
 			id: 'placeholder_2',
 			name: 'placeholder',
@@ -56,6 +58,18 @@ export default component$(() => {
 		tracker.track(() => appState.activeOrder);
 		quantitySignal.value = await calculateQuantities(productSignal.value);
 	});
+
+	// Add these log statements before the console.log for customFields
+	// console.log('Product Signal Value:', productSignal.value);
+
+	// Check if customFields is defined
+	if (productSignal.value.customFields !== undefined) {
+		console.log('Custom Fields:', productSignal.value.customFields);
+
+		// Add your existing code for accessing additionalInfo here
+	} else {
+		console.log('Custom Fields is not available.');
+	}
 
 	return (
 		<div>
@@ -215,6 +229,29 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
+
+			{/* Display related products */}
+			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
+				<h2>Related Products</h2>
+				<br />
+				<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+					{productSignal.value.customFields?.relatedProducts?.map((relatedProduct: any) => {
+						const relatedVariant = relatedProduct.variants?.[0];
+						return (
+							<ProductCard
+								productAsset={relatedProduct.featuredAsset}
+								productName={relatedProduct.name}
+								slug={relatedProduct.slug} // Pass the slug prop
+								priceWithTax={relatedVariant?.priceWithTax}
+								currencyCode={relatedVariant?.currencyCode}
+								key={relatedProduct.id}
+								productSignalSetter={productSignal}
+							/>
+						);
+					})}
+				</div>
+			</section>
+
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">
 					<TopReviews />
