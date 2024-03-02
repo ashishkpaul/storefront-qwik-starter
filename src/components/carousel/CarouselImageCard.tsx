@@ -21,7 +21,7 @@ export default component$(({ collection }: IProps) => {
 		const imageUrl = `${image.preview}`;
 
 		return (
-			<div class="bg">
+			<div class="min-w-[720px]">
 				<Image
 					layout="fixed"
 					loading="lazy"
