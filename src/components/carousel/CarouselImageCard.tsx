@@ -12,9 +12,9 @@ export default component$(({ collection }: IProps) => {
 	const { featuredAsset } = collection || {};
 
 	// Log the collection, customFields, and promoBanner
-	console.log('Collection:', collection);
-	console.log('Custom Fields:', collection.customFields);
-	console.log('Promo Banner:', promoBanner);
+	// console.log('Collection:', collection);
+	// console.log('Custom Fields:', collection.customFields);
+	// console.log('Promo Banner:', promoBanner);
 
 	// Render the image based on the logic provided
 	const renderImage = (image: Asset) => {

@@ -63,13 +63,13 @@ export default component$(() => {
 	// console.log('Product Signal Value:', productSignal.value);
 
 	// Check if customFields is defined
-	if (productSignal.value.customFields !== undefined) {
-		console.log('Custom Fields:', productSignal.value.customFields);
+	// if (productSignal.value.customFields !== undefined) {
+	// 	console.log('Custom Fields:', productSignal.value.customFields);
 
-		// Add your existing code for accessing additionalInfo here
-	} else {
-		console.log('Custom Fields is not available.');
-	}
+	// 	// Add your existing code for accessing additionalInfo here
+	// } else {
+	// 	console.log('Custom Fields is not available.');
+	// }
 
 	return (
 		<div>
