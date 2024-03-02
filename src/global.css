@@ -15,8 +15,10 @@
 .bg {
 	border: 1px solid #8c8c8c;
 	border-radius: 10px;
+	/* width: 960px; */
 	min-width: 711px;
 	height: 400px;
+	/* margin: 0 auto; */
 	display: flex;
 	cursor: pointer;
 	align-items: center;

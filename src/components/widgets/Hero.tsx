@@ -10,16 +10,30 @@ export default component$(() => {
 		autoScroll: true,
 		autoScrollSpeed: 10,
 		gap: 25,
-		width: '960px',
 		styleClass: 'test',
+		breakpoints: {
+			sm: {
+				slidesPerView: 1,
+				spaceBetween: 10,
+			},
+			md: {
+				slidesPerView: 2,
+				spaceBetween: 20,
+			},
+			lg: {
+				slidesPerView: 3,
+				spaceBetween: 25,
+			},
+		},
 	};
+
 	return (
 		<section class="relative md:-mt-[76px] not-prose">
 			<div class="absolute inset-0 pointer-events-none" aria-hidden="true"></div>
 			<div class="relative max-w-full mx-auto px-4 sm:px-6">
 				<div class="pt-0 md:pt-[76px] pointer-events-none"></div>
 				<div class="py-12 md:py-20 lg:py-0 lg:flex lg:items-center lg:gap-8">
-					<div class="w-1/2  text-center lg:text-left pb-10 md:pb-16 mx-auto">
+					<div class="w-full lg:w-1/2 text-center lg:text-left pb-10 md:pb-16 mx-auto">
 						<h1 class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-700">
 							Join the Marketplace <br class="hidden lg:block" />{' '}
 							<span class="hidden lg:inline">Become an Online Seller </span>{' '}
@@ -51,7 +65,7 @@ export default component$(() => {
 							</div>
 						</div>
 					</div>
-					<div class="w-1/2 ">
+					<div class="w-full lg:w-1/2">
 						<Slider {...sliderSettingsOne}>
 							{collections.map((collection) => (
 								<CarouselImageCard key={collection.id} collection={collection} />

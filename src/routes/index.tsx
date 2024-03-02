@@ -1,5 +1,4 @@
 import { component$, useContext } from '@builder.io/qwik';
-
 import CollectionCard from '~/components/collection-card/CollectionCard';
 import { APP_STATE } from '~/constants';
 import Hero from '../components/widgets/Hero';
