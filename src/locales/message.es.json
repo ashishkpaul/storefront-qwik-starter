@@ -1,10 +1,12 @@
 {
 	"locale": "es",
 	"translations": {
+		"544638921091541351": "Las mejores ofertas",
+		"2102825898069375693": "Menú",
 		"7783075331922954453": "¡Tu pedido",
 		"2859674902685464668": "ha sido recibido!",
 		"4818852650817502025": "Mi cuenta",
-		"840692109692540367": "Iniciar sesión",
+		"2454050363478003966": "Acceso",
 		"8845493150593778100": "Pagar con {$PH}",
 		"7536314812908500391": "{$PH} en el carrito",
 		"2211280835151579476": "página de devoluciones",

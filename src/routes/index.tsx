@@ -58,7 +58,7 @@ export default component$(() => {
 					<div class="-my-2">
 						<div class="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible">
 							<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-								<h2 class="text-2xl font-light tracking-tight text-gray-900">{$localize`Product In Collection`}</h2>
+								<h2 class="text-2xl font-light tracking-tight text-gray-900">{$localize`Hot Deals`}</h2>
 							</div>
 							{/* <h1>Products in Collection</h1> */}
 							<div class="gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">
