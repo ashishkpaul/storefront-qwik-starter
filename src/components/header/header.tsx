@@ -7,8 +7,9 @@ import { DealsLink } from '../DealsLink/DealsLink';
 import LoginIcon from '../icons/LoginIcon';
 import LogoutIcon from '../icons/LogoutIcon';
 import MenuIcon from '../icons/MenuIcon';
-import ShoppingBagIcon from '../icons/ShoppingBagIcon';
 import SearchBar from '../search-bar/SearchBar';
+// import ShoppingBagIcon from '../icons/ShoppingBagIcon';
+import ShoppingCartIcon from '../icons/ShoppingCartIcon';
 
 export default component$(() => {
 	const appState = useContext(APP_STATE);
@@ -113,7 +114,7 @@ export default component$(() => {
 							class="relative w-9 h-9 bg-white bg-opacity-20 rounded text-white p-1"
 							onClick$={() => (appState.showCart = !appState.showCart)}
 						>
-							<ShoppingBagIcon />
+							<ShoppingCartIcon />
 							{totalQuantity ? (
 								<div class="absolute rounded-full -top-2 -right-2 bg-primary-600 w-6 h-6">
 									{totalQuantity}

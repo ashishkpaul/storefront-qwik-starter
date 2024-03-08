@@ -2,7 +2,7 @@ import { Slot, component$ } from '@builder.io/qwik';
 import { useLocation } from '@builder.io/qwik-city';
 import HashtagIcon from '../icons/HashtagIcon';
 import MapPinIcon from '../icons/MapPinIcon';
-import ShoppingBagIcon from '../icons/ShoppingBagIcon';
+import ShoppingCartIcon from '../icons/ShoppingCartIcon';
 import UserCircleIcon from '../icons/UserCircleIcon';
 import { Tab } from './Tab';
 
@@ -20,7 +20,7 @@ export const TabsContainer = component$(() => {
 					/>
 
 					<Tab
-						Icon={ShoppingBagIcon}
+						Icon={ShoppingCartIcon}
 						text="Purchase history"
 						href="/account/orders"
 						isActive={location.url.pathname.indexOf('orders') >= 0}
