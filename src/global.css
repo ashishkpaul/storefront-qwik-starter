@@ -12,6 +12,25 @@
 	}
 }
 
+.marquee-container {
+	width: 100%;
+	overflow: hidden;
+}
+
+.marquee {
+	animation: marquee 10s linear infinite;
+	white-space: nowrap;
+}
+
+@keyframes marquee {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
 /* bg {
 	border: 1px solid #8c8c8c;
 	border-radius: 10px;

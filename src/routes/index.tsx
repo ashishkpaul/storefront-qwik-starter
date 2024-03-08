@@ -4,13 +4,13 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { Slider } from 'qwik-slider';
 import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
+import Hero from '~/components/widgets/Hero';
 import { APP_STATE } from '~/constants';
 import {
 	searchQueryWithCollectionSlug,
 	searchQueryWithTerm,
 } from '~/providers/shop/products/products';
 import { cleanUpParams } from '~/utils';
-import Hero from '../components/widgets/Hero';
 
 export const useSearchLoader = routeLoader$(async ({ params }) => {
 	const cleanParams = cleanUpParams(params);
