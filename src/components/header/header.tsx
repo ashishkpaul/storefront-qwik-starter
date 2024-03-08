@@ -91,7 +91,7 @@ export default component$(() => {
 					</button>
 					<h1 class="text-white w-10">
 						<Link href="/">
-							<img src={`/cube-logo-small.webp`} width={40} height={31} alt="Vendure logo" />
+							<img src={`/cube-logo-small.webp`} width={40} height={31} alt="DingPack logo" />
 						</Link>
 					</h1>
 					<div class="hidden space-x-4 sm:block">
