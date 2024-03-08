@@ -1,7 +1,6 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { APP_STATE } from '~/constants';
-import GitIcon from '../icons/GitIcon';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections.filter(
@@ -10,18 +9,20 @@ export default component$(() => {
 
 	const navigation = {
 		support: [
-			{ name: $localize`Help`, href: '#' },
-			{ name: $localize`Track order`, href: '#' },
-			{ name: $localize`Shipping`, href: '#' },
-			{ name: $localize`Returns`, href: '#' },
+			{ name: $localize`Help`, href: 'https://saa9vi.com/services/ecom/#about', target: '_blank' },
+			{ name: $localize`Track order`, href: '#', target: '_blank' },
+			{ name: $localize`Shipping`, href: '#', target: '_blank' },
+			{ name: $localize`Returns`, href: '#', target: '_blank' },
 		],
 		company: [
-			{ name: $localize`About`, href: '#' },
-			{ name: $localize`Blog`, href: '#' },
-			{ name: $localize`Corporate responsibility`, href: '#' },
-			{ name: $localize`Press`, href: '#' },
+			{ name: $localize`About`, href: 'https://saa9vi.com/services/ecom/#about', target: '_blank' },
+			{ name: $localize`Blog`, href: '#', target: '_blank' },
+			{ name: $localize`Corporate responsibility`, href: '#', target: '_blank' },
+			{ name: $localize`Press`, href: '#', target: '_blank' },
 		],
 	};
+
+	const year = new Date().getFullYear(); // Get current year
 
 	return (
 		<footer class="pt-6 border-t bg-gray-50">
@@ -105,14 +106,13 @@ export default component$(() => {
 					</div>
 				</div>
 				<div class="mt-8 border-t pt-8">
-					<a
-						class="flex items-center space-x-4 font-medium text-gray-500 hover:text-gray-700"
-						target="_blank"
-						href="https://github.com/vendure-ecommerce/storefront-qwik-starter"
-					>
-						<GitIcon />
-						<span>github.com/vendure-ecommerce/storefront-qwik-starter</span>
-					</a>
+					<div class="flex items-center space-x-4 font-medium text-gray-500 hover:text-gray-700">
+						{/* Replace the GitHub link with the CopyrightIcon and website link */}
+						{/* <CopyrightIcon /> */}
+						<a target="_blank" href="https://www.saa9vi.com">
+							<p>&copy; {year} DingPack, All rights reserved.</p>
+						</a>
+					</div>
 				</div>
 			</div>
 		</footer>
