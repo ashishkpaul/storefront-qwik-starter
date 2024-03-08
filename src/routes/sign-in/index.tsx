@@ -33,13 +33,11 @@ export default component$(() => {
 			<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 				<div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
 					<div class="mb-6 bg-yellow-50 border border-yellow-400 text-yellow-800 rounded p-4 text-center text-sm">
-						<p>Demo credentials</p>
-						<p>
-							Email address: <span class="font-bold">test@vendure.io</span>
-						</p>
-						<p>
-							Password: <span class="font-bold">test</span>
-						</p>
+						<span class="font-bold">
+							<p>Hi! Welcome Back.</p>
+						</span>
+						<p>Enter your email address</p>
+						<p>and password bellow.</p>
 					</div>
 					<div class="space-y-6">
 						<div>

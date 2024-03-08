@@ -52,9 +52,10 @@ export default component$(() => {
 				<div class="bg-zinc-100 text-gray-600 shadow-inner text-center text-sm py-1 px-2 xl:px-0">
 					<div class="max-w-6xl mx-2 h-5 min-h-full md:mx-auto flex items-center justify-between my-1">
 						<div class="flex justify-between items-center w-full">
-							<div class="marquee-container">
-								<p class="marquee text-lg">
-									This is a longer text content that can be scrolled horizontally.
+							<div class="marquee-container mx-auto px-4 lg:px-8 shadow-sides">
+								<p class="marquee text-lg font-serif">
+									Find Everything You Need at DingPack - Shop Fashion, Electronics, Home Goods, and
+									More!
 								</p>
 							</div>
 							<div class="flex mr-[60px] 2xl:mr-0">
