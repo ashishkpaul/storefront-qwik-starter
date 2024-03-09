@@ -68,6 +68,9 @@ export const detailedProductFragment = gql`
 			}
 		}
 		customFields {
+			additionalInfo
+			infoUrl
+			productPhysicalDimensions
 			relatedProducts {
 				id
 				name
