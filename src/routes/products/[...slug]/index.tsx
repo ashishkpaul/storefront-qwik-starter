@@ -1,6 +1,7 @@
 import { $, component$, useComputed$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
+import Accordion from '~/components/accordion/Accordion'; // Assuming Accordion is in the components folder
 import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
@@ -71,6 +72,14 @@ export default component$(() => {
 	// } else {
 	// 	console.log('Custom Fields is not available.');
 	// }
+	const items = [
+		{
+			title: 'Additional Information',
+			content: 'Content for Product Additioanl Info', // Pass product as prop
+		},
+		{ title: 'Item 2', content: 'Content for Item 2' },
+		// ... more items
+	];
 
 	return (
 		<div>
@@ -229,6 +238,10 @@ export default component$(() => {
 						</div>
 					</div>
 				</div>
+			</div>
+			<div>
+				{/* Other content for your route */}
+				<Accordion items={items} />
 			</div>
 			<ProductAdditionalInfo product={productSignal.value} />
 			{/* Display related products */}
