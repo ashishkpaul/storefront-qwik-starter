@@ -35,10 +35,10 @@ export default component$(() => {
 				<div class="py-12 md:py-20 lg:py-0 lg:flex lg:items-center lg:gap-8">
 					<div class="w-full lg:w-1/2 text-center lg:text-left pb-10 md:pb-16 mx-auto">
 						<h1 class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-700">
-							Join the Marketplace <br class="hidden lg:block" />{' '}
-							<span class="hidden lg:inline">Become an Online Seller </span>{' '}
-							<span class="text-[#039de1]">Today!</span> +{' '}
-							<span class="sm:whitespace-nowrap text-[#039de1]">Begin Selling Now!</span>
+							Join the <span class="text-[#039de1]">Marketplace</span> Plus,{' '}
+							<br class="hidden lg:block" />{' '}
+							<span class="hidden lg:inline">Host Your Commerce on</span>
+							<span class="sm:whitespace-nowrap text-[#039de1]"> Your Domain</span>
 						</h1>
 						<div class="max-w-3xl mx-auto lg:max-w-none">
 							<p class="text-xl text-muted mb-6 dark:text-slate-600">
@@ -49,7 +49,8 @@ export default component$(() => {
 								<em>kickstart</em> your online selling journey today.{' '}
 								<span class="inline md:hidden">...</span>
 								<span class="hidden md:inline">
-									Start selling now and tap into a world of opportunities!
+									Plus, elevate your brand presence by hosting your own ecommerce portal on your
+									domain name.
 								</span>
 							</p>
 
