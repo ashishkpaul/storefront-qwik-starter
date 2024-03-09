@@ -310,6 +310,7 @@ export type AssignStockLocationsToChannelInput = {
 };
 
 export type AuthenticationInput = {
+	keycloak?: InputMaybe<KeycloakAuthInput>;
 	native?: InputMaybe<NativeAuthInput>;
 };
 
@@ -2222,6 +2223,10 @@ export const JobState = {
 } as const;
 
 export type JobState = (typeof JobState)[keyof typeof JobState];
+export type KeycloakAuthInput = {
+	token: Scalars['String']['input'];
+};
+
 /**
  * @description
  * Languages in the form of a ISO 639-1 language code with optional

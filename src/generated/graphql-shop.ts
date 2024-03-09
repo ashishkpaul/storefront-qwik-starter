@@ -5061,6 +5061,9 @@ export type DetailedProductFragment = {
 	}>;
 	customFields?: {
 		__typename?: 'ProductCustomFields';
+		additionalInfo?: string | null;
+		infoUrl?: string | null;
+		productPhysicalDimensions?: string | null;
 		relatedProducts?: Array<{
 			__typename?: 'Product';
 			id: string;
@@ -5136,6 +5139,9 @@ export type ProductQuery = {
 		}>;
 		customFields?: {
 			__typename?: 'ProductCustomFields';
+			additionalInfo?: string | null;
+			infoUrl?: string | null;
+			productPhysicalDimensions?: string | null;
 			relatedProducts?: Array<{
 				__typename?: 'Product';
 				id: string;
@@ -5351,6 +5357,9 @@ export const DetailedProductFragmentDoc = gql`
 			}
 		}
 		customFields {
+			additionalInfo
+			infoUrl
+			productPhysicalDimensions
 			relatedProducts {
 				id
 				name

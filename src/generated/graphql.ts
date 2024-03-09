@@ -2539,6 +2539,7 @@ export type ProductVariantListArgs = {
 };
 
 export type ProductCustomFields = {
+	additionalInfo: string;
 	__typename?: 'ProductCustomFields';
 	printfulProductId?: Maybe<Scalars['String']>;
 	relatedProducts?: Maybe<Array<Product>>;

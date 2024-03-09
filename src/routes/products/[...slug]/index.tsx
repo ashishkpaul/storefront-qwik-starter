@@ -9,6 +9,7 @@ import Price from '~/components/products/Price';
 import ProductCard from '~/components/products/ProductCard';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
 import TopReviews from '~/components/top-reviews/TopReviews';
+import { ProductAdditionalInfo } from '~/components/widgets/ProductAdditionalInfo'; // Import ProductAdditionalInfo
 import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
@@ -229,7 +230,7 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
-
+			<ProductAdditionalInfo product={productSignal.value} /> {/* Use ProductAdditionalInfo here */}
 			{/* Display related products */}
 			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
 				<h2>Related Products</h2>
@@ -251,7 +252,6 @@ export default component$(() => {
 					})}
 				</div>
 			</section>
-
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">
 					<TopReviews />
