@@ -4,12 +4,11 @@ import { APP_STATE, CUSTOMER_NOT_DEFINED_ID } from '~/constants';
 import { logoutMutation } from '~/providers/shop/account/account';
 import { getActiveCustomerQuery } from '~/providers/shop/customer/customer';
 import { DealsLink } from '../DealsLink/DealsLink';
-import LoginIcon from '../icons/LoginIcon';
 import LogoutIcon from '../icons/LogoutIcon';
 import MenuIcon from '../icons/MenuIcon';
-import SearchBar from '../search-bar/SearchBar';
-// import ShoppingBagIcon from '../icons/ShoppingBagIcon';
 import ShoppingCartIcon from '../icons/ShoppingCartIcon';
+import UserIcon from '../icons/UserIcon';
+import SearchBar from '../search-bar/SearchBar';
 
 export default component$(() => {
 	const appState = useContext(APP_STATE);
@@ -63,7 +62,7 @@ export default component$(() => {
 									href={appState.customer.id !== CUSTOMER_NOT_DEFINED_ID ? '/account' : '/sign-in'}
 									class="flex items-center space-x-1 pb-1 pr-2"
 								>
-									<LoginIcon />
+									<UserIcon />
 									<span class="mt-1 text-gray-700">
 										{appState.customer.id !== CUSTOMER_NOT_DEFINED_ID
 											? $localize`My Account`
