@@ -230,7 +230,7 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
-			<ProductAdditionalInfo product={productSignal.value} /> {/* Use ProductAdditionalInfo here */}
+			<ProductAdditionalInfo product={productSignal.value} />
 			{/* Display related products */}
 			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
 				<h2>Related Products</h2>
