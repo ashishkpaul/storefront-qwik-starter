@@ -1,6 +1,10 @@
 import { $, component$, useComputed$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
+<<<<<<< HEAD
+=======
+// import Accordion from '~/components/accordion/Accordion'; // Assuming Accordion is in the components folder
+>>>>>>> fce9739 (removing accordion)
 import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
@@ -9,7 +13,7 @@ import Price from '~/components/products/Price';
 import ProductCard from '~/components/products/ProductCard';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
 import TopReviews from '~/components/top-reviews/TopReviews';
-import { ProductAdditionalInfo } from '~/components/widgets/ProductAdditionalInfo'; // Import ProductAdditionalInfo
+import { ProductAdditionalInfo } from '~/components/widgets/ProductAdditionalInfo';
 import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
@@ -71,6 +75,19 @@ export default component$(() => {
 	// } else {
 	// 	console.log('Custom Fields is not available.');
 	// }
+<<<<<<< HEAD
+=======
+
+	// Accordion static page
+	// const items = [
+	// 	{
+	// 		title: 'Additional Information',
+	// 		content: 'Content for Product Additioanl Info', // Pass product as prop
+	// 	},
+	// 	{ title: 'Item 2', content: 'Content for Item 2' },
+	// 	// ... more items
+	// ];
+>>>>>>> fce9739 (removing accordion)
 
 	return (
 		<div>
@@ -230,6 +247,13 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
+=======
+			<div>
+				{/* Other content for your route */}
+				{/* <Accordion items={items} /> */}
+			</div>
+>>>>>>> fce9739 (removing accordion)
 			<ProductAdditionalInfo product={productSignal.value} />
 			{/* Display related products */}
 			<section class="max-w-6xl mx-auto px-4 px-4 py-10">

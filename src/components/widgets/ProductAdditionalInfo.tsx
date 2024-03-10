@@ -1,5 +1,3 @@
-// src/components/widgets/ProductAdditionalInfo.tsx
-
 import { component$ } from '@builder.io/qwik';
 import { Product, ProductCustomFields } from '~/generated/graphql';
 
@@ -22,4 +20,4 @@ export const ProductAdditionalInfo = component$((props: AdditionalInfoProps) => 
 	);
 });
 
-export default ProductAdditionalInfo; // Export the component as default
+export default ProductAdditionalInfo;
