@@ -2,6 +2,7 @@ import { $, component$, useComputed$, useContext, useSignal, useTask$ } from '@b
 import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
 // import Accordion from '~/components/accordion/Accordion'; // Assuming Accordion is in the components folder
+import { Slider } from 'qwik-slider';
 import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
@@ -17,7 +18,6 @@ import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug } from '~/providers/shop/products/products';
 import { Variant } from '~/types';
 import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
-
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
@@ -34,6 +34,12 @@ export const useProductLoader = routeLoader$(async ({ params }) => {
 
 export default component$(() => {
 	const appState = useContext(APP_STATE);
+	const relatedProductSlider = {
+		scrollSpeed: 1,
+		autoScroll: false,
+		autoScrollSpeed: 10,
+		gap: 25,
+	};
 
 	const calculateQuantities = $((product: Product) => {
 		const result: Record<string, number> = {};
@@ -247,10 +253,11 @@ export default component$(() => {
 			</div>
 			<ProductAdditionalInfo product={productSignal.value} />
 			{/* Display related products */}
-			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
-				<h2>Related Products</h2>
-				<br />
-				<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
+				<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Related Products`}</h2>
+				</div>
+				<Slider {...relatedProductSlider}>
 					{productSignal.value.customFields?.relatedProducts?.map((relatedProduct: any) => {
 						const relatedVariant = relatedProduct.variants?.[0];
 						return (
@@ -265,8 +272,9 @@ export default component$(() => {
 							/>
 						);
 					})}
-				</div>
+				</Slider>
 			</section>
+
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">
 					<TopReviews />

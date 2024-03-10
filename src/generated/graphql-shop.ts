@@ -343,6 +343,12 @@ export type Coordinate = {
 	y: Scalars['Float']['output'];
 };
 
+/**
+ * A Country of the world which your shop operates in.
+ *
+ * The `code` field is typically a 2-character ISO code such as "GB", "US", "DE" etc. This code is used in certain inputs such as
+ * `UpdateAddressInput` and `CreateAddressInput` to specify the country.
+ */
 export type Country = Node &
 	Region & {
 		__typename?: 'Country';
@@ -391,6 +397,13 @@ export type CouponCodeLimitError = ErrorResult & {
 	message: Scalars['String']['output'];
 };
 
+/**
+ * Input used to create an Address.
+ *
+ * The countryCode must correspond to a `code` property of a Country that has been defined in the
+ * Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+ * If an invalid code is passed, the mutation will fail.
+ */
 export type CreateAddressInput = {
 	city?: InputMaybe<Scalars['String']['input']>;
 	company?: InputMaybe<Scalars['String']['input']>;
@@ -2681,7 +2694,6 @@ export type ProductCustomFields = {
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	primaryCollection?: Maybe<Collection>;
-	productPhysicalDimensions?: Maybe<Scalars['String']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
 	reviewCount?: Maybe<Scalars['Float']['output']>;
 	reviewRating?: Maybe<Scalars['Float']['output']>;
@@ -2697,7 +2709,6 @@ export type ProductFilterParameter = {
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
 	popularityScore?: InputMaybe<NumberOperators>;
-	productPhysicalDimensions?: InputMaybe<StringOperators>;
 	reviewCount?: InputMaybe<NumberOperators>;
 	reviewRating?: InputMaybe<NumberOperators>;
 	slug?: InputMaybe<StringOperators>;
@@ -2855,7 +2866,6 @@ export type ProductSortParameter = {
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
 	primaryCollection?: InputMaybe<SortOrder>;
-	productPhysicalDimensions?: InputMaybe<SortOrder>;
 	reviewCount?: InputMaybe<SortOrder>;
 	reviewRating?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
@@ -3544,6 +3554,13 @@ export type TextCustomFieldConfig = CustomField & {
 
 export type TransitionOrderToStateResult = Order | OrderStateTransitionError;
 
+/**
+ * Input used to update an Address.
+ *
+ * The countryCode must correspond to a `code` property of a Country that has been defined in the
+ * Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+ * If an invalid code is passed, the mutation will fail.
+ */
 export type UpdateAddressInput = {
 	city?: InputMaybe<Scalars['String']['input']>;
 	company?: InputMaybe<Scalars['String']['input']>;
@@ -5063,7 +5080,6 @@ export type DetailedProductFragment = {
 		__typename?: 'ProductCustomFields';
 		additionalInfo?: string | null;
 		infoUrl?: string | null;
-		productPhysicalDimensions?: string | null;
 		relatedProducts?: Array<{
 			__typename?: 'Product';
 			id: string;
@@ -5141,7 +5157,6 @@ export type ProductQuery = {
 			__typename?: 'ProductCustomFields';
 			additionalInfo?: string | null;
 			infoUrl?: string | null;
-			productPhysicalDimensions?: string | null;
 			relatedProducts?: Array<{
 				__typename?: 'Product';
 				id: string;
@@ -5359,7 +5374,6 @@ export const DetailedProductFragmentDoc = gql`
 		customFields {
 			additionalInfo
 			infoUrl
-			productPhysicalDimensions
 			relatedProducts {
 				id
 				name

@@ -315,6 +315,12 @@ type Coordinate {
 	y: Float!
 }
 
+"""
+A Country of the world which your shop operates in.
+
+The `code` field is typically a 2-character ISO code such as "GB", "US", "DE" etc. This code is used in certain inputs such as
+`UpdateAddressInput` and `CreateAddressInput` to specify the country.
+"""
 type Country implements Node & Region {
 	code: String!
 	createdAt: DateTime!
@@ -363,6 +369,13 @@ type CouponCodeLimitError implements ErrorResult {
 	message: String!
 }
 
+"""
+Input used to create an Address.
+
+The countryCode must correspond to a `code` property of a Country that has been defined in the
+Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+If an invalid code is passed, the mutation will fail.
+"""
 input CreateAddressInput {
 	city: String
 	company: String
@@ -3963,7 +3976,6 @@ type ProductCustomFields {
 	infoUrl: String
 	popularityScore: Int
 	primaryCollection: Collection
-	productPhysicalDimensions: String
 	relatedProducts: [Product!]
 	reviewCount: Float
 	reviewRating: Float
@@ -3979,7 +3991,6 @@ input ProductFilterParameter {
 	languageCode: StringOperators
 	name: StringOperators
 	popularityScore: NumberOperators
-	productPhysicalDimensions: StringOperators
 	reviewCount: NumberOperators
 	reviewRating: NumberOperators
 	slug: StringOperators
@@ -4157,7 +4168,6 @@ input ProductSortParameter {
 	name: SortOrder
 	popularityScore: SortOrder
 	primaryCollection: SortOrder
-	productPhysicalDimensions: SortOrder
 	reviewCount: SortOrder
 	reviewRating: SortOrder
 	slug: SortOrder
@@ -4836,6 +4846,13 @@ type TextCustomFieldConfig implements CustomField {
 
 union TransitionOrderToStateResult = Order | OrderStateTransitionError
 
+"""
+Input used to update an Address.
+
+The countryCode must correspond to a `code` property of a Country that has been defined in the
+Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+If an invalid code is passed, the mutation will fail.
+"""
 input UpdateAddressInput {
 	city: String
 	company: String

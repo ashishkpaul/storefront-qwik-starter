@@ -310,7 +310,6 @@ export type AssignStockLocationsToChannelInput = {
 };
 
 export type AuthenticationInput = {
-	keycloak?: InputMaybe<KeycloakAuthInput>;
 	native?: InputMaybe<NativeAuthInput>;
 };
 
@@ -664,6 +663,12 @@ export type CoordinateInput = {
 	y: Scalars['Float']['input'];
 };
 
+/**
+ * A Country of the world which your shop operates in.
+ *
+ * The `code` field is typically a 2-character ISO code such as "GB", "US", "DE" etc. This code is used in certain inputs such as
+ * `UpdateAddressInput` and `CreateAddressInput` to specify the country.
+ */
 export type Country = Node &
 	Region & {
 		__typename?: 'Country';
@@ -754,6 +759,13 @@ export type CouponCodeLimitError = ErrorResult & {
 	message: Scalars['String']['output'];
 };
 
+/**
+ * Input used to create an Address.
+ *
+ * The countryCode must correspond to a `code` property of a Country that has been defined in the
+ * Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+ * If an invalid code is passed, the mutation will fail.
+ */
 export type CreateAddressInput = {
 	city?: InputMaybe<Scalars['String']['input']>;
 	company?: InputMaybe<Scalars['String']['input']>;
@@ -913,7 +925,6 @@ export type CreateProductCustomFieldsInput = {
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
 	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
-	productPhysicalDimensions?: InputMaybe<Scalars['String']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	reviewCount?: InputMaybe<Scalars['Float']['input']>;
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
@@ -2223,10 +2234,6 @@ export const JobState = {
 } as const;
 
 export type JobState = (typeof JobState)[keyof typeof JobState];
-export type KeycloakAuthInput = {
-	token: Scalars['String']['input'];
-};
-
 /**
  * @description
  * Languages in the form of a ISO 639-1 language code with optional
@@ -4520,7 +4527,6 @@ export type ProductCustomFields = {
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	primaryCollection?: Maybe<Collection>;
-	productPhysicalDimensions?: Maybe<Scalars['String']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
 	reviewCount?: Maybe<Scalars['Float']['output']>;
 	reviewRating?: Maybe<Scalars['Float']['output']>;
@@ -4541,7 +4547,6 @@ export type ProductFilterParameter = {
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
 	popularityScore?: InputMaybe<NumberOperators>;
-	productPhysicalDimensions?: InputMaybe<StringOperators>;
 	reviewCount?: InputMaybe<NumberOperators>;
 	reviewRating?: InputMaybe<NumberOperators>;
 	seoDescription?: InputMaybe<StringOperators>;
@@ -4725,7 +4730,6 @@ export type ProductSortParameter = {
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
 	primaryCollection?: InputMaybe<SortOrder>;
-	productPhysicalDimensions?: InputMaybe<SortOrder>;
 	reviewCount?: InputMaybe<SortOrder>;
 	reviewRating?: InputMaybe<SortOrder>;
 	seoDescription?: InputMaybe<SortOrder>;
@@ -6302,6 +6306,13 @@ export type UpdateActiveAdministratorInput = {
 	password?: InputMaybe<Scalars['String']['input']>;
 };
 
+/**
+ * Input used to update an Address.
+ *
+ * The countryCode must correspond to a `code` property of a Country that has been defined in the
+ * Vendure server. The `code` property is typically a 2-character ISO code such as "GB", "US", "DE" etc.
+ * If an invalid code is passed, the mutation will fail.
+ */
 export type UpdateAddressInput = {
 	city?: InputMaybe<Scalars['String']['input']>;
 	company?: InputMaybe<Scalars['String']['input']>;
@@ -6501,7 +6512,6 @@ export type UpdateProductCustomFieldsInput = {
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
 	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
-	productPhysicalDimensions?: InputMaybe<Scalars['String']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	reviewCount?: InputMaybe<Scalars['Float']['input']>;
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
