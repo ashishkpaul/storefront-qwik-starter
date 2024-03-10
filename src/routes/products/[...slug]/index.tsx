@@ -1,10 +1,7 @@
 import { $, component$, useComputed$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
-<<<<<<< HEAD
-=======
 // import Accordion from '~/components/accordion/Accordion'; // Assuming Accordion is in the components folder
->>>>>>> fce9739 (removing accordion)
 import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
@@ -75,8 +72,6 @@ export default component$(() => {
 	// } else {
 	// 	console.log('Custom Fields is not available.');
 	// }
-<<<<<<< HEAD
-=======
 
 	// Accordion static page
 	// const items = [
@@ -87,7 +82,6 @@ export default component$(() => {
 	// 	{ title: 'Item 2', content: 'Content for Item 2' },
 	// 	// ... more items
 	// ];
->>>>>>> fce9739 (removing accordion)
 
 	return (
 		<div>
@@ -247,13 +241,10 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
-<<<<<<< HEAD
-=======
 			<div>
 				{/* Accordion */}
 				{/* <Accordion items={items} /> */}
 			</div>
->>>>>>> fce9739 (removing accordion)
 			<ProductAdditionalInfo product={productSignal.value} />
 			{/* Display related products */}
 			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
