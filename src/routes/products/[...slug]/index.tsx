@@ -250,7 +250,7 @@ export default component$(() => {
 <<<<<<< HEAD
 =======
 			<div>
-				{/* Other content for your route */}
+				{/* Accordion */}
 				{/* <Accordion items={items} /> */}
 			</div>
 >>>>>>> fce9739 (removing accordion)
