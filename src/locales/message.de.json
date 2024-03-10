@@ -1,7 +1,17 @@
 {
 	"locale": "de",
 	"translations": {
+<<<<<<< HEAD
+		"544638921091541351": "Heiße Angebote",
+		"2102825898069375693": "Speisekarte",
+		"7783075331922954453": "Ihre Bestellung",
+		"2859674902685464668": "wurde erhalten!",
+		"4915431133669985304": "Profil",
+		"2454050363478003966": "Anmeldung",
+		"8845493150593778100": "Bezahlen mit {$PH}",
+=======
 		"6911093944941068743": "Vendure Qwik Starter",
+>>>>>>> main
 		"7536314812908500391": "{$PH} im Warenkorb",
 		"8845493150593778100": "Bezahlen mit {$PH}",
 		"7122377178437871160": "Ein headless eCommerce Starterkit, entwickelt mit",

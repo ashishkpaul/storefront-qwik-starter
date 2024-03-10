@@ -1,7 +1,10 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { APP_STATE } from '~/constants';
+<<<<<<< HEAD
+=======
 import CopyrightIcon from '../icons/CopyrightIcon'; // Import the CopyrightIcon
+>>>>>>> main
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections.filter(
@@ -23,8 +26,10 @@ export default component$(() => {
 		],
 	};
 
+	const year = new Date().getFullYear(); // Get current year
+
 	return (
-		<footer class="pt-6 border-t bg-gray-50 mt-12">
+		<footer class="pt-6 border-t bg-gray-50">
 			<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 ">
 				<div class="xl:grid xl:grid-cols-3 xl:gap-8">
 					<div class="grid grid-cols-2 gap-8 xl:col-span-2">
@@ -107,9 +112,15 @@ export default component$(() => {
 				<div class="mt-8 border-t pt-8">
 					<div class="flex items-center space-x-4 font-medium text-gray-500 hover:text-gray-700">
 						{/* Replace the GitHub link with the CopyrightIcon and website link */}
+<<<<<<< HEAD
+						{/* <CopyrightIcon /> */}
+						<a target="_blank" href="https://www.saa9vi.com">
+							<p>&copy; {year} DingPack, All rights reserved.</p>
+=======
 						<CopyrightIcon />
 						<a target="_blank" href="https://www.saa9vi.com">
 							Saa9vi Online Services
+>>>>>>> main
 						</a>
 					</div>
 				</div>

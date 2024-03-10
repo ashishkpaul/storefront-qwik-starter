@@ -1,6 +1,16 @@
 {
 	"locale": "en",
 	"translations": {
+<<<<<<< HEAD
+		"544638921091541351": "Hot Deals",
+		"2102825898069375693": "Menu",
+		"7783075331922954453": "Your order",
+		"2859674902685464668": "has been received!",
+		"4915431133669985304": "Profile",
+		"2454050363478003966": "Login",
+		"8845493150593778100": "Pay with {$PH}",
+=======
+>>>>>>> main
 		"7536314812908500391": "{$PH} in cart",
 		"8845493150593778100": "Pay with {$PH}",
 		"7122377178437871160": "A headless commerce storefront starter kit built with",

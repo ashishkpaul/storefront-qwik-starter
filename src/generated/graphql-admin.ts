@@ -38,11 +38,13 @@ export type AddFulfillmentToOrderResult =
 	| ItemsAlreadyFulfilledError;
 
 export type AddItemInput = {
+	customFields?: InputMaybe<OrderLineCustomFieldsInput>;
 	productVariantId: Scalars['ID']['input'];
 	quantity: Scalars['Int']['input'];
 };
 
 export type AddItemToDraftOrderInput = {
+	customFields?: InputMaybe<OrderLineCustomFieldsInput>;
 	productVariantId: Scalars['ID']['input'];
 	quantity: Scalars['Int']['input'];
 };
@@ -81,6 +83,7 @@ export type Address = Node & {
 };
 
 export type AdjustDraftOrderLineInput = {
+	customFields?: InputMaybe<OrderLineCustomFieldsInput>;
 	orderLineId: Scalars['ID']['input'];
 	quantity: Scalars['Int']['input'];
 };
@@ -307,6 +310,7 @@ export type AssignStockLocationsToChannelInput = {
 };
 
 export type AuthenticationInput = {
+	keycloak?: InputMaybe<KeycloakAuthInput>;
 	native?: InputMaybe<NativeAuthInput>;
 };
 
@@ -400,7 +404,7 @@ export type Channel = Node & {
 	createdAt: Scalars['DateTime']['output'];
 	/** @deprecated Use defaultCurrencyCode instead */
 	currencyCode: CurrencyCode;
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<ChannelCustomFields>;
 	defaultCurrencyCode: CurrencyCode;
 	defaultLanguageCode: LanguageCode;
 	defaultShippingZone?: Maybe<Zone>;
@@ -414,6 +418,11 @@ export type Channel = Node & {
 	/** Not yet used - will be implemented in a future release. */
 	trackInventory?: Maybe<Scalars['Boolean']['output']>;
 	updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ChannelCustomFields = {
+	__typename?: 'ChannelCustomFields';
+	postalPinCode?: Maybe<Scalars['Int']['output']>;
 };
 
 /**
@@ -436,6 +445,7 @@ export type ChannelFilterParameter = {
 	defaultLanguageCode?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
 	outOfStockThreshold?: InputMaybe<NumberOperators>;
+	postalPinCode?: InputMaybe<NumberOperators>;
 	pricesIncludeTax?: InputMaybe<BooleanOperators>;
 	token?: InputMaybe<StringOperators>;
 	trackInventory?: InputMaybe<BooleanOperators>;
@@ -466,6 +476,7 @@ export type ChannelSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	outOfStockThreshold?: InputMaybe<SortOrder>;
+	postalPinCode?: InputMaybe<SortOrder>;
 	token?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
@@ -476,7 +487,7 @@ export type Collection = Node & {
 	breadcrumbs: Array<CollectionBreadcrumb>;
 	children?: Maybe<Array<Collection>>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<CollectionCustomFields>;
 	description: Scalars['String']['output'];
 	featuredAsset?: Maybe<Asset>;
 	filters: Array<ConfigurableOperation>;
@@ -505,6 +516,17 @@ export type CollectionBreadcrumb = {
 	slug: Scalars['String']['output'];
 };
 
+export type CollectionCustomFields = {
+	__typename?: 'CollectionCustomFields';
+	facebookImage?: Maybe<Asset>;
+	popularityScore?: Maybe<Scalars['Int']['output']>;
+	promoBanner?: Maybe<Asset>;
+	promoBannerStatus?: Maybe<Scalars['Boolean']['output']>;
+	seoDescription?: Maybe<Scalars['String']['output']>;
+	seoTitle?: Maybe<Scalars['String']['output']>;
+	twitterImage?: Maybe<Asset>;
+};
+
 export type CollectionFilterParameter = {
 	createdAt?: InputMaybe<DateOperators>;
 	description?: InputMaybe<StringOperators>;
@@ -514,7 +536,11 @@ export type CollectionFilterParameter = {
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
 	parentId?: InputMaybe<IdOperators>;
+	popularityScore?: InputMaybe<NumberOperators>;
 	position?: InputMaybe<NumberOperators>;
+	promoBannerStatus?: InputMaybe<BooleanOperators>;
+	seoDescription?: InputMaybe<StringOperators>;
+	seoTitle?: InputMaybe<StringOperators>;
 	slug?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 };
@@ -552,23 +578,37 @@ export type CollectionResult = {
 export type CollectionSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
+	facebookImage?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	parentId?: InputMaybe<SortOrder>;
+	popularityScore?: InputMaybe<SortOrder>;
 	position?: InputMaybe<SortOrder>;
+	promoBanner?: InputMaybe<SortOrder>;
+	promoBannerStatus?: InputMaybe<SortOrder>;
+	seoDescription?: InputMaybe<SortOrder>;
+	seoTitle?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
+	twitterImage?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type CollectionTranslation = {
 	__typename?: 'CollectionTranslation';
 	createdAt: Scalars['DateTime']['output'];
+	customFields?: Maybe<CollectionTranslationCustomFields>;
 	description: Scalars['String']['output'];
 	id: Scalars['ID']['output'];
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
 	slug: Scalars['String']['output'];
 	updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CollectionTranslationCustomFields = {
+	__typename?: 'CollectionTranslationCustomFields';
+	seoDescription?: Maybe<Scalars['String']['output']>;
+	seoTitle?: Maybe<Scalars['String']['output']>;
 };
 
 export type ConfigArg = {
@@ -746,11 +786,15 @@ export type CreateAssetInput = {
 
 export type CreateAssetResult = Asset | MimeTypeError;
 
+export type CreateChannelCustomFieldsInput = {
+	postalPinCode?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type CreateChannelInput = {
 	availableCurrencyCodes?: InputMaybe<Array<CurrencyCode>>;
 	availableLanguageCodes?: InputMaybe<Array<LanguageCode>>;
 	code: Scalars['String']['input'];
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateChannelCustomFieldsInput>;
 	defaultCurrencyCode?: InputMaybe<CurrencyCode>;
 	defaultLanguageCode: LanguageCode;
 	defaultShippingZoneId: Scalars['ID']['input'];
@@ -764,9 +808,17 @@ export type CreateChannelInput = {
 
 export type CreateChannelResult = Channel | LanguageNotAvailableError;
 
+export type CreateCollectionCustomFieldsInput = {
+	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
+	popularityScore?: InputMaybe<Scalars['Int']['input']>;
+	promoBannerId?: InputMaybe<Scalars['ID']['input']>;
+	promoBannerStatus?: InputMaybe<Scalars['Boolean']['input']>;
+	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type CreateCollectionInput = {
 	assetIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateCollectionCustomFieldsInput>;
 	featuredAssetId?: InputMaybe<Scalars['ID']['input']>;
 	filters: Array<ConfigurableOperationInput>;
 	inheritFilters?: InputMaybe<Scalars['Boolean']['input']>;
@@ -776,11 +828,16 @@ export type CreateCollectionInput = {
 };
 
 export type CreateCollectionTranslationInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateCollectionTranslationInputCustomFields>;
 	description: Scalars['String']['input'];
 	languageCode: LanguageCode;
 	name: Scalars['String']['input'];
 	slug: Scalars['String']['input'];
+};
+
+export type CreateCollectionTranslationInputCustomFields = {
+	seoDescription?: InputMaybe<Scalars['String']['input']>;
+	seoTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCountryInput = {
@@ -851,6 +908,19 @@ export type CreatePaymentMethodInput = {
 
 export type CreateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
+<<<<<<< HEAD
+	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
+	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
+	infoUrl?: InputMaybe<Scalars['String']['input']>;
+	popularityScore?: InputMaybe<Scalars['Int']['input']>;
+	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
+	productPhysicalDimensions?: InputMaybe<Scalars['String']['input']>;
+	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+	reviewCount?: InputMaybe<Scalars['Float']['input']>;
+	reviewRating?: InputMaybe<Scalars['Float']['input']>;
+	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
+	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
 	depth?: InputMaybe<Scalars['Int']['input']>;
 	downloadable?: InputMaybe<Scalars['Boolean']['input']>;
 	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
@@ -860,6 +930,7 @@ export type CreateProductCustomFieldsInput = {
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
 	width?: InputMaybe<Scalars['Int']['input']>;
+>>>>>>> main
 };
 
 export type CreateProductInput = {
@@ -886,7 +957,14 @@ export type CreateProductOptionInput = {
 };
 
 export type CreateProductVariantCustomFieldsInput = {
+<<<<<<< HEAD
+	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
+	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
+	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+>>>>>>> main
 };
 
 export type CreateProductVariantInput = {
@@ -942,16 +1020,24 @@ export type CreateRoleInput = {
 	permissions: Array<Permission>;
 };
 
+export type CreateSellerCustomFieldsInput = {
+	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateSellerInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateSellerCustomFieldsInput>;
 	name: Scalars['String']['input'];
+};
+
+export type CreateShippingMethodCustomFieldsInput = {
+	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CreateShippingMethodInput = {
 	calculator: ConfigurableOperationInput;
 	checker: ConfigurableOperationInput;
 	code: Scalars['String']['input'];
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateShippingMethodCustomFieldsInput>;
 	fulfillmentHandler: Scalars['String']['input'];
 	translations: Array<ShippingMethodTranslationInput>;
 };
@@ -1838,7 +1924,7 @@ export type FulfillOrderInput = {
 export type Fulfillment = Node & {
 	__typename?: 'Fulfillment';
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<FulfillmentCustomFields>;
 	id: Scalars['ID']['output'];
 	lines: Array<FulfillmentLine>;
 	method: Scalars['String']['output'];
@@ -1848,6 +1934,11 @@ export type Fulfillment = Node & {
 	summary: Array<FulfillmentLine>;
 	trackingCode?: Maybe<Scalars['String']['output']>;
 	updatedAt: Scalars['DateTime']['output'];
+};
+
+export type FulfillmentCustomFields = {
+	__typename?: 'FulfillmentCustomFields';
+	downloadUrls?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type FulfillmentLine = {
@@ -1965,6 +2056,7 @@ export const HistoryEntryType = {
 	OrderPaymentTransition: 'ORDER_PAYMENT_TRANSITION',
 	OrderRefundTransition: 'ORDER_REFUND_TRANSITION',
 	OrderStateTransition: 'ORDER_STATE_TRANSITION',
+	SendcloudNotification: 'SENDCLOUD_NOTIFICATION',
 } as const;
 
 export type HistoryEntryType = (typeof HistoryEntryType)[keyof typeof HistoryEntryType];
@@ -2147,6 +2239,10 @@ export const JobState = {
 } as const;
 
 export type JobState = (typeof JobState)[keyof typeof JobState];
+export type KeycloakAuthInput = {
+	token: Scalars['String']['input'];
+};
+
 /**
  * @description
  * Languages in the form of a ISO 639-1 language code with optional
@@ -2871,6 +2967,7 @@ export type Mutation = {
 	/** Removes StockLocations from the specified Channel */
 	removeStockLocationsFromChannel: Array<StockLocation>;
 	runPendingSearchIndexUpdates: Success;
+	sendToSendCloud: Scalars['Boolean']['output'];
 	setCustomerForDraftOrder: SetCustomerForDraftOrderResult;
 	/** Sets the billing address for a draft Order */
 	setDraftOrderBillingAddress: Order;
@@ -2881,6 +2978,8 @@ export type Mutation = {
 	/** Sets the shipping method by id, which can be obtained with the `eligibleShippingMethodsForDraftOrder` query */
 	setDraftOrderShippingMethod: SetOrderShippingMethodResult;
 	setOrderCustomFields?: Maybe<Order>;
+	/** Set all webhooks for the current channel. This will overwrite any existing webhooks. */
+	setWebhooks: Array<Webhook>;
 	settlePayment: SettlePaymentResult;
 	settleRefund: SettleRefundResult;
 	transitionFulfillmentToState: TransitionFulfillmentToStateResult;
@@ -2931,6 +3030,7 @@ export type Mutation = {
 	updateRole: Role;
 	/** Update an existing Seller */
 	updateSeller: Seller;
+	updateSendCloudConfig: SendCloudConfig;
 	/** Update an existing ShippingMethod */
 	updateShippingMethod: ShippingMethod;
 	updateStockLocation: StockLocation;
@@ -3436,6 +3536,10 @@ export type MutationRemoveStockLocationsFromChannelArgs = {
 	input: RemoveStockLocationsFromChannelInput;
 };
 
+export type MutationSendToSendCloudArgs = {
+	orderId: Scalars['ID']['input'];
+};
+
 export type MutationSetCustomerForDraftOrderArgs = {
 	customerId?: InputMaybe<Scalars['ID']['input']>;
 	input?: InputMaybe<CreateCustomerInput>;
@@ -3464,6 +3568,10 @@ export type MutationSetDraftOrderShippingMethodArgs = {
 
 export type MutationSetOrderCustomFieldsArgs = {
 	input: UpdateOrderInput;
+};
+
+export type MutationSetWebhooksArgs = {
+	webhooks: Array<WebhookInput>;
 };
 
 export type MutationSettlePaymentArgs = {
@@ -3587,6 +3695,10 @@ export type MutationUpdateRoleArgs = {
 
 export type MutationUpdateSellerArgs = {
 	input: UpdateSellerInput;
+};
+
+export type MutationUpdateSendCloudConfigArgs = {
+	input?: InputMaybe<SendCloudConfigInput>;
 };
 
 export type MutationUpdateShippingMethodArgs = {
@@ -3812,7 +3924,7 @@ export type OrderLimitError = ErrorResult & {
 export type OrderLine = Node & {
 	__typename?: 'OrderLine';
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<OrderLineCustomFields>;
 	/** The price of the line including discounts, excluding tax */
 	discountedLinePrice: Scalars['Money']['output'];
 	/** The price of the line including discounts and tax */
@@ -3873,7 +3985,17 @@ export type OrderLine = Node & {
 	updatedAt: Scalars['DateTime']['output'];
 };
 
+export type OrderLineCustomFields = {
+	__typename?: 'OrderLineCustomFields';
+	isSelectedAsGift?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type OrderLineCustomFieldsInput = {
+	isSelectedAsGift?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type OrderLineInput = {
+	customFields?: InputMaybe<OrderLineCustomFieldsInput>;
 	orderLineId: Scalars['ID']['input'];
 	quantity: Scalars['Int']['input'];
 };
@@ -4247,6 +4369,8 @@ export const Permission = {
 	DeleteTaxRate: 'DeleteTaxRate',
 	/** Grants permission to delete Zone */
 	DeleteZone: 'DeleteZone',
+	/** Allows administrator to export orders */
+	ExportOrders: 'ExportOrders',
 	/** Owner means the user owns this entity, e.g. a Customer's own Order */
 	Owner: 'Owner',
 	/** Public means any unauthenticated user may perform the operation */
@@ -4295,6 +4419,10 @@ export const Permission = {
 	ReadTaxRate: 'ReadTaxRate',
 	/** Grants permission to read Zone */
 	ReadZone: 'ReadZone',
+	/** Allows setting SendCloud configuration */
+	SetSendCloudConfig: 'SetSendCloudConfig',
+	/** Allows setting a webhook URL */
+	SetWebhook: 'SetWebhook',
 	/** SuperAdmin has unrestricted access to all operations */
 	SuperAdmin: 'SuperAdmin',
 	/** Grants permission to update Administrator */
@@ -4403,6 +4531,21 @@ export type ProductVariantListArgs = {
 export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	additionalInfo?: Maybe<Scalars['String']['output']>;
+<<<<<<< HEAD
+	facebookImage?: Maybe<Asset>;
+	featuredReview?: Maybe<ProductReview>;
+	infoUrl?: Maybe<Scalars['String']['output']>;
+	popularityScore?: Maybe<Scalars['Int']['output']>;
+	primaryCollection?: Maybe<Collection>;
+	productPhysicalDimensions?: Maybe<Scalars['String']['output']>;
+	relatedProducts?: Maybe<Array<Product>>;
+	reviewCount?: Maybe<Scalars['Float']['output']>;
+	reviewRating?: Maybe<Scalars['Float']['output']>;
+	seoDescription?: Maybe<Scalars['String']['output']>;
+	seoTitle?: Maybe<Scalars['String']['output']>;
+	twitterImage?: Maybe<Asset>;
+	weight?: Maybe<Scalars['Int']['output']>;
+=======
 	depth?: Maybe<Scalars['Int']['output']>;
 	downloadable?: Maybe<Scalars['Boolean']['output']>;
 	featuredReview?: Maybe<ProductReview>;
@@ -4416,6 +4559,7 @@ export type ProductCustomFields = {
 	shortName?: Maybe<Scalars['String']['output']>;
 	weight?: Maybe<Scalars['Int']['output']>;
 	width?: Maybe<Scalars['Int']['output']>;
+>>>>>>> main
 };
 
 export type ProductFilterParameter = {
@@ -4429,11 +4573,25 @@ export type ProductFilterParameter = {
 	height?: InputMaybe<NumberOperators>;
 	id?: InputMaybe<IdOperators>;
 	infoUrl?: InputMaybe<StringOperators>;
+<<<<<<< HEAD
+=======
 	keywords?: InputMaybe<StringOperators>;
+>>>>>>> main
 	languageCode?: InputMaybe<StringOperators>;
 	metaDescription?: InputMaybe<StringOperators>;
 	metaTitle?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
+<<<<<<< HEAD
+	popularityScore?: InputMaybe<NumberOperators>;
+	productPhysicalDimensions?: InputMaybe<StringOperators>;
+	reviewCount?: InputMaybe<NumberOperators>;
+	reviewRating?: InputMaybe<NumberOperators>;
+	seoDescription?: InputMaybe<StringOperators>;
+	seoTitle?: InputMaybe<StringOperators>;
+	slug?: InputMaybe<StringOperators>;
+	updatedAt?: InputMaybe<DateOperators>;
+	weight?: InputMaybe<NumberOperators>;
+=======
 	reviewCount?: InputMaybe<NumberOperators>;
 	reviewRating?: InputMaybe<NumberOperators>;
 	shortName?: InputMaybe<StringOperators>;
@@ -4441,6 +4599,7 @@ export type ProductFilterParameter = {
 	updatedAt?: InputMaybe<DateOperators>;
 	weight?: InputMaybe<NumberOperators>;
 	width?: InputMaybe<NumberOperators>;
+>>>>>>> main
 };
 
 export type ProductList = PaginatedList & {
@@ -4611,6 +4770,20 @@ export type ProductSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	depth?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
+<<<<<<< HEAD
+	facebookImage?: InputMaybe<SortOrder>;
+	featuredReview?: InputMaybe<SortOrder>;
+	id?: InputMaybe<SortOrder>;
+	infoUrl?: InputMaybe<SortOrder>;
+	name?: InputMaybe<SortOrder>;
+	popularityScore?: InputMaybe<SortOrder>;
+	primaryCollection?: InputMaybe<SortOrder>;
+	productPhysicalDimensions?: InputMaybe<SortOrder>;
+	reviewCount?: InputMaybe<SortOrder>;
+	reviewRating?: InputMaybe<SortOrder>;
+	seoDescription?: InputMaybe<SortOrder>;
+	seoTitle?: InputMaybe<SortOrder>;
+=======
 	downloadable?: InputMaybe<SortOrder>;
 	featuredReview?: InputMaybe<SortOrder>;
 	height?: InputMaybe<SortOrder>;
@@ -4623,10 +4796,15 @@ export type ProductSortParameter = {
 	reviewCount?: InputMaybe<SortOrder>;
 	reviewRating?: InputMaybe<SortOrder>;
 	shortName?: InputMaybe<SortOrder>;
+>>>>>>> main
 	slug?: InputMaybe<SortOrder>;
+	twitterImage?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	weight?: InputMaybe<SortOrder>;
+<<<<<<< HEAD
+=======
 	width?: InputMaybe<SortOrder>;
+>>>>>>> main
 };
 
 export type ProductTranslation = {
@@ -4643,10 +4821,15 @@ export type ProductTranslation = {
 
 export type ProductTranslationCustomFields = {
 	__typename?: 'ProductTranslationCustomFields';
+<<<<<<< HEAD
+	seoDescription?: Maybe<Scalars['String']['output']>;
+	seoTitle?: Maybe<Scalars['String']['output']>;
+=======
 	keywords?: Maybe<Scalars['String']['output']>;
 	metaDescription?: Maybe<Scalars['String']['output']>;
 	metaTitle?: Maybe<Scalars['String']['output']>;
 	shortName?: Maybe<Scalars['String']['output']>;
+>>>>>>> main
 };
 
 export type ProductTranslationInput = {
@@ -4659,10 +4842,15 @@ export type ProductTranslationInput = {
 };
 
 export type ProductTranslationInputCustomFields = {
+<<<<<<< HEAD
+	seoDescription?: InputMaybe<Scalars['String']['input']>;
+	seoTitle?: InputMaybe<Scalars['String']['input']>;
+=======
 	keywords?: InputMaybe<Scalars['String']['input']>;
 	metaDescription?: InputMaybe<Scalars['String']['input']>;
 	metaTitle?: InputMaybe<Scalars['String']['input']>;
 	shortName?: InputMaybe<Scalars['String']['input']>;
+>>>>>>> main
 };
 
 export type ProductVariant = Node & {
@@ -4707,7 +4895,14 @@ export type ProductVariantStockMovementsArgs = {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
+<<<<<<< HEAD
+	isDigital?: Maybe<Scalars['Boolean']['output']>;
+	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
+	weight?: Maybe<Scalars['Int']['output']>;
+=======
+	releaseDate?: Maybe<Scalars['DateTime']['output']>;
+>>>>>>> main
 };
 
 export type ProductVariantFilterParameter = {
@@ -4716,7 +4911,9 @@ export type ProductVariantFilterParameter = {
 	enabled?: InputMaybe<BooleanOperators>;
 	facetValueId?: InputMaybe<IdOperators>;
 	id?: InputMaybe<IdOperators>;
+	isDigital?: InputMaybe<BooleanOperators>;
 	languageCode?: InputMaybe<StringOperators>;
+	maxPerOrder?: InputMaybe<NumberOperators>;
 	name?: InputMaybe<StringOperators>;
 	outOfStockThreshold?: InputMaybe<NumberOperators>;
 	price?: InputMaybe<NumberOperators>;
@@ -4730,6 +4927,7 @@ export type ProductVariantFilterParameter = {
 	trackInventory?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 	useGlobalOutOfStockThreshold?: InputMaybe<BooleanOperators>;
+	weight?: InputMaybe<NumberOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -4770,6 +4968,8 @@ export type ProductVariantPriceInput = {
 export type ProductVariantSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
+	isDigital?: InputMaybe<SortOrder>;
+	maxPerOrder?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	outOfStockThreshold?: InputMaybe<SortOrder>;
 	price?: InputMaybe<SortOrder>;
@@ -4781,6 +4981,7 @@ export type ProductVariantSortParameter = {
 	stockLevel?: InputMaybe<SortOrder>;
 	stockOnHand?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
+	weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {
@@ -4964,6 +5165,14 @@ export type Query = {
 	asset?: Maybe<Asset>;
 	/** Get a list of Assets */
 	assets: AssetList;
+	availableOrderExportStrategies: Array<Scalars['String']['output']>;
+	/** Get all available Vendure events that can be used to trigger webhooks */
+	availableWebhookEvents: Array<Scalars['String']['output']>;
+	/**
+	 * "
+	 * Get all available webhook request transformers
+	 */
+	availableWebhookRequestTransformers: Array<WebhookRequestTransformer>;
 	channel?: Maybe<Channel>;
 	channels: ChannelList;
 	/** Get a Collection either by id or slug. If neither id nor slug is specified, an error will result. */
@@ -5010,6 +5219,7 @@ export type Query = {
 	productVariant?: Maybe<ProductVariant>;
 	/** List ProductVariants either all or for the specific product. */
 	productVariants: ProductVariantList;
+	productVariantsWithLowStock: Array<ProductVariant>;
 	/** List Products */
 	products: ProductList;
 	promotion?: Maybe<Promotion>;
@@ -5023,6 +5233,7 @@ export type Query = {
 	search: SearchResponse;
 	seller?: Maybe<Seller>;
 	sellers: SellerList;
+	sendCloudConfig?: Maybe<SendCloudConfig>;
 	shippingCalculators: Array<ConfigurableOperationDefinition>;
 	shippingEligibilityCheckers: Array<ConfigurableOperationDefinition>;
 	shippingMethod?: Maybe<ShippingMethod>;
@@ -5037,6 +5248,8 @@ export type Query = {
 	taxRates: TaxRateList;
 	testEligibleShippingMethods: Array<ShippingMethodQuote>;
 	testShippingMethod: TestShippingMethodResult;
+	/** Get all webhooks for the current channel */
+	webhooks: Array<Webhook>;
 	zone?: Maybe<Zone>;
 	zones: ZoneList;
 };
@@ -5524,6 +5737,7 @@ export type SearchInput = {
 	collectionSlug?: InputMaybe<Scalars['String']['input']>;
 	facetValueFilters?: InputMaybe<Array<FacetValueFilterInput>>;
 	groupByProduct?: InputMaybe<Scalars['Boolean']['input']>;
+	inStock?: InputMaybe<Scalars['Boolean']['input']>;
 	skip?: InputMaybe<Scalars['Int']['input']>;
 	sort?: InputMaybe<SearchResultSortParameter>;
 	take?: InputMaybe<Scalars['Int']['input']>;
@@ -5554,6 +5768,7 @@ export type SearchResult = {
 	enabled: Scalars['Boolean']['output'];
 	facetIds: Array<Scalars['ID']['output']>;
 	facetValueIds: Array<Scalars['ID']['output']>;
+	inStock: Scalars['Boolean']['output'];
 	price: SearchResultPrice;
 	priceWithTax: SearchResultPrice;
 	productAsset?: Maybe<SearchResultAsset>;
@@ -5586,13 +5801,19 @@ export type SearchResultSortParameter = {
 export type Seller = Node & {
 	__typename?: 'Seller';
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<SellerCustomFields>;
 	id: Scalars['ID']['output'];
 	name: Scalars['String']['output'];
 	updatedAt: Scalars['DateTime']['output'];
 };
 
+export type SellerCustomFields = {
+	__typename?: 'SellerCustomFields';
+	connectedAccountId?: Maybe<Scalars['String']['output']>;
+};
+
 export type SellerFilterParameter = {
+	connectedAccountId?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	id?: InputMaybe<IdOperators>;
 	name?: InputMaybe<StringOperators>;
@@ -5619,10 +5840,25 @@ export type SellerListOptions = {
 };
 
 export type SellerSortParameter = {
+	connectedAccountId?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
+};
+
+export type SendCloudConfig = {
+	__typename?: 'SendCloudConfig';
+	defaultPhoneNr?: Maybe<Scalars['String']['output']>;
+	id: Scalars['ID']['output'];
+	publicKey?: Maybe<Scalars['String']['output']>;
+	secret?: Maybe<Scalars['String']['output']>;
+};
+
+export type SendCloudConfigInput = {
+	defaultPhoneNr?: InputMaybe<Scalars['String']['input']>;
+	publicKey?: InputMaybe<Scalars['String']['input']>;
+	secret?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ServerConfig = {
@@ -5679,7 +5915,7 @@ export type ShippingMethod = Node & {
 	checker: ConfigurableOperation;
 	code: Scalars['String']['output'];
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<ShippingMethodCustomFields>;
 	description: Scalars['String']['output'];
 	fulfillmentHandlerCode: Scalars['String']['output'];
 	id: Scalars['ID']['output'];
@@ -5689,12 +5925,18 @@ export type ShippingMethod = Node & {
 	updatedAt: Scalars['DateTime']['output'];
 };
 
+export type ShippingMethodCustomFields = {
+	__typename?: 'ShippingMethodCustomFields';
+	isDigital?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type ShippingMethodFilterParameter = {
 	code?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	description?: InputMaybe<StringOperators>;
 	fulfillmentHandlerCode?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
+	isDigital?: InputMaybe<BooleanOperators>;
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
@@ -5722,7 +5964,7 @@ export type ShippingMethodListOptions = {
 export type ShippingMethodQuote = {
 	__typename?: 'ShippingMethodQuote';
 	code: Scalars['String']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<ShippingMethodCustomFields>;
 	description: Scalars['String']['output'];
 	id: Scalars['ID']['output'];
 	/** Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult */
@@ -5738,6 +5980,7 @@ export type ShippingMethodSortParameter = {
 	description?: InputMaybe<SortOrder>;
 	fulfillmentHandlerCode?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
+	isDigital?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
@@ -6182,11 +6425,15 @@ export type UpdateAssetInput = {
 	tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type UpdateChannelCustomFieldsInput = {
+	postalPinCode?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type UpdateChannelInput = {
 	availableCurrencyCodes?: InputMaybe<Array<CurrencyCode>>;
 	availableLanguageCodes?: InputMaybe<Array<LanguageCode>>;
 	code?: InputMaybe<Scalars['String']['input']>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateChannelCustomFieldsInput>;
 	defaultCurrencyCode?: InputMaybe<CurrencyCode>;
 	defaultLanguageCode?: InputMaybe<LanguageCode>;
 	defaultShippingZoneId?: InputMaybe<Scalars['ID']['input']>;
@@ -6201,9 +6448,17 @@ export type UpdateChannelInput = {
 
 export type UpdateChannelResult = Channel | LanguageNotAvailableError;
 
+export type UpdateCollectionCustomFieldsInput = {
+	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
+	popularityScore?: InputMaybe<Scalars['Int']['input']>;
+	promoBannerId?: InputMaybe<Scalars['ID']['input']>;
+	promoBannerStatus?: InputMaybe<Scalars['Boolean']['input']>;
+	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type UpdateCollectionInput = {
 	assetIds?: InputMaybe<Array<Scalars['ID']['input']>>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateCollectionCustomFieldsInput>;
 	featuredAssetId?: InputMaybe<Scalars['ID']['input']>;
 	filters?: InputMaybe<Array<ConfigurableOperationInput>>;
 	id: Scalars['ID']['input'];
@@ -6214,12 +6469,17 @@ export type UpdateCollectionInput = {
 };
 
 export type UpdateCollectionTranslationInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateCollectionTranslationInputCustomFields>;
 	description?: InputMaybe<Scalars['String']['input']>;
 	id?: InputMaybe<Scalars['ID']['input']>;
 	languageCode: LanguageCode;
 	name?: InputMaybe<Scalars['String']['input']>;
 	slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCollectionTranslationInputCustomFields = {
+	seoDescription?: InputMaybe<Scalars['String']['input']>;
+	seoTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCountryInput = {
@@ -6325,6 +6585,19 @@ export type UpdatePaymentMethodInput = {
 
 export type UpdateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
+<<<<<<< HEAD
+	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
+	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
+	infoUrl?: InputMaybe<Scalars['String']['input']>;
+	popularityScore?: InputMaybe<Scalars['Int']['input']>;
+	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
+	productPhysicalDimensions?: InputMaybe<Scalars['String']['input']>;
+	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+	reviewCount?: InputMaybe<Scalars['Float']['input']>;
+	reviewRating?: InputMaybe<Scalars['Float']['input']>;
+	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
+	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
 	depth?: InputMaybe<Scalars['Int']['input']>;
 	downloadable?: InputMaybe<Scalars['Boolean']['input']>;
 	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
@@ -6334,6 +6607,7 @@ export type UpdateProductCustomFieldsInput = {
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
 	width?: InputMaybe<Scalars['Int']['input']>;
+>>>>>>> main
 };
 
 export type UpdateProductInput = {
@@ -6368,7 +6642,14 @@ export type UpdateProductReviewInput = {
 };
 
 export type UpdateProductVariantCustomFieldsInput = {
+<<<<<<< HEAD
+	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
+	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
+	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+>>>>>>> main
 };
 
 export type UpdateProductVariantInput = {
@@ -6425,17 +6706,25 @@ export type UpdateRoleInput = {
 	permissions?: InputMaybe<Array<Permission>>;
 };
 
+export type UpdateSellerCustomFieldsInput = {
+	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateSellerInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateSellerCustomFieldsInput>;
 	id: Scalars['ID']['input'];
 	name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateShippingMethodCustomFieldsInput = {
+	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateShippingMethodInput = {
 	calculator?: InputMaybe<ConfigurableOperationInput>;
 	checker?: InputMaybe<ConfigurableOperationInput>;
 	code?: InputMaybe<Scalars['String']['input']>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateShippingMethodCustomFieldsInput>;
 	fulfillmentHandler?: InputMaybe<Scalars['String']['input']>;
 	id: Scalars['ID']['input'];
 	translations: Array<ShippingMethodTranslationInput>;
@@ -6488,6 +6777,26 @@ export type User = Node & {
 	roles: Array<Role>;
 	updatedAt: Scalars['DateTime']['output'];
 	verified: Scalars['Boolean']['output'];
+};
+
+export type Webhook = {
+	__typename?: 'Webhook';
+	event: Scalars['String']['output'];
+	id: Scalars['ID']['output'];
+	requestTransformer?: Maybe<WebhookRequestTransformer>;
+	url: Scalars['String']['output'];
+};
+
+export type WebhookInput = {
+	event: Scalars['String']['input'];
+	transformerName?: InputMaybe<Scalars['String']['input']>;
+	url: Scalars['String']['input'];
+};
+
+export type WebhookRequestTransformer = {
+	__typename?: 'WebhookRequestTransformer';
+	name: Scalars['String']['output'];
+	supportedEvents: Array<Scalars['String']['output']>;
 };
 
 export type Zone = Node & {
@@ -6738,12 +7047,12 @@ export const OrdersDocument = gql`
 	}
 	${OrderDetailFragmentDoc}
 `;
-export type Requester<C = {}, E = unknown> = <R, V>(
+export type Requester<C = {}> = <R, V>(
 	doc: DocumentNode,
 	vars?: V,
 	options?: C
 ) => Promise<R> | AsyncIterable<R>;
-export function getSdk<C, E>(requester: Requester<C, E>) {
+export function getSdk<C>(requester: Requester<C>) {
 	return {
 		orders(variables?: OrdersQueryVariables, options?: C): Promise<OrdersQuery> {
 			return requester<OrdersQuery, OrdersQueryVariables>(

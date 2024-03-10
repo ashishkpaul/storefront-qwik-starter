@@ -1,13 +1,16 @@
 import { $, component$, useComputed$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
+// import Accordion from '~/components/accordion/Accordion'; // Assuming Accordion is in the components folder
 import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
 import Price from '~/components/products/Price';
+import ProductCard from '~/components/products/ProductCard';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
 import TopReviews from '~/components/top-reviews/TopReviews';
+import { ProductAdditionalInfo } from '~/components/widgets/ProductAdditionalInfo';
 import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
@@ -18,10 +21,15 @@ import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/uti
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
+<<<<<<< HEAD
+	// console.log('Product Data:', product);
+	if (product && product.assets && product.assets.length === 1) {
+=======
 	{
 		/* console.log('Product Data:', product); */
 	}
 	if (product.assets.length === 1) {
+>>>>>>> main
 		product.assets.push({
 			id: 'placeholder_2',
 			name: 'placeholder',
@@ -59,6 +67,28 @@ export default component$(() => {
 		tracker.track(() => appState.activeOrder);
 		quantitySignal.value = await calculateQuantities(productSignal.value);
 	});
+
+	// Add these log statements before the console.log for customFields
+	// console.log('Product Signal Value:', productSignal.value);
+
+	// Check if customFields is defined
+	// if (productSignal.value.customFields !== undefined) {
+	// 	console.log('Custom Fields:', productSignal.value.customFields);
+
+	// 	// Add your existing code for accessing additionalInfo here
+	// } else {
+	// 	console.log('Custom Fields is not available.');
+	// }
+
+	// Accordion static page
+	// const items = [
+	// 	{
+	// 		title: 'Additional Information',
+	// 		content: 'Content for Product Additioanl Info', // Pass product as prop
+	// 	},
+	// 	{ title: 'Item 2', content: 'Content for Item 2' },
+	// 	// ... more items
+	// ];
 
 	return (
 		<div>
@@ -123,7 +153,7 @@ export default component$(() => {
 									<select
 										class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md"
 										value={selectedVariantIdSignal.value}
-										onChange$={(e: any) => (selectedVariantIdSignal.value = e.target.value)}
+										onChange$={(_, el) => (selectedVariantIdSignal.value = el.value)}
 									>
 										{productSignal.value.variants.map((variant) => (
 											<option
@@ -218,6 +248,34 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
+			<div>
+				{/* Accordion */}
+				{/* <Accordion items={items} /> */}
+			</div>
+			<ProductAdditionalInfo product={productSignal.value} />
+			{/* Display related products */}
+			<section class="max-w-6xl mx-auto px-4 px-4 py-10">
+				<h2>Related Products</h2>
+				<br />
+				<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+					{productSignal.value.customFields?.relatedProducts?.map((relatedProduct: any) => {
+						const relatedVariant = relatedProduct.variants?.[0];
+						return (
+							<ProductCard
+								productAsset={relatedProduct.featuredAsset}
+								productName={relatedProduct.name}
+								slug={relatedProduct.slug} // Pass the slug prop
+								priceWithTax={relatedVariant?.priceWithTax}
+								currencyCode={relatedVariant?.currencyCode}
+								key={relatedProduct.id}
+								productSignalSetter={productSignal}
+							/>
+						);
+					})}
+				</div>
+			</section>
+=======
 			{/* {productSignal.value.customFields && productSignal.value.customFields.additionalInfo && ( */}
 			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
 				<h2 class="text-lg font-medium text-orange-900">Additional Info</h2>
@@ -229,6 +287,7 @@ export default component$(() => {
 				/>
 			</div>
 			{/* )} */}
+>>>>>>> main
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">
 					<TopReviews />

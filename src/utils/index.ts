@@ -100,8 +100,10 @@ export const getCookie = (name: string) => {
 };
 
 export const cleanUpParams = (params: Record<string, string>) => {
-	if ('slug' in params && params.slug[params.slug.length - 1] === '/') {
-		params.slug = params.slug.slice(0, params.slug.length - 1);
+	if ('slug' in params && typeof params.slug === 'string' && params.slug.length > 0) {
+		if (params.slug[params.slug.length - 1] === '/') {
+			params.slug = params.slug.slice(0, params.slug.length - 1);
+		}
 	}
 	return params;
 };
