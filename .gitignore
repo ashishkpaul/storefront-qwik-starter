@@ -41,5 +41,6 @@ lerna-debug.log*
 # Yarn
 .yarn/*
 !.yarn/releases
+yarn.lock
 
 # Cloudflare

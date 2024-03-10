@@ -15,14 +15,21 @@ import { APP_STATE } from '~/constants';
 import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug } from '~/providers/shop/products/products';
-import { Variant } from '~/types';
+import { Variant, ProductCustomFields } from '~/types';
 import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
 
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
+<<<<<<< HEAD
 	// console.log('Product Data:', product);
 	if (product && product.assets && product.assets.length === 1) {
+=======
+	{
+		/* console.log('Product Data:', product); */
+	}
+	if (product.assets.length === 1) {
+>>>>>>> main
 		product.assets.push({
 			id: 'placeholder_2',
 			name: 'placeholder',
@@ -87,7 +94,7 @@ export default component$(() => {
 		<div>
 			<div class="max-w-6xl mx-auto px-4 py-10">
 				<div>
-					<h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
+					<h2 class="text-3xl sm:text-5xl font-light tracking-tight text-orange-900 my-8">
 						{productSignal.value.name}
 					</h2>
 					<Breadcrumbs
@@ -241,6 +248,7 @@ export default component$(() => {
 					</div>
 				</div>
 			</div>
+<<<<<<< HEAD
 			<div>
 				{/* Accordion */}
 				{/* <Accordion items={items} /> */}
@@ -267,6 +275,19 @@ export default component$(() => {
 					})}
 				</div>
 			</section>
+=======
+			{/* {productSignal.value.customFields && productSignal.value.customFields.additionalInfo && ( */}
+			<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
+				<h2 class="text-lg font-medium text-orange-900">Additional Info</h2>
+				<div
+					class="text-base text-gray-700"
+					dangerouslySetInnerHTML={
+						(productSignal.value.customFields as ProductCustomFields)?.additionalInfo ?? ''
+					}
+				/>
+			</div>
+			{/* )} */}
+>>>>>>> main
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">
 					<TopReviews />

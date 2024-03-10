@@ -2653,10 +2653,15 @@ export type Product = Node & {
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
 	optionGroups: Array<ProductOptionGroup>;
+<<<<<<< HEAD
 	primaryCollection?: Maybe<Collection>;
 	reviews: ProductReviewList;
 	reviewsHistogram: Array<ProductReviewHistogramItem>;
 	seo: Seo;
+=======
+	reviews: ProductReviewList;
+	reviewsHistogram: Array<ProductReviewHistogramItem>;
+>>>>>>> main
 	slug: Scalars['String']['output'];
 	translations: Array<ProductTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
@@ -2677,6 +2682,7 @@ export type ProductVariantListArgs = {
 export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	additionalInfo?: Maybe<Scalars['String']['output']>;
+<<<<<<< HEAD
 	featuredReview?: Maybe<ProductReview>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
@@ -2686,16 +2692,41 @@ export type ProductCustomFields = {
 	reviewCount?: Maybe<Scalars['Float']['output']>;
 	reviewRating?: Maybe<Scalars['Float']['output']>;
 	weight?: Maybe<Scalars['Int']['output']>;
+=======
+	depth?: Maybe<Scalars['Int']['output']>;
+	downloadable?: Maybe<Scalars['Boolean']['output']>;
+	featuredReview?: Maybe<ProductReview>;
+	height?: Maybe<Scalars['Int']['output']>;
+	infoUrl?: Maybe<Scalars['String']['output']>;
+	keywords?: Maybe<Scalars['String']['output']>;
+	metaDescription?: Maybe<Scalars['String']['output']>;
+	metaTitle?: Maybe<Scalars['String']['output']>;
+	reviewCount?: Maybe<Scalars['Float']['output']>;
+	reviewRating?: Maybe<Scalars['Float']['output']>;
+	shortName?: Maybe<Scalars['String']['output']>;
+	weight?: Maybe<Scalars['Int']['output']>;
+	width?: Maybe<Scalars['Int']['output']>;
+>>>>>>> main
 };
 
 export type ProductFilterParameter = {
 	additionalInfo?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
+	depth?: InputMaybe<NumberOperators>;
 	description?: InputMaybe<StringOperators>;
+	downloadable?: InputMaybe<BooleanOperators>;
+	height?: InputMaybe<NumberOperators>;
 	id?: InputMaybe<IdOperators>;
 	infoUrl?: InputMaybe<StringOperators>;
+<<<<<<< HEAD
+=======
+	keywords?: InputMaybe<StringOperators>;
+>>>>>>> main
 	languageCode?: InputMaybe<StringOperators>;
+	metaDescription?: InputMaybe<StringOperators>;
+	metaTitle?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
+<<<<<<< HEAD
 	popularityScore?: InputMaybe<NumberOperators>;
 	productPhysicalDimensions?: InputMaybe<StringOperators>;
 	reviewCount?: InputMaybe<NumberOperators>;
@@ -2703,6 +2734,15 @@ export type ProductFilterParameter = {
 	slug?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 	weight?: InputMaybe<NumberOperators>;
+=======
+	reviewCount?: InputMaybe<NumberOperators>;
+	reviewRating?: InputMaybe<NumberOperators>;
+	shortName?: InputMaybe<StringOperators>;
+	slug?: InputMaybe<StringOperators>;
+	updatedAt?: InputMaybe<DateOperators>;
+	weight?: InputMaybe<NumberOperators>;
+	width?: InputMaybe<NumberOperators>;
+>>>>>>> main
 };
 
 export type ProductList = PaginatedList & {
@@ -2848,7 +2888,9 @@ export type ProductReviewSortParameter = {
 export type ProductSortParameter = {
 	additionalInfo?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
+	depth?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
+<<<<<<< HEAD
 	featuredReview?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	infoUrl?: InputMaybe<SortOrder>;
@@ -2861,17 +2903,44 @@ export type ProductSortParameter = {
 	slug?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	weight?: InputMaybe<SortOrder>;
+=======
+	downloadable?: InputMaybe<SortOrder>;
+	featuredReview?: InputMaybe<SortOrder>;
+	height?: InputMaybe<SortOrder>;
+	id?: InputMaybe<SortOrder>;
+	infoUrl?: InputMaybe<SortOrder>;
+	keywords?: InputMaybe<SortOrder>;
+	metaDescription?: InputMaybe<SortOrder>;
+	metaTitle?: InputMaybe<SortOrder>;
+	name?: InputMaybe<SortOrder>;
+	reviewCount?: InputMaybe<SortOrder>;
+	reviewRating?: InputMaybe<SortOrder>;
+	shortName?: InputMaybe<SortOrder>;
+	slug?: InputMaybe<SortOrder>;
+	updatedAt?: InputMaybe<SortOrder>;
+	weight?: InputMaybe<SortOrder>;
+	width?: InputMaybe<SortOrder>;
+>>>>>>> main
 };
 
 export type ProductTranslation = {
 	__typename?: 'ProductTranslation';
 	createdAt: Scalars['DateTime']['output'];
+	customFields?: Maybe<ProductTranslationCustomFields>;
 	description: Scalars['String']['output'];
 	id: Scalars['ID']['output'];
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
 	slug: Scalars['String']['output'];
 	updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ProductTranslationCustomFields = {
+	__typename?: 'ProductTranslationCustomFields';
+	keywords?: Maybe<Scalars['String']['output']>;
+	metaDescription?: Maybe<Scalars['String']['output']>;
+	metaTitle?: Maybe<Scalars['String']['output']>;
+	shortName?: Maybe<Scalars['String']['output']>;
 };
 
 export type ProductVariant = Node & {
@@ -2900,10 +2969,14 @@ export type ProductVariant = Node & {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
+<<<<<<< HEAD
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
 	weight?: Maybe<Scalars['Int']['output']>;
+=======
+	releaseDate?: Maybe<Scalars['DateTime']['output']>;
+>>>>>>> main
 };
 
 export type ProductVariantFilterParameter = {
@@ -3972,7 +4045,9 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
-export type CollectionsQueryVariables = Exact<{ [key: string]: never }>;
+export type CollectionsQueryVariables = Exact<{
+	take: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
@@ -5028,6 +5103,7 @@ export type DetailedProductFragment = {
 	name: string;
 	slug: string;
 	description: string;
+	customFields?: { __typename?: 'ProductCustomFields'; additionalInfo?: string | null } | null;
 	collections: Array<{
 		__typename?: 'Collection';
 		id: string;
@@ -5106,6 +5182,7 @@ export type ProductQuery = {
 		name: string;
 		slug: string;
 		description: string;
+		customFields?: { __typename?: 'ProductCustomFields'; additionalInfo?: string | null } | null;
 		collections: Array<{
 			__typename?: 'Collection';
 			id: string;
@@ -5316,6 +5393,9 @@ export const DetailedProductFragmentDoc = gql`
 		name
 		slug
 		description
+		customFields {
+			additionalInfo
+		}
 		collections {
 			id
 			slug
@@ -5597,8 +5677,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections {
-		collections {
+	query collections($take: Int) {
+		collections(options: { take: $take }) {
 			items {
 				id
 				name

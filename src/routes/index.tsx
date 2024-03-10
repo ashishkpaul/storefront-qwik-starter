@@ -1,5 +1,6 @@
 // ./src/routes/index.tsx
 import { component$, useContext } from '@builder.io/qwik';
+<<<<<<< HEAD
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { Slider } from 'qwik-slider';
 import CollectionCard from '~/components/collection-card/CollectionCard';
@@ -48,6 +49,19 @@ export default component$(() => {
 	};
 	// Fetch search results
 	const searchSignal = useSearchLoader();
+=======
+// import { Image } from 'qwik-image';
+import CollectionCard from '~/components/collection-card/CollectionCard';
+// import { APP_STATE, HOMEPAGE_IMAGE } from '~/constants';
+import { APP_STATE } from '~/constants';
+import Carousel from '~/components/carousel/Carousel';
+
+export default component$(() => {
+	const collections = useContext(APP_STATE).collections;
+	return (
+		<div>
+			<Carousel />
+>>>>>>> main
 
 	// Render ProductCard components based on search results
 	return (
@@ -58,7 +72,11 @@ export default component$(() => {
 					<div class="-my-2">
 						<div class="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible">
 							<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+<<<<<<< HEAD
 								<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Hot Deals`}</h2>
+=======
+								<h2 class="text-2xl font-light tracking-tight text-orange-800">{$localize`Shop by Category`}</h2>
+>>>>>>> main
 							</div>
 							{/* <h1>Products in Collection</h1> */}
 							<div class="gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">

@@ -8,7 +8,10 @@
  *
  */
 import { type PlatformNode } from '@builder.io/qwik-city/middleware/node';
+<<<<<<< HEAD
 import 'dotenv/config';
+=======
+>>>>>>> main
 import Fastify from 'fastify';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,7 +31,11 @@ const HOST = process.env.HOST ?? '0.0.0.0';
 
 const start = async () => {
 	// Create the fastify server
+<<<<<<< HEAD
 	// https://fastify.dev/docs/latest/Guides/Getting-Started/
+=======
+	// https://www.fastify.io/docs/latest/Guides/Getting-Started/
+>>>>>>> main
 	const fastify = Fastify({
 		logger: true,
 	});

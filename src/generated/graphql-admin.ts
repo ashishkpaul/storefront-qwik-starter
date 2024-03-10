@@ -908,6 +908,7 @@ export type CreatePaymentMethodInput = {
 
 export type CreateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
+<<<<<<< HEAD
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
 	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
@@ -919,6 +920,17 @@ export type CreateProductCustomFieldsInput = {
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
 	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
+	depth?: InputMaybe<Scalars['Int']['input']>;
+	downloadable?: InputMaybe<Scalars['Boolean']['input']>;
+	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
+	height?: InputMaybe<Scalars['Int']['input']>;
+	infoUrl?: InputMaybe<Scalars['String']['input']>;
+	reviewCount?: InputMaybe<Scalars['Float']['input']>;
+	reviewRating?: InputMaybe<Scalars['Float']['input']>;
+	weight?: InputMaybe<Scalars['Int']['input']>;
+	width?: InputMaybe<Scalars['Int']['input']>;
+>>>>>>> main
 };
 
 export type CreateProductInput = {
@@ -945,10 +957,14 @@ export type CreateProductOptionInput = {
 };
 
 export type CreateProductVariantCustomFieldsInput = {
+<<<<<<< HEAD
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
+	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+>>>>>>> main
 };
 
 export type CreateProductVariantInput = {
@@ -4515,6 +4531,7 @@ export type ProductVariantListArgs = {
 export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	additionalInfo?: Maybe<Scalars['String']['output']>;
+<<<<<<< HEAD
 	facebookImage?: Maybe<Asset>;
 	featuredReview?: Maybe<ProductReview>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
@@ -4528,18 +4545,43 @@ export type ProductCustomFields = {
 	seoTitle?: Maybe<Scalars['String']['output']>;
 	twitterImage?: Maybe<Asset>;
 	weight?: Maybe<Scalars['Int']['output']>;
+=======
+	depth?: Maybe<Scalars['Int']['output']>;
+	downloadable?: Maybe<Scalars['Boolean']['output']>;
+	featuredReview?: Maybe<ProductReview>;
+	height?: Maybe<Scalars['Int']['output']>;
+	infoUrl?: Maybe<Scalars['String']['output']>;
+	keywords?: Maybe<Scalars['String']['output']>;
+	metaDescription?: Maybe<Scalars['String']['output']>;
+	metaTitle?: Maybe<Scalars['String']['output']>;
+	reviewCount?: Maybe<Scalars['Float']['output']>;
+	reviewRating?: Maybe<Scalars['Float']['output']>;
+	shortName?: Maybe<Scalars['String']['output']>;
+	weight?: Maybe<Scalars['Int']['output']>;
+	width?: Maybe<Scalars['Int']['output']>;
+>>>>>>> main
 };
 
 export type ProductFilterParameter = {
 	additionalInfo?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
+	depth?: InputMaybe<NumberOperators>;
 	description?: InputMaybe<StringOperators>;
+	downloadable?: InputMaybe<BooleanOperators>;
 	enabled?: InputMaybe<BooleanOperators>;
 	facetValueId?: InputMaybe<IdOperators>;
+	height?: InputMaybe<NumberOperators>;
 	id?: InputMaybe<IdOperators>;
 	infoUrl?: InputMaybe<StringOperators>;
+<<<<<<< HEAD
+=======
+	keywords?: InputMaybe<StringOperators>;
+>>>>>>> main
 	languageCode?: InputMaybe<StringOperators>;
+	metaDescription?: InputMaybe<StringOperators>;
+	metaTitle?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
+<<<<<<< HEAD
 	popularityScore?: InputMaybe<NumberOperators>;
 	productPhysicalDimensions?: InputMaybe<StringOperators>;
 	reviewCount?: InputMaybe<NumberOperators>;
@@ -4549,6 +4591,15 @@ export type ProductFilterParameter = {
 	slug?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 	weight?: InputMaybe<NumberOperators>;
+=======
+	reviewCount?: InputMaybe<NumberOperators>;
+	reviewRating?: InputMaybe<NumberOperators>;
+	shortName?: InputMaybe<StringOperators>;
+	slug?: InputMaybe<StringOperators>;
+	updatedAt?: InputMaybe<DateOperators>;
+	weight?: InputMaybe<NumberOperators>;
+	width?: InputMaybe<NumberOperators>;
+>>>>>>> main
 };
 
 export type ProductList = PaginatedList & {
@@ -4717,7 +4768,9 @@ export type ProductReviewSortParameter = {
 export type ProductSortParameter = {
 	additionalInfo?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
+	depth?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
+<<<<<<< HEAD
 	facebookImage?: InputMaybe<SortOrder>;
 	featuredReview?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
@@ -4730,10 +4783,28 @@ export type ProductSortParameter = {
 	reviewRating?: InputMaybe<SortOrder>;
 	seoDescription?: InputMaybe<SortOrder>;
 	seoTitle?: InputMaybe<SortOrder>;
+=======
+	downloadable?: InputMaybe<SortOrder>;
+	featuredReview?: InputMaybe<SortOrder>;
+	height?: InputMaybe<SortOrder>;
+	id?: InputMaybe<SortOrder>;
+	infoUrl?: InputMaybe<SortOrder>;
+	keywords?: InputMaybe<SortOrder>;
+	metaDescription?: InputMaybe<SortOrder>;
+	metaTitle?: InputMaybe<SortOrder>;
+	name?: InputMaybe<SortOrder>;
+	reviewCount?: InputMaybe<SortOrder>;
+	reviewRating?: InputMaybe<SortOrder>;
+	shortName?: InputMaybe<SortOrder>;
+>>>>>>> main
 	slug?: InputMaybe<SortOrder>;
 	twitterImage?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	weight?: InputMaybe<SortOrder>;
+<<<<<<< HEAD
+=======
+	width?: InputMaybe<SortOrder>;
+>>>>>>> main
 };
 
 export type ProductTranslation = {
@@ -4750,8 +4821,15 @@ export type ProductTranslation = {
 
 export type ProductTranslationCustomFields = {
 	__typename?: 'ProductTranslationCustomFields';
+<<<<<<< HEAD
 	seoDescription?: Maybe<Scalars['String']['output']>;
 	seoTitle?: Maybe<Scalars['String']['output']>;
+=======
+	keywords?: Maybe<Scalars['String']['output']>;
+	metaDescription?: Maybe<Scalars['String']['output']>;
+	metaTitle?: Maybe<Scalars['String']['output']>;
+	shortName?: Maybe<Scalars['String']['output']>;
+>>>>>>> main
 };
 
 export type ProductTranslationInput = {
@@ -4764,8 +4842,15 @@ export type ProductTranslationInput = {
 };
 
 export type ProductTranslationInputCustomFields = {
+<<<<<<< HEAD
 	seoDescription?: InputMaybe<Scalars['String']['input']>;
 	seoTitle?: InputMaybe<Scalars['String']['input']>;
+=======
+	keywords?: InputMaybe<Scalars['String']['input']>;
+	metaDescription?: InputMaybe<Scalars['String']['input']>;
+	metaTitle?: InputMaybe<Scalars['String']['input']>;
+	shortName?: InputMaybe<Scalars['String']['input']>;
+>>>>>>> main
 };
 
 export type ProductVariant = Node & {
@@ -4810,10 +4895,14 @@ export type ProductVariantStockMovementsArgs = {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
+<<<<<<< HEAD
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
 	weight?: Maybe<Scalars['Int']['output']>;
+=======
+	releaseDate?: Maybe<Scalars['DateTime']['output']>;
+>>>>>>> main
 };
 
 export type ProductVariantFilterParameter = {
@@ -6496,6 +6585,7 @@ export type UpdatePaymentMethodInput = {
 
 export type UpdateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
+<<<<<<< HEAD
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
 	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
@@ -6507,6 +6597,17 @@ export type UpdateProductCustomFieldsInput = {
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
 	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
+	depth?: InputMaybe<Scalars['Int']['input']>;
+	downloadable?: InputMaybe<Scalars['Boolean']['input']>;
+	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
+	height?: InputMaybe<Scalars['Int']['input']>;
+	infoUrl?: InputMaybe<Scalars['String']['input']>;
+	reviewCount?: InputMaybe<Scalars['Float']['input']>;
+	reviewRating?: InputMaybe<Scalars['Float']['input']>;
+	weight?: InputMaybe<Scalars['Int']['input']>;
+	width?: InputMaybe<Scalars['Int']['input']>;
+>>>>>>> main
 };
 
 export type UpdateProductInput = {
@@ -6541,10 +6642,14 @@ export type UpdateProductReviewInput = {
 };
 
 export type UpdateProductVariantCustomFieldsInput = {
+<<<<<<< HEAD
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
+=======
+	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+>>>>>>> main
 };
 
 export type UpdateProductVariantInput = {

@@ -938,6 +938,7 @@ input CreatePaymentMethodInput {
 
 input CreateProductCustomFieldsInput {
 	additionalInfo: String
+<<<<<<< HEAD
 	facebookImageId: ID
 	featuredReviewId: ID
 	infoUrl: String
@@ -949,6 +950,17 @@ input CreateProductCustomFieldsInput {
 	reviewRating: Float
 	twitterImageId: ID
 	weight: Int
+=======
+	depth: Int
+	downloadable: Boolean
+	featuredReviewId: ID
+	height: Int
+	infoUrl: String
+	reviewCount: Float
+	reviewRating: Float
+	weight: Int
+	width: Int
+>>>>>>> main
 }
 
 input CreateProductInput {
@@ -975,10 +987,14 @@ input CreateProductOptionInput {
 }
 
 input CreateProductVariantCustomFieldsInput {
+<<<<<<< HEAD
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
 	weight: Int
+=======
+	releaseDate: DateTime
+>>>>>>> main
 }
 
 input CreateProductVariantInput {
@@ -5637,6 +5653,7 @@ type Product implements Node {
 
 type ProductCustomFields {
 	additionalInfo: String
+<<<<<<< HEAD
 	facebookImage: Asset
 	featuredReview: ProductReview
 	infoUrl: String
@@ -5650,18 +5667,43 @@ type ProductCustomFields {
 	seoTitle: String
 	twitterImage: Asset
 	weight: Int
+=======
+	depth: Int
+	downloadable: Boolean
+	featuredReview: ProductReview
+	height: Int
+	infoUrl: String
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	reviewCount: Float
+	reviewRating: Float
+	shortName: String
+	weight: Int
+	width: Int
+>>>>>>> main
 }
 
 input ProductFilterParameter {
 	additionalInfo: StringOperators
 	createdAt: DateOperators
+	depth: NumberOperators
 	description: StringOperators
+	downloadable: BooleanOperators
 	enabled: BooleanOperators
 	facetValueId: IDOperators
+	height: NumberOperators
 	id: IDOperators
 	infoUrl: StringOperators
+<<<<<<< HEAD
+=======
+	keywords: StringOperators
+>>>>>>> main
 	languageCode: StringOperators
+	metaDescription: StringOperators
+	metaTitle: StringOperators
 	name: StringOperators
+<<<<<<< HEAD
 	popularityScore: NumberOperators
 	productPhysicalDimensions: StringOperators
 	reviewCount: NumberOperators
@@ -5671,6 +5713,15 @@ input ProductFilterParameter {
 	slug: StringOperators
 	updatedAt: DateOperators
 	weight: NumberOperators
+=======
+	reviewCount: NumberOperators
+	reviewRating: NumberOperators
+	shortName: StringOperators
+	slug: StringOperators
+	updatedAt: DateOperators
+	weight: NumberOperators
+	width: NumberOperators
+>>>>>>> main
 }
 
 type ProductList implements PaginatedList {
@@ -5858,7 +5909,9 @@ input ProductReviewSortParameter {
 input ProductSortParameter {
 	additionalInfo: SortOrder
 	createdAt: SortOrder
+	depth: SortOrder
 	description: SortOrder
+<<<<<<< HEAD
 	facebookImage: SortOrder
 	featuredReview: SortOrder
 	id: SortOrder
@@ -5871,10 +5924,28 @@ input ProductSortParameter {
 	reviewRating: SortOrder
 	seoDescription: SortOrder
 	seoTitle: SortOrder
+=======
+	downloadable: SortOrder
+	featuredReview: SortOrder
+	height: SortOrder
+	id: SortOrder
+	infoUrl: SortOrder
+	keywords: SortOrder
+	metaDescription: SortOrder
+	metaTitle: SortOrder
+	name: SortOrder
+	reviewCount: SortOrder
+	reviewRating: SortOrder
+	shortName: SortOrder
+>>>>>>> main
 	slug: SortOrder
 	twitterImage: SortOrder
 	updatedAt: SortOrder
 	weight: SortOrder
+<<<<<<< HEAD
+=======
+	width: SortOrder
+>>>>>>> main
 }
 
 type ProductTranslation {
@@ -5889,8 +5960,15 @@ type ProductTranslation {
 }
 
 type ProductTranslationCustomFields {
+<<<<<<< HEAD
 	seoDescription: String
 	seoTitle: String
+=======
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	shortName: String
+>>>>>>> main
 }
 
 input ProductTranslationInput {
@@ -5903,8 +5981,15 @@ input ProductTranslationInput {
 }
 
 input ProductTranslationInputCustomFields {
+<<<<<<< HEAD
 	seoDescription: String
 	seoTitle: String
+=======
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	shortName: String
+>>>>>>> main
 }
 
 type ProductVariant implements Node {
@@ -5941,10 +6026,14 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
+<<<<<<< HEAD
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
 	weight: Int
+=======
+	releaseDate: DateTime
+>>>>>>> main
 }
 
 input ProductVariantFilterParameter {
@@ -7525,6 +7614,7 @@ input UpdatePaymentMethodInput {
 
 input UpdateProductCustomFieldsInput {
 	additionalInfo: String
+<<<<<<< HEAD
 	facebookImageId: ID
 	featuredReviewId: ID
 	infoUrl: String
@@ -7536,6 +7626,17 @@ input UpdateProductCustomFieldsInput {
 	reviewRating: Float
 	twitterImageId: ID
 	weight: Int
+=======
+	depth: Int
+	downloadable: Boolean
+	featuredReviewId: ID
+	height: Int
+	infoUrl: String
+	reviewCount: Float
+	reviewRating: Float
+	weight: Int
+	width: Int
+>>>>>>> main
 }
 
 input UpdateProductInput {
@@ -7570,10 +7671,14 @@ input UpdateProductReviewInput {
 }
 
 input UpdateProductVariantCustomFieldsInput {
+<<<<<<< HEAD
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
 	weight: Int
+=======
+	releaseDate: DateTime
+>>>>>>> main
 }
 
 input UpdateProductVariantInput {

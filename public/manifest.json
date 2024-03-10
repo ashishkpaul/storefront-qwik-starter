@@ -1,12 +1,12 @@
 {
 	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
-	"name": "Vendure Qwik Storefront",
-	"short_name": "Qwik Storefront",
+	"name": "DingPack: Local City Online Store",
+	"short_name": "Buy From Your Local Trusted Online Store",
 	"start_url": ".",
 	"display": "standalone",
 	"theme_color": "#1D4ED8",
 	"background_color": "#fff",
-	"description": "A Qwik version of the Vendure Storefront.",
+	"description": "served by saa9vi online services",
 	"icons": [
 		{
 			"src": "logo-512-512.png",

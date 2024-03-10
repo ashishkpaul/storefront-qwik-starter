@@ -3938,10 +3938,15 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
+<<<<<<< HEAD
 	primaryCollection: Collection
 	reviews(options: ProductReviewListOptions): ProductReviewList!
 	reviewsHistogram: [ProductReviewHistogramItem!]!
 	seo: Seo!
+=======
+	reviews(options: ProductReviewListOptions): ProductReviewList!
+	reviewsHistogram: [ProductReviewHistogramItem!]!
+>>>>>>> main
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -3959,6 +3964,7 @@ type Product implements Node {
 
 type ProductCustomFields {
 	additionalInfo: String
+<<<<<<< HEAD
 	featuredReview: ProductReview
 	infoUrl: String
 	popularityScore: Int
@@ -3968,16 +3974,41 @@ type ProductCustomFields {
 	reviewCount: Float
 	reviewRating: Float
 	weight: Int
+=======
+	depth: Int
+	downloadable: Boolean
+	featuredReview: ProductReview
+	height: Int
+	infoUrl: String
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	reviewCount: Float
+	reviewRating: Float
+	shortName: String
+	weight: Int
+	width: Int
+>>>>>>> main
 }
 
 input ProductFilterParameter {
 	additionalInfo: StringOperators
 	createdAt: DateOperators
+	depth: NumberOperators
 	description: StringOperators
+	downloadable: BooleanOperators
+	height: NumberOperators
 	id: IDOperators
 	infoUrl: StringOperators
+<<<<<<< HEAD
+=======
+	keywords: StringOperators
+>>>>>>> main
 	languageCode: StringOperators
+	metaDescription: StringOperators
+	metaTitle: StringOperators
 	name: StringOperators
+<<<<<<< HEAD
 	popularityScore: NumberOperators
 	productPhysicalDimensions: StringOperators
 	reviewCount: NumberOperators
@@ -3985,6 +4016,15 @@ input ProductFilterParameter {
 	slug: StringOperators
 	updatedAt: DateOperators
 	weight: NumberOperators
+=======
+	reviewCount: NumberOperators
+	reviewRating: NumberOperators
+	shortName: StringOperators
+	slug: StringOperators
+	updatedAt: DateOperators
+	weight: NumberOperators
+	width: NumberOperators
+>>>>>>> main
 }
 
 type ProductList implements PaginatedList {
@@ -4150,7 +4190,9 @@ input ProductReviewSortParameter {
 input ProductSortParameter {
 	additionalInfo: SortOrder
 	createdAt: SortOrder
+	depth: SortOrder
 	description: SortOrder
+<<<<<<< HEAD
 	featuredReview: SortOrder
 	id: SortOrder
 	infoUrl: SortOrder
@@ -4163,16 +4205,42 @@ input ProductSortParameter {
 	slug: SortOrder
 	updatedAt: SortOrder
 	weight: SortOrder
+=======
+	downloadable: SortOrder
+	featuredReview: SortOrder
+	height: SortOrder
+	id: SortOrder
+	infoUrl: SortOrder
+	keywords: SortOrder
+	metaDescription: SortOrder
+	metaTitle: SortOrder
+	name: SortOrder
+	reviewCount: SortOrder
+	reviewRating: SortOrder
+	shortName: SortOrder
+	slug: SortOrder
+	updatedAt: SortOrder
+	weight: SortOrder
+	width: SortOrder
+>>>>>>> main
 }
 
 type ProductTranslation {
 	createdAt: DateTime!
+	customFields: ProductTranslationCustomFields
 	description: String!
 	id: ID!
 	languageCode: LanguageCode!
 	name: String!
 	slug: String!
 	updatedAt: DateTime!
+}
+
+type ProductTranslationCustomFields {
+	keywords: String
+	metaDescription: String
+	metaTitle: String
+	shortName: String
 }
 
 type ProductVariant implements Node {
@@ -4199,10 +4267,14 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
+<<<<<<< HEAD
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
 	weight: Int
+=======
+	releaseDate: DateTime
+>>>>>>> main
 }
 
 input ProductVariantFilterParameter {
