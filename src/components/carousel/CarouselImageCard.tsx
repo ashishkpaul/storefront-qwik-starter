@@ -61,10 +61,12 @@ export default component$(({ collection }: IProps) => {
 
 			return (
 				<Image
+					width="640"
+					height="360"
 					layout="fullWidth"
 					loading="lazy"
 					class="w-full h-full object-center object-cover"
-					src={randomImageUrl}
+					src={randomImageUrl + '?w=640&h=360&format=webp'}
 					alt={collection.name}
 				/>
 			);
