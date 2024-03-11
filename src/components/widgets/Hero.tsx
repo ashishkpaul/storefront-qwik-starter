@@ -5,7 +5,7 @@ import CarouselImageCard from '../../components/carousel/CarouselImageCard';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
-	const sliderSettingsOne = {
+	const collectionInSlider = {
 		scrollSpeed: 1,
 		autoScroll: true,
 		autoScrollSpeed: 10,
@@ -67,7 +67,7 @@ export default component$(() => {
 						</div>
 					</div>
 					<div class="w-full lg:w-1/2">
-						<Slider {...sliderSettingsOne}>
+						<Slider {...collectionInSlider}>
 							{collections.map((collection) => (
 								<CarouselImageCard key={collection.id} collection={collection} />
 							))}

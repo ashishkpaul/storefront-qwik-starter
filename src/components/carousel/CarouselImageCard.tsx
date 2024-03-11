@@ -11,22 +11,15 @@ export default component$(({ collection }: IProps) => {
 	const { promoBanner } = collection.customFields || {};
 	const { featuredAsset } = collection || {};
 
-	// Log the collection, customFields, and promoBanner
-	// console.log('Collection:', collection);
-	// console.log('Custom Fields:', collection.customFields);
-	// console.log('Promo Banner:', promoBanner);
-
 	// Render the image based on the logic provided
 	const renderImage = (image: Asset) => {
 		const imageUrl = `${image.preview}`;
 
 		return (
-			<div class="min-w-[720px]">
+			<div class="relative w-full min-w-[320px] md:min-w-[480px] lg:min-w-[720px]">
 				<Image
 					layout="fixed"
 					loading="lazy"
-					// width="854"
-					// height="480"
 					class="w-full h-full object-center object-cover"
 					src={imageUrl + '?w=640&h=360&format=webp'}
 					alt={collection.name}
@@ -39,7 +32,7 @@ export default component$(({ collection }: IProps) => {
 	if (promoBanner || featuredAsset) {
 		return (
 			<Link href={`/collections/${collection.slug}`} key={collection.id}>
-				<div class="relative rounded-lg overflow-hidden hover:opacity-75 xl:w-auto mx-auto h-96">
+				<div class="relative rounded-lg overflow-hidden hover:opacity-75 w-full md:w-auto mx-auto">
 					<div class="w-full h-full object-center object-cover">
 						{promoBanner ? renderImage(promoBanner) : featuredAsset && renderImage(featuredAsset)}
 					</div>
