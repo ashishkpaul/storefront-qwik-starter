@@ -269,6 +269,7 @@ export default component$(() => {
 								currencyCode={relatedVariant?.currencyCode}
 								key={relatedProduct.id}
 								productSignalSetter={productSignal}
+								class="min-w-[200px]"
 							/>
 						);
 					})}

@@ -16,7 +16,7 @@ export default component$(
 			<a class="flex flex-col mx-auto" href={`/products/${slug}/`} onClick$={handleProductClick}>
 				<Image
 					layout="fixed"
-					class="rounded-xl flex-grow object-cover aspect-[7/8]"
+					class="rounded-xl flex-grow object-cover aspect-[7/8] min-w-[200px]"
 					width="200"
 					height="200"
 					src={productAsset?.preview + '?w=300&h=400&format=webp'}

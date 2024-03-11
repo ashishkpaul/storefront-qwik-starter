@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import ProductCard from '~/components/products/ProductCard';
 
 export default component$(({ relatedProducts }: any) => {
-	console.log('Related Products:', relatedProducts);
+	// console.log('Related Products:', relatedProducts);
 	return (
 		<div>
 			{relatedProducts.map((relatedProduct: any) => {

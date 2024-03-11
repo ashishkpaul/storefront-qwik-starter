@@ -10,21 +10,21 @@ export default component$(() => {
 		autoScroll: true,
 		autoScrollSpeed: 10,
 		gap: 25,
-		styleClass: 'test',
-		breakpoints: {
-			sm: {
-				slidesPerView: 1,
-				spaceBetween: 10,
-			},
-			md: {
-				slidesPerView: 2,
-				spaceBetween: 20,
-			},
-			lg: {
-				slidesPerView: 3,
-				spaceBetween: 25,
-			},
-		},
+		// styleClass: 'test',
+		// breakpoints: {
+		// 	sm: {
+		// 		slidesPerView: 1,
+		// 		spaceBetween: 10,
+		// 	},
+		// 	md: {
+		// 		slidesPerView: 2,
+		// 		spaceBetween: 20,
+		// 	},
+		// 	lg: {
+		// 		slidesPerView: 3,
+		// 		spaceBetween: 25,
+		// 	},
+		// },
 	};
 
 	return (
