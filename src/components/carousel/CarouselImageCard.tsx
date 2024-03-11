@@ -18,7 +18,9 @@ export default component$(({ collection }: IProps) => {
 		return (
 			<div class="relative w-full min-w-[320px] md:min-w-[480px] lg:min-w-[720px]">
 				<Image
-					layout="fixed"
+					width="640"
+					height="360"
+					layout="fullWidth"
 					loading="lazy"
 					class="w-full h-full object-center object-cover"
 					src={imageUrl + '?w=640&h=360&format=webp'}
