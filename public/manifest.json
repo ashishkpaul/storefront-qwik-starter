@@ -1,34 +1,34 @@
 {
 	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
-	"name": "Vendure Qwik Storefront",
-	"short_name": "Qwik Storefront",
+	"name": "DingPack",
+	"short_name": "Local City Online Store",
 	"start_url": ".",
 	"display": "standalone",
 	"theme_color": "#1D4ED8",
 	"background_color": "#fff",
-	"description": "A Qwik version of the Vendure Storefront.",
+	"description": "Local City Online Store",
 	"icons": [
 		{
-			"src": "logo-512-512.png",
-			"sizes": "512x512",
+			"src": "logo-480.png",
+			"sizes": "480x480",
 			"type": "image/png",
 			"purpose": "any maskable"
 		},
 		{
-			"src": "logo-192-192.png",
-			"sizes": "192x192",
+			"src": "logo-320.png",
+			"sizes": "320x320",
 			"type": "image/png",
 			"purpose": "any maskable"
 		},
 		{
-			"src": "logo-144-144.png",
-			"sizes": "144x144",
+			"src": "logo-240.png",
+			"sizes": "240x240",
 			"type": "image/png",
 			"purpose": "any maskable"
 		},
 		{
-			"src": "logo-96-96.png",
-			"sizes": "96x96",
+			"src": "logo-160.png",
+			"sizes": "160x160",
 			"type": "image/png",
 			"purpose": "any maskable"
 		},
