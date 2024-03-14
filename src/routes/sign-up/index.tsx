@@ -20,6 +20,10 @@ export default component$(() => {
 			console.log('Honeypot field filled out. Possible bot activity detected.');
 			return; // Exit registration function if honeypot field is filled out
 		}
+		// Validate honeypot field
+		if (!validateHoneypot()) {
+			return; // Exit registration function if honeypot field validation fails
+		}
 
 		if (
 			email.value === '' ||
@@ -50,7 +54,7 @@ export default component$(() => {
 		}
 	});
 
-	const validateHoneypot = (): boolean => {
+	const validateHoneypot = $((): boolean => {
 		// Implement JavaScript validation on the client-side to check for specific patterns in the honeypot field data
 		// Example: Check if the honeypot field contains "http" or "https" (which is unusual for a honeypot)
 		if (websiteUrl.value.includes('http') || websiteUrl.value.includes('https')) {
@@ -58,7 +62,7 @@ export default component$(() => {
 			return false; // Reject form submission if honeypot field validation fails
 		}
 		return true; // Honeypot field validation passed
-	};
+	});
 
 	return (
 		<div class="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
