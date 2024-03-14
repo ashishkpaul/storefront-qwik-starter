@@ -12,7 +12,15 @@ export default component$(() => {
 	const successSignal = useSignal(false);
 	const error = useSignal('');
 
+	const websiteUrl = useSignal(''); // Change honeypot field name to "website_url"
+
 	const registerCustomer = $(async (): Promise<void> => {
+		// Check if honeypot field is filled out
+		if (websiteUrl.value !== '') {
+			console.log('Honeypot field filled out. Possible bot activity detected.');
+			return; // Exit registration function if honeypot field is filled out
+		}
+
 		if (
 			email.value === '' ||
 			firstName.value === '' ||
@@ -41,6 +49,16 @@ export default component$(() => {
 			}
 		}
 	});
+
+	const validateHoneypot = (): boolean => {
+		// Implement JavaScript validation on the client-side to check for specific patterns in the honeypot field data
+		// Example: Check if the honeypot field contains "http" or "https" (which is unusual for a honeypot)
+		if (websiteUrl.value.includes('http') || websiteUrl.value.includes('https')) {
+			console.log('Honeypot field validation failed. Possible bot activity detected.');
+			return false; // Reject form submission if honeypot field validation fails
+		}
+		return true; // Honeypot field validation passed
+	};
 
 	return (
 		<div class="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -135,6 +153,12 @@ export default component$(() => {
 								/>
 							</div>
 						</div>
+						<input
+							type="text"
+							value={websiteUrl.value}
+							style={{ display: 'none' }} // Hide the honeypot field
+							onInput$={(_, el) => (websiteUrl.value = el.value)}
+						/>
 
 						{error.value !== '' && (
 							<div class="rounded-md bg-red-50 p-4">
