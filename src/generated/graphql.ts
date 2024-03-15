@@ -2935,6 +2935,10 @@ export type RegisterCustomerAccountResult =
 	| PasswordValidationError
 	| Success;
 
+export type RegisterCustomerCustomFieldsInput = {
+	websiteUrl?: InputMaybe<Scalars['String']>;
+};
+
 export type RegisterCustomerInput = {
 	emailAddress: Scalars['String'];
 	firstName?: InputMaybe<Scalars['String']>;
@@ -2942,6 +2946,7 @@ export type RegisterCustomerInput = {
 	password?: InputMaybe<Scalars['String']>;
 	phoneNumber?: InputMaybe<Scalars['String']>;
 	title?: InputMaybe<Scalars['String']>;
+	customFields?: InputMaybe<RegisterCustomerCustomFieldsInput>;
 };
 
 export type RelationCustomFieldConfig = CustomField & {

@@ -11,20 +11,9 @@ export default component$(() => {
 	const confirmPassword = useSignal('');
 	const successSignal = useSignal(false);
 	const error = useSignal('');
-
-	const websiteUrl = useSignal(''); // Change honeypot field name to "website_url"
+	const websiteUrl = useSignal(''); // Add a signal for the websiteUrl input field
 
 	const registerCustomer = $(async (): Promise<void> => {
-		// Check if honeypot field is filled out
-		if (websiteUrl.value !== '') {
-			console.log('Honeypot field filled out. Possible bot activity detected.');
-			return; // Exit registration function if honeypot field is filled out
-		}
-		// Validate honeypot field
-		if (!validateHoneypot()) {
-			return; // Exit registration function if honeypot field validation fails
-		}
-
 		if (
 			email.value === '' ||
 			firstName.value === '' ||
@@ -35,33 +24,32 @@ export default component$(() => {
 		} else if (password.value !== confirmPassword.value) {
 			error.value = 'Passwords do not match';
 		} else {
-			error.value = '';
-			successSignal.value = false;
+			if (websiteUrl.value === '') {
+				// Proceed with account registration if websiteUrl is empty
+				error.value = '';
+				successSignal.value = false;
 
-			const { registerCustomerAccount } = await registerCustomerAccountMutation({
-				input: {
-					emailAddress: email.value,
-					firstName: firstName.value,
-					lastName: lastName.value,
-					password: password.value,
-				},
-			});
-			if (registerCustomerAccount.__typename === 'Success') {
-				successSignal.value = true;
+				const { registerCustomerAccount } = await registerCustomerAccountMutation({
+					input: {
+						emailAddress: email.value,
+						firstName: firstName.value,
+						lastName: lastName.value,
+						password: password.value,
+						customFields: {
+							websiteUrl: websiteUrl.value,
+						},
+					},
+				});
+				if (registerCustomerAccount.__typename === 'Success') {
+					successSignal.value = true;
+				} else {
+					error.value = registerCustomerAccount.message;
+				}
 			} else {
-				error.value = registerCustomerAccount.message;
+				// Handle the case where websiteUrl is not empty
+				error.value = 'Website URL is not allowed for account registration';
 			}
 		}
-	});
-
-	const validateHoneypot = $((): boolean => {
-		// Implement JavaScript validation on the client-side to check for specific patterns in the honeypot field data
-		// Example: Check if the honeypot field contains "http" or "https" (which is unusual for a honeypot)
-		if (websiteUrl.value.includes('http') || websiteUrl.value.includes('https')) {
-			console.log('Honeypot field validation failed. Possible bot activity detected.');
-			return false; // Reject form submission if honeypot field validation fails
-		}
-		return true; // Honeypot field validation passed
 	});
 
 	return (
@@ -86,8 +74,8 @@ export default component$(() => {
 							</p>
 						) : (
 							<p>
-								Hi! Welcome. Please fill the form bellow, Then check you mail in all folders
-								including spam, then click on veryfiy account.
+								Account registration is not supported by the demo Vendure instance. In order to use
+								it, please connect to your own local / production instance.
 							</p>
 						)}
 					</div>
@@ -157,13 +145,18 @@ export default component$(() => {
 								/>
 							</div>
 						</div>
-						<input
-							type="text"
-							value={websiteUrl.value}
-							style={{ display: 'none' }} // Hide the honeypot field
-							onInput$={(_, el) => (websiteUrl.value = el.value)}
-						/>
-
+						<div>
+							<label class="block text-sm font-medium text-gray-700">websiteUrl</label>
+							<div class="mt-1">
+								<input
+									type="text"
+									value={websiteUrl.value}
+									style={{ display: '' }} // Hide the honeypot field
+									onInput$={(_, el) => (websiteUrl.value = el.value)}
+									class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+								/>
+							</div>
+						</div>
 						{error.value !== '' && (
 							<div class="rounded-md bg-red-50 p-4">
 								<div class="flex">

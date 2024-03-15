@@ -164,7 +164,7 @@ export type Channel = Node & {
 	createdAt: Scalars['DateTime']['output'];
 	/** @deprecated Use defaultCurrencyCode instead */
 	currencyCode: CurrencyCode;
-	customFields?: Maybe<ChannelCustomFields>;
+	customFields?: Maybe<Scalars['JSON']['output']>;
 	defaultCurrencyCode: CurrencyCode;
 	defaultLanguageCode: LanguageCode;
 	defaultShippingZone?: Maybe<Zone>;
@@ -178,11 +178,6 @@ export type Channel = Node & {
 	/** Not yet used - will be implemented in a future release. */
 	trackInventory?: Maybe<Scalars['Boolean']['output']>;
 	updatedAt: Scalars['DateTime']['output'];
-};
-
-export type ChannelCustomFields = {
-	__typename?: 'ChannelCustomFields';
-	postalPinCode?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Collection = Node & {
@@ -419,8 +414,12 @@ export type CreateAddressInput = {
 	streetLine2?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateCustomerCustomFieldsInput = {
+	websiteUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateCustomerInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateCustomerCustomFieldsInput>;
 	emailAddress: Scalars['String']['input'];
 	firstName: Scalars['String']['input'];
 	lastName: Scalars['String']['input'];
@@ -802,7 +801,7 @@ export type Customer = Node & {
 	__typename?: 'Customer';
 	addresses?: Maybe<Array<Address>>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<CustomerCustomFields>;
 	emailAddress: Scalars['String']['output'];
 	firstName: Scalars['String']['output'];
 	id: Scalars['ID']['output'];
@@ -818,6 +817,11 @@ export type CustomerOrdersArgs = {
 	options?: InputMaybe<OrderListOptions>;
 };
 
+export type CustomerCustomFields = {
+	__typename?: 'CustomerCustomFields';
+	websiteUrl?: Maybe<Scalars['String']['output']>;
+};
+
 export type CustomerFilterParameter = {
 	createdAt?: InputMaybe<DateOperators>;
 	emailAddress?: InputMaybe<StringOperators>;
@@ -827,6 +831,7 @@ export type CustomerFilterParameter = {
 	phoneNumber?: InputMaybe<StringOperators>;
 	title?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
+	websiteUrl?: InputMaybe<StringOperators>;
 };
 
 export type CustomerGroup = Node & {
@@ -871,6 +876,7 @@ export type CustomerSortParameter = {
 	phoneNumber?: InputMaybe<SortOrder>;
 	title?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
+	websiteUrl?: InputMaybe<SortOrder>;
 };
 
 /** Operators for filtering on a list of Date fields */
@@ -3190,7 +3196,12 @@ export type RegisterCustomerAccountResult =
 	| PasswordValidationError
 	| Success;
 
+export type RegisterCustomerCustomFieldsInput = {
+	websiteUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type RegisterCustomerInput = {
+	customFields?: InputMaybe<RegisterCustomerCustomFieldsInput>;
 	emailAddress: Scalars['String']['input'];
 	firstName?: InputMaybe<Scalars['String']['input']>;
 	lastName?: InputMaybe<Scalars['String']['input']>;
@@ -3577,6 +3588,10 @@ export type UpdateAddressInput = {
 	streetLine2?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateCustomerCustomFieldsInput = {
+	websiteUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateCustomerEmailAddressResult =
 	| IdentifierChangeTokenExpiredError
 	| IdentifierChangeTokenInvalidError
@@ -3584,7 +3599,7 @@ export type UpdateCustomerEmailAddressResult =
 	| Success;
 
 export type UpdateCustomerInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdateCustomerCustomFieldsInput>;
 	firstName?: InputMaybe<Scalars['String']['input']>;
 	lastName?: InputMaybe<Scalars['String']['input']>;
 	phoneNumber?: InputMaybe<Scalars['String']['input']>;

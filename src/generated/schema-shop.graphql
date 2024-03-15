@@ -129,7 +129,7 @@ type Channel implements Node {
 	code: String!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode! @deprecated(reason: "Use defaultCurrencyCode instead")
-	customFields: ChannelCustomFields
+	customFields: JSON
 	defaultCurrencyCode: CurrencyCode!
 	defaultLanguageCode: LanguageCode!
 	defaultShippingZone: Zone
@@ -149,10 +149,6 @@ type Channel implements Node {
 	"""
 	trackInventory: Boolean
 	updatedAt: DateTime!
-}
-
-type ChannelCustomFields {
-	postalPinCode: Int
 }
 
 type Collection implements Node {
@@ -391,8 +387,12 @@ input CreateAddressInput {
 	streetLine2: String
 }
 
+input CreateCustomerCustomFieldsInput {
+	websiteUrl: String
+}
+
 input CreateCustomerInput {
-	customFields: JSON
+	customFields: CreateCustomerCustomFieldsInput
 	emailAddress: String!
 	firstName: String!
 	lastName: String!
@@ -1240,7 +1240,7 @@ union CustomFieldConfig =
 type Customer implements Node {
 	addresses: [Address!]
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: CustomerCustomFields
 	emailAddress: String!
 	firstName: String!
 	id: ID!
@@ -1252,6 +1252,10 @@ type Customer implements Node {
 	user: User
 }
 
+type CustomerCustomFields {
+	websiteUrl: String
+}
+
 input CustomerFilterParameter {
 	createdAt: DateOperators
 	emailAddress: StringOperators
@@ -1261,6 +1265,7 @@ input CustomerFilterParameter {
 	phoneNumber: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
+	websiteUrl: StringOperators
 }
 
 type CustomerGroup implements Node {
@@ -1313,6 +1318,7 @@ input CustomerSortParameter {
 	phoneNumber: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
+	websiteUrl: SortOrder
 }
 
 """
@@ -4492,7 +4498,12 @@ union RegisterCustomerAccountResult =
 	| PasswordValidationError
 	| Success
 
+input RegisterCustomerCustomFieldsInput {
+	websiteUrl: String
+}
+
 input RegisterCustomerInput {
+	customFields: RegisterCustomerCustomFieldsInput
 	emailAddress: String!
 	firstName: String
 	lastName: String
@@ -4869,6 +4880,10 @@ input UpdateAddressInput {
 	streetLine2: String
 }
 
+input UpdateCustomerCustomFieldsInput {
+	websiteUrl: String
+}
+
 union UpdateCustomerEmailAddressResult =
 	| IdentifierChangeTokenExpiredError
 	| IdentifierChangeTokenInvalidError
@@ -4876,7 +4891,7 @@ union UpdateCustomerEmailAddressResult =
 	| Success
 
 input UpdateCustomerInput {
-	customFields: JSON
+	customFields: UpdateCustomerCustomFieldsInput
 	firstName: String
 	lastName: String
 	phoneNumber: String

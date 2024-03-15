@@ -400,7 +400,7 @@ type Channel implements Node {
 	code: String!
 	createdAt: DateTime!
 	currencyCode: CurrencyCode! @deprecated(reason: "Use defaultCurrencyCode instead")
-	customFields: ChannelCustomFields
+	customFields: JSON
 	defaultCurrencyCode: CurrencyCode!
 	defaultLanguageCode: LanguageCode!
 	defaultShippingZone: Zone
@@ -422,10 +422,6 @@ type Channel implements Node {
 	updatedAt: DateTime!
 }
 
-type ChannelCustomFields {
-	postalPinCode: Int
-}
-
 """
 Returned when the default LanguageCode of a Channel is no longer found in the `availableLanguages`
 of the GlobalSettings
@@ -445,7 +441,6 @@ input ChannelFilterParameter {
 	defaultLanguageCode: StringOperators
 	id: IDOperators
 	outOfStockThreshold: NumberOperators
-	postalPinCode: NumberOperators
 	pricesIncludeTax: BooleanOperators
 	token: StringOperators
 	trackInventory: BooleanOperators
@@ -489,7 +484,6 @@ input ChannelSortParameter {
 	createdAt: SortOrder
 	id: SortOrder
 	outOfStockThreshold: SortOrder
-	postalPinCode: SortOrder
 	token: SortOrder
 	updatedAt: SortOrder
 }
@@ -827,15 +821,11 @@ input CreateAssetInput {
 
 union CreateAssetResult = Asset | MimeTypeError
 
-input CreateChannelCustomFieldsInput {
-	postalPinCode: Int
-}
-
 input CreateChannelInput {
 	availableCurrencyCodes: [CurrencyCode!]
 	availableLanguageCodes: [LanguageCode!]
 	code: String!
-	customFields: CreateChannelCustomFieldsInput
+	customFields: JSON
 	defaultCurrencyCode: CurrencyCode
 	defaultLanguageCode: LanguageCode!
 	defaultShippingZoneId: ID!
@@ -888,6 +878,10 @@ input CreateCountryInput {
 	translations: [CountryTranslationInput!]!
 }
 
+input CreateCustomerCustomFieldsInput {
+	websiteUrl: String
+}
+
 input CreateCustomerGroupInput {
 	customFields: JSON
 	customerIds: [ID!]
@@ -895,7 +889,7 @@ input CreateCustomerGroupInput {
 }
 
 input CreateCustomerInput {
-	customFields: JSON
+	customFields: CreateCustomerCustomFieldsInput
 	emailAddress: String!
 	firstName: String!
 	lastName: String!
@@ -1961,7 +1955,7 @@ type CustomFields {
 type Customer implements Node {
 	addresses: [Address!]
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: CustomerCustomFields
 	emailAddress: String!
 	firstName: String!
 	groups: [CustomerGroup!]!
@@ -1975,6 +1969,10 @@ type Customer implements Node {
 	user: User
 }
 
+type CustomerCustomFields {
+	websiteUrl: String
+}
+
 input CustomerFilterParameter {
 	createdAt: DateOperators
 	emailAddress: StringOperators
@@ -1985,6 +1983,7 @@ input CustomerFilterParameter {
 	postalCode: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
+	websiteUrl: StringOperators
 }
 
 type CustomerGroup implements Node {
@@ -2083,6 +2082,7 @@ input CustomerSortParameter {
 	phoneNumber: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
+	websiteUrl: SortOrder
 }
 
 """
@@ -7376,15 +7376,11 @@ input UpdateAssetInput {
 	tags: [String!]
 }
 
-input UpdateChannelCustomFieldsInput {
-	postalPinCode: Int
-}
-
 input UpdateChannelInput {
 	availableCurrencyCodes: [CurrencyCode!]
 	availableLanguageCodes: [LanguageCode!]
 	code: String
-	customFields: UpdateChannelCustomFieldsInput
+	customFields: JSON
 	defaultCurrencyCode: CurrencyCode
 	defaultLanguageCode: LanguageCode
 	defaultShippingZoneId: ID
@@ -7441,6 +7437,10 @@ input UpdateCountryInput {
 	translations: [CountryTranslationInput!]
 }
 
+input UpdateCustomerCustomFieldsInput {
+	websiteUrl: String
+}
+
 input UpdateCustomerGroupInput {
 	customFields: JSON
 	id: ID!
@@ -7448,7 +7448,7 @@ input UpdateCustomerGroupInput {
 }
 
 input UpdateCustomerInput {
-	customFields: JSON
+	customFields: UpdateCustomerCustomFieldsInput
 	emailAddress: String
 	firstName: String
 	id: ID!
