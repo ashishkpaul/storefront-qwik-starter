@@ -25,7 +25,10 @@ export default component$(() => {
 		} else if (password.value !== confirmPassword.value) {
 			error.value = 'Passwords do not match';
 		} else {
-			if (websiteUrl.value === '') {
+			if (websiteUrl.value !== '') {
+				// Website URL is not allowed for account registration
+				error.value = 'Invalid registration attempt';
+			} else {
 				// Proceed with account registration if websiteUrl is empty
 				error.value = '';
 				successSignal.value = false;
@@ -47,9 +50,6 @@ export default component$(() => {
 				} else {
 					error.value = registerCustomerAccount.message;
 				}
-			} else {
-				// Handle the case where websiteUrl is not empty
-				error.value = 'Website URL is not allowed for account registration';
 			}
 		}
 	});
@@ -148,17 +148,17 @@ export default component$(() => {
 							</div>
 						</div>
 						<div>
-							{/* <label class="block text-sm font-medium text-gray-700">websiteUrl</label> */}
-							<div class="mt-1">
-								<input
-									type="text"
-									value={websiteUrl.value}
-									style={{ display: 'none' }} // Hide the honeypot field
-									onInput$={(_, el) => (websiteUrl.value = el.value)}
-									class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-								/>
-							</div>
+							<input type="hidden" value={websiteUrl.value} name="websiteUrl" />
 						</div>
+						{/* <div class="mt-1">
+							<input
+								type="text"
+								value={websiteUrl.value}
+								class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+								style={{ opacity: 0 }}
+								onInput$={(_, el) => (websiteUrl.value = el.value)}
+							/>
+						</div> */}
 						<div>
 							<label class="block text-sm font-medium text-gray-700">Phone number</label>
 							<div class="mt-1">
