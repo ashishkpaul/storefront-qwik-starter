@@ -147,24 +147,20 @@ export default component$(() => {
 								/>
 							</div>
 						</div>
-						<div>
-							<input type="hidden" value={websiteUrl.value} name="websiteUrl" />
-						</div>
-						{/* <div class="mt-1">
+						<div class="mt-1">
 							<input
-								type="text"
+								type="hidden"
 								value={websiteUrl.value}
-								class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-								style={{ opacity: 0 }}
 								onInput$={(_, el) => (websiteUrl.value = el.value)}
 							/>
-						</div> */}
+						</div>
 						<div>
-							<label class="block text-sm font-medium text-gray-700">Phone number</label>
+							<label class="block text-sm font-medium text-gray-700">Phone Number</label>
 							<div class="mt-1">
 								<input
 									type="text"
 									value={phoneNumber.value}
+									required
 									onInput$={(_, el) => (phoneNumber.value = el.value)}
 									class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
 								/>
