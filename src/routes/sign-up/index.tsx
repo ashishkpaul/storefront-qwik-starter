@@ -12,6 +12,7 @@ export default component$(() => {
 	const successSignal = useSignal(false);
 	const error = useSignal('');
 	const websiteUrl = useSignal(''); // Add a signal for the websiteUrl input field
+	const phoneNumber = useSignal(''); // Add a signal for the phoneNumber input field
 
 	const registerCustomer = $(async (): Promise<void> => {
 		if (
@@ -35,6 +36,7 @@ export default component$(() => {
 						firstName: firstName.value,
 						lastName: lastName.value,
 						password: password.value,
+						phoneNumber: phoneNumber.value, // Include phoneNumber in the mutation input
 						customFields: {
 							websiteUrl: websiteUrl.value,
 						},
@@ -146,13 +148,24 @@ export default component$(() => {
 							</div>
 						</div>
 						<div>
-							<label class="block text-sm font-medium text-gray-700">websiteUrl</label>
+							{/* <label class="block text-sm font-medium text-gray-700">websiteUrl</label> */}
 							<div class="mt-1">
 								<input
 									type="text"
 									value={websiteUrl.value}
-									style={{ display: '' }} // Hide the honeypot field
+									style={{ display: 'none' }} // Hide the honeypot field
 									onInput$={(_, el) => (websiteUrl.value = el.value)}
+									class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+								/>
+							</div>
+						</div>
+						<div>
+							<label class="block text-sm font-medium text-gray-700">Phone number</label>
+							<div class="mt-1">
+								<input
+									type="text"
+									value={phoneNumber.value}
+									onInput$={(_, el) => (phoneNumber.value = el.value)}
 									class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
 								/>
 							</div>
