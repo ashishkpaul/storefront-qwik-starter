@@ -388,6 +388,7 @@ input CreateAddressInput {
 }
 
 input CreateCustomerCustomFieldsInput {
+	avatarId: ID
 	websiteUrl: String
 }
 
@@ -1253,6 +1254,7 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
+	avatar: Asset
 	websiteUrl: String
 }
 
@@ -1310,6 +1312,7 @@ input CustomerListOptions {
 }
 
 input CustomerSortParameter {
+	avatar: SortOrder
 	createdAt: SortOrder
 	emailAddress: SortOrder
 	firstName: SortOrder
@@ -2722,7 +2725,7 @@ type Mutation {
 	Create a new Customer Address
 	"""
 	createCustomerAddress(input: CreateAddressInput!): Address!
-	createStripePaymentIntent: String
+	createStripePaymentIntent: String!
 
 	"""
 	Delete an existing Address
@@ -2799,6 +2802,7 @@ type Mutation {
 	Resets a Customer's password based on the provided token
 	"""
 	resetPassword(password: String!, token: String!): ResetPasswordResult!
+	setCustomerAvatar(file: Upload!): Asset
 
 	"""
 	Set the Customer for the Order. Required only if the Customer is not currently logged in
@@ -3982,6 +3986,7 @@ type ProductCustomFields {
 	infoUrl: String
 	popularityScore: Int
 	primaryCollection: Collection
+	productPhysicalDimensions: String
 	relatedProducts: [Product!]
 	reviewCount: Float
 	reviewRating: Float
@@ -3997,6 +4002,7 @@ input ProductFilterParameter {
 	languageCode: StringOperators
 	name: StringOperators
 	popularityScore: NumberOperators
+	productPhysicalDimensions: StringOperators
 	reviewCount: NumberOperators
 	reviewRating: NumberOperators
 	slug: StringOperators
@@ -4174,6 +4180,7 @@ input ProductSortParameter {
 	name: SortOrder
 	popularityScore: SortOrder
 	primaryCollection: SortOrder
+	productPhysicalDimensions: SortOrder
 	reviewCount: SortOrder
 	reviewRating: SortOrder
 	slug: SortOrder
@@ -4499,6 +4506,7 @@ union RegisterCustomerAccountResult =
 	| Success
 
 input RegisterCustomerCustomFieldsInput {
+	avatarId: ID
 	websiteUrl: String
 }
 
@@ -4881,6 +4889,7 @@ input UpdateAddressInput {
 }
 
 input UpdateCustomerCustomFieldsInput {
+	avatarId: ID
 	websiteUrl: String
 }
 

@@ -11,7 +11,7 @@ dependencies:
   '@graphql-codegen/typescript-generic-sdk':
     specifier: ^4.0.1
     version: 4.0.1(graphql-tag@2.12.6)(graphql@16.8.1)
-  '@img/sharp-linux-x64':
+  '@img/sharp-linux-arm64':
     specifier: ^0.33.2
     version: 0.33.2
   '@stripe/stripe-js':
@@ -3035,7 +3035,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@img/sharp-libvips-linux-arm@1.0.1:
@@ -3071,6 +3070,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@img/sharp-libvips-linuxmusl-arm64@1.0.1:
@@ -3115,8 +3115,6 @@ packages:
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linux-arm64': 1.0.1
-    dev: true
-    optional: true
 
   /@img/sharp-linux-arm@0.33.2:
     resolution:
@@ -3178,6 +3176,8 @@ packages:
     requiresBuild: true
     optionalDependencies:
       '@img/sharp-libvips-linux-x64': 1.0.1
+    dev: true
+    optional: true
 
   /@img/sharp-linuxmusl-arm64@0.33.2:
     resolution:

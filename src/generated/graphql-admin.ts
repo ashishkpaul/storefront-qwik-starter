@@ -310,7 +310,7 @@ export type AssignStockLocationsToChannelInput = {
 };
 
 export type AuthenticationInput = {
-	native?: InputMaybe<NativeAuthInput>;
+	google?: InputMaybe<GoogleAuthInput>;
 };
 
 export type AuthenticationMethod = Node & {
@@ -849,6 +849,7 @@ export type CreateCountryInput = {
 };
 
 export type CreateCustomerCustomFieldsInput = {
+	avatarId?: InputMaybe<Scalars['ID']['input']>;
 	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -918,6 +919,7 @@ export type CreateProductCustomFieldsInput = {
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
 	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
+	productPhysicalDimensions?: InputMaybe<Scalars['String']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	reviewCount?: InputMaybe<Scalars['Float']['input']>;
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
@@ -1483,6 +1485,8 @@ export type CustomerOrdersArgs = {
 
 export type CustomerCustomFields = {
 	__typename?: 'CustomerCustomFields';
+	avatar?: Maybe<Asset>;
+	stripeCustomerId?: Maybe<Scalars['String']['output']>;
 	websiteUrl?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1494,6 +1498,7 @@ export type CustomerFilterParameter = {
 	lastName?: InputMaybe<StringOperators>;
 	phoneNumber?: InputMaybe<StringOperators>;
 	postalCode?: InputMaybe<StringOperators>;
+	stripeCustomerId?: InputMaybe<StringOperators>;
 	title?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 	websiteUrl?: InputMaybe<StringOperators>;
@@ -1566,12 +1571,14 @@ export type CustomerListOptions = {
 };
 
 export type CustomerSortParameter = {
+	avatar?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	emailAddress?: InputMaybe<SortOrder>;
 	firstName?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	lastName?: InputMaybe<SortOrder>;
 	phoneNumber?: InputMaybe<SortOrder>;
+	stripeCustomerId?: InputMaybe<SortOrder>;
 	title?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	websiteUrl?: InputMaybe<SortOrder>;
@@ -1972,6 +1979,11 @@ export type GlobalSettings = {
 	serverConfig: ServerConfig;
 	trackInventory: Scalars['Boolean']['output'];
 	updatedAt: Scalars['DateTime']['output'];
+};
+
+export type GoogleAuthInput = {
+	/** The encoded response credential returned by the Google Sign-In API */
+	credentialJWT: Scalars['String']['input'];
 };
 
 /** Returned when attempting to set the Customer on a guest checkout when the configured GuestCheckoutStrategy does not allow it. */
@@ -3716,11 +3728,6 @@ export type MutationUpdateZoneArgs = {
 	input: UpdateZoneInput;
 };
 
-export type NativeAuthInput = {
-	password: Scalars['String']['input'];
-	username: Scalars['String']['input'];
-};
-
 /** Returned when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured. */
 export type NativeAuthStrategyError = ErrorResult & {
 	__typename?: 'NativeAuthStrategyError';
@@ -4527,6 +4534,7 @@ export type ProductCustomFields = {
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	primaryCollection?: Maybe<Collection>;
+	productPhysicalDimensions?: Maybe<Scalars['String']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
 	reviewCount?: Maybe<Scalars['Float']['output']>;
 	reviewRating?: Maybe<Scalars['Float']['output']>;
@@ -4547,6 +4555,7 @@ export type ProductFilterParameter = {
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
 	popularityScore?: InputMaybe<NumberOperators>;
+	productPhysicalDimensions?: InputMaybe<StringOperators>;
 	reviewCount?: InputMaybe<NumberOperators>;
 	reviewRating?: InputMaybe<NumberOperators>;
 	seoDescription?: InputMaybe<StringOperators>;
@@ -4730,6 +4739,7 @@ export type ProductSortParameter = {
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
 	primaryCollection?: InputMaybe<SortOrder>;
+	productPhysicalDimensions?: InputMaybe<SortOrder>;
 	reviewCount?: InputMaybe<SortOrder>;
 	reviewRating?: InputMaybe<SortOrder>;
 	seoDescription?: InputMaybe<SortOrder>;
@@ -6409,6 +6419,7 @@ export type UpdateCountryInput = {
 };
 
 export type UpdateCustomerCustomFieldsInput = {
+	avatarId?: InputMaybe<Scalars['ID']['input']>;
 	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -6512,6 +6523,7 @@ export type UpdateProductCustomFieldsInput = {
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
 	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
+	productPhysicalDimensions?: InputMaybe<Scalars['String']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	reviewCount?: InputMaybe<Scalars['Float']['input']>;
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;

@@ -415,6 +415,7 @@ export type CreateAddressInput = {
 };
 
 export type CreateCustomerCustomFieldsInput = {
+	avatarId?: InputMaybe<Scalars['ID']['input']>;
 	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -819,6 +820,7 @@ export type CustomerOrdersArgs = {
 
 export type CustomerCustomFields = {
 	__typename?: 'CustomerCustomFields';
+	avatar?: Maybe<Asset>;
 	websiteUrl?: Maybe<Scalars['String']['output']>;
 };
 
@@ -868,6 +870,7 @@ export type CustomerListOptions = {
 };
 
 export type CustomerSortParameter = {
+	avatar?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	emailAddress?: InputMaybe<SortOrder>;
 	firstName?: InputMaybe<SortOrder>;
@@ -1740,7 +1743,7 @@ export type Mutation = {
 	authenticate: AuthenticationResult;
 	/** Create a new Customer Address */
 	createCustomerAddress: Address;
-	createStripePaymentIntent?: Maybe<Scalars['String']['output']>;
+	createStripePaymentIntent: Scalars['String']['output'];
 	/** Delete an existing Address */
 	deleteCustomerAddress: Success;
 	/** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
@@ -1785,6 +1788,7 @@ export type Mutation = {
 	requestUpdateCustomerEmailAddress: RequestUpdateCustomerEmailAddressResult;
 	/** Resets a Customer's password based on the provided token */
 	resetPassword: ResetPasswordResult;
+	setCustomerAvatar?: Maybe<Asset>;
 	/** Set the Customer for the Order. Required only if the Customer is not currently logged in */
 	setCustomerForOrder: SetCustomerForOrderResult;
 	/** Sets the billing address for this order */
@@ -1907,6 +1911,10 @@ export type MutationRequestUpdateCustomerEmailAddressArgs = {
 export type MutationResetPasswordArgs = {
 	password: Scalars['String']['input'];
 	token: Scalars['String']['input'];
+};
+
+export type MutationSetCustomerAvatarArgs = {
+	file: Scalars['Upload']['input'];
 };
 
 export type MutationSetCustomerForOrderArgs = {
@@ -2700,6 +2708,7 @@ export type ProductCustomFields = {
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	primaryCollection?: Maybe<Collection>;
+	productPhysicalDimensions?: Maybe<Scalars['String']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
 	reviewCount?: Maybe<Scalars['Float']['output']>;
 	reviewRating?: Maybe<Scalars['Float']['output']>;
@@ -2715,6 +2724,7 @@ export type ProductFilterParameter = {
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
 	popularityScore?: InputMaybe<NumberOperators>;
+	productPhysicalDimensions?: InputMaybe<StringOperators>;
 	reviewCount?: InputMaybe<NumberOperators>;
 	reviewRating?: InputMaybe<NumberOperators>;
 	slug?: InputMaybe<StringOperators>;
@@ -2872,6 +2882,7 @@ export type ProductSortParameter = {
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
 	primaryCollection?: InputMaybe<SortOrder>;
+	productPhysicalDimensions?: InputMaybe<SortOrder>;
 	reviewCount?: InputMaybe<SortOrder>;
 	reviewRating?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
@@ -3197,6 +3208,7 @@ export type RegisterCustomerAccountResult =
 	| Success;
 
 export type RegisterCustomerCustomFieldsInput = {
+	avatarId?: InputMaybe<Scalars['ID']['input']>;
 	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -3589,6 +3601,7 @@ export type UpdateAddressInput = {
 };
 
 export type UpdateCustomerCustomFieldsInput = {
+	avatarId?: InputMaybe<Scalars['ID']['input']>;
 	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -3991,7 +4004,7 @@ export type CreateStripePaymentIntentMutationVariables = Exact<{ [key: string]: 
 
 export type CreateStripePaymentIntentMutation = {
 	__typename?: 'Mutation';
-	createStripePaymentIntent?: string | null;
+	createStripePaymentIntent: string;
 };
 
 export type GenerateBraintreeClientTokenQueryVariables = Exact<{
@@ -4004,7 +4017,10 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
-export type CollectionsQueryVariables = Exact<{ [key: string]: never }>;
+// export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
+export type CollectionsQueryVariables = Exact<{
+	take: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
@@ -5626,8 +5642,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections {
-		collections {
+	query collections($take: Int) {
+		collections(options: { take: $take }) {
 			items {
 				id
 				name
