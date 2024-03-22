@@ -30,6 +30,14 @@ export default component$(() => {
 		autoScrollSpeed: 10,
 		gap: 25,
 	};
+
+	const CollectionSlider = {
+		scrollSpeed: 1,
+		autoScroll: false,
+		showScrollbar: true,
+		autoScrollSpeed: 10,
+		gap: 25,
+	};
 	// Fetch search results
 	const searchSignal = useSearchLoader();
 
@@ -37,6 +45,26 @@ export default component$(() => {
 	return (
 		<div class="py-2 px-2 ">
 			<Hero />
+			<div>
+				<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
+					<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+						<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+							<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Shop by Category`}</h2>
+						</div>
+						<div class="">
+							<Slider {...CollectionSlider}>
+								{collections.map((collection) =>
+									collection.featuredAsset ? (
+										<div key={collection.id} class="rounded-lg overflow-hidden">
+											<CollectionCard collection={collection} />
+										</div>
+									) : null
+								)}
+							</Slider>
+						</div>
+					</div>
+				</section>
+			</div>
 			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 				<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
 					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Hot Deals`}</h2>
@@ -55,26 +83,6 @@ export default component$(() => {
 					))}
 				</Slider>
 			</section>
-			<div>
-				<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
-					<div class="mt-4 flow-root">
-						<div class="-my-2">
-							<div class="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible">
-								<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-									<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Shop by Category`}</h2>
-								</div>
-								<div class="grid justify-items-center grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">
-									{collections.map((collection) =>
-										collection.featuredAsset ? (
-											<CollectionCard key={collection.id} collection={collection} />
-										) : null
-									)}
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
 		</div>
 	);
 });

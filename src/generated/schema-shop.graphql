@@ -104,6 +104,7 @@ type BooleanCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -167,7 +168,6 @@ type Collection implements Node {
 	parentId: ID!
 	position: Int!
 	productVariants(options: ProductVariantListOptions): ProductVariantList!
-	seo: Seo!
 	slug: String!
 	translations: [CollectionTranslation!]!
 	updatedAt: DateTime!
@@ -180,19 +180,19 @@ type CollectionBreadcrumb {
 }
 
 type CollectionCustomFields {
-	popularityScore: Int
 	promoBanner: Asset
 	promoBannerStatus: Boolean
 }
 
 input CollectionFilterParameter {
+	_and: [CollectionFilterParameter!]
+	_or: [CollectionFilterParameter!]
 	createdAt: DateOperators
 	description: StringOperators
 	id: IDOperators
 	languageCode: StringOperators
 	name: StringOperators
 	parentId: IDOperators
-	popularityScore: NumberOperators
 	position: NumberOperators
 	promoBannerStatus: BooleanOperators
 	slug: StringOperators
@@ -211,7 +211,7 @@ input CollectionListOptions {
 	filter: CollectionFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -247,7 +247,6 @@ input CollectionSortParameter {
 	id: SortOrder
 	name: SortOrder
 	parentId: SortOrder
-	popularityScore: SortOrder
 	position: SortOrder
 	promoBanner: SortOrder
 	promoBannerStatus: SortOrder
@@ -398,14 +397,6 @@ input CreateCustomerInput {
 	lastName: String!
 	phoneNumber: String
 	title: String
-}
-
-input CreateSellerInput {
-	customFields: JSON
-	emailAddress: String!
-	firstName: String!
-	lastName: String!
-	password: String!
 }
 
 """
@@ -1222,6 +1213,7 @@ interface CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -1257,6 +1249,8 @@ type CustomerCustomFields {
 }
 
 input CustomerFilterParameter {
+	_and: [CustomerFilterParameter!]
+	_or: [CustomerFilterParameter!]
 	createdAt: DateOperators
 	emailAddress: StringOperators
 	firstName: StringOperators
@@ -1289,7 +1283,7 @@ input CustomerListOptions {
 	filter: CustomerFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1363,6 +1357,7 @@ type DateTimeCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	step: Int
 	type: String!
 	ui: JSON
@@ -1439,10 +1434,6 @@ interface ErrorResult {
 	message: String!
 }
 
-type ExampleType {
-	name: String
-}
-
 type Facet implements Node {
 	code: String!
 	createdAt: DateTime!
@@ -1461,6 +1452,8 @@ type Facet implements Node {
 }
 
 input FacetFilterParameter {
+	_and: [FacetFilterParameter!]
+	_or: [FacetFilterParameter!]
 	code: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
@@ -1481,7 +1474,7 @@ input FacetListOptions {
 	filter: FacetFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1544,6 +1537,8 @@ input FacetValueFilterInput {
 }
 
 input FacetValueFilterParameter {
+	_and: [FacetValueFilterParameter!]
+	_or: [FacetValueFilterParameter!]
 	code: StringOperators
 	createdAt: DateOperators
 	facetId: IDOperators
@@ -1565,7 +1560,7 @@ input FacetValueListOptions {
 	filter: FacetValueFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1621,6 +1616,7 @@ type FloatCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	step: Float
 	type: String!
 	ui: JSON
@@ -1628,7 +1624,7 @@ type FloatCustomFieldConfig implements CustomField {
 
 type Fulfillment implements Node {
 	createdAt: DateTime!
-	customFields: FulfillmentCustomFields
+	customFields: JSON
 	id: ID!
 	lines: [FulfillmentLine!]!
 	method: String!
@@ -1636,10 +1632,6 @@ type Fulfillment implements Node {
 	summary: [FulfillmentLine!]! @deprecated(reason: "Use the `lines` field instead")
 	trackingCode: String
 	updatedAt: DateTime!
-}
-
-type FulfillmentCustomFields {
-	downloadUrls: [String!]
 }
 
 type FulfillmentLine {
@@ -1674,6 +1666,8 @@ type HistoryEntry implements Node {
 }
 
 input HistoryEntryFilterParameter {
+	_and: [HistoryEntryFilterParameter!]
+	_or: [HistoryEntryFilterParameter!]
 	createdAt: DateOperators
 	id: IDOperators
 	type: StringOperators
@@ -1692,7 +1686,7 @@ input HistoryEntryListOptions {
 	filter: HistoryEntryFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1736,6 +1730,7 @@ enum HistoryEntryType {
 	ORDER_CANCELLATION
 	ORDER_COUPON_APPLIED
 	ORDER_COUPON_REMOVED
+	ORDER_CUSTOMER_UPDATED
 	ORDER_FULFILLMENT
 	ORDER_FULFILLMENT_TRANSITION
 	ORDER_MODIFIED
@@ -1818,6 +1813,7 @@ type IntCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	step: Int
 	type: String!
 	ui: JSON
@@ -2643,6 +2639,7 @@ type LocaleStringCustomFieldConfig implements CustomField {
 	nullable: Boolean
 	pattern: String
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -2655,6 +2652,7 @@ type LocaleTextCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -2686,27 +2684,17 @@ type Mutation {
 	"""
 	Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available.
 	"""
-	addItemToOrder(
-		customFields: OrderLineCustomFieldsInput = null
-		productVariantId: ID!
-		quantity: Int!
-	): UpdateOrderItemsResult!
+	addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
 
 	"""
 	Add a Payment to the Order
 	"""
 	addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult!
-	addSelectedGiftToOrder(productVariantId: ID!): UpdateOrderItemsResult!
-	addToWishlist(productVariantId: ID!): [WishlistItem!]!
 
 	"""
 	Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available.
 	"""
-	adjustOrderLine(
-		customFields: OrderLineCustomFieldsInput = null
-		orderLineId: ID!
-		quantity: Int!
-	): UpdateOrderItemsResult!
+	adjustOrderLine(orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
 
 	"""
 	Applies the given coupon code to the active Order
@@ -2761,7 +2749,6 @@ type Mutation {
 	3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
 	"""
 	registerCustomerAccount(input: RegisterCustomerInput!): RegisterCustomerAccountResult!
-	registerNewSeller(input: RegisterSellerInput!): Channel
 
 	"""
 	Remove all OrderLine from the Order
@@ -2772,7 +2759,6 @@ type Mutation {
 	Removes the given coupon code from the active Order
 	"""
 	removeCouponCode(couponCode: String!): Order
-	removeFromWishlist(itemId: ID!): [WishlistItem!]!
 
 	"""
 	Remove an OrderLine from the Order
@@ -2827,7 +2813,6 @@ type Mutation {
 	shipping method will apply to.
 	"""
 	setOrderShippingMethod(shippingMethodId: [ID!]!): SetOrderShippingMethodResult!
-	submitProductReview(input: SubmitProductReviewInput!): ProductReview!
 
 	"""
 	Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`
@@ -2865,7 +2850,6 @@ type Mutation {
 	provided here.
 	"""
 	verifyCustomerAccount(password: String, token: String!): VerifyCustomerAccountResult!
-	voteOnReview(id: ID!, vote: Boolean!): ProductReview!
 }
 
 input NativeAuthInput {
@@ -3046,6 +3030,8 @@ type OrderCustomFields {
 }
 
 input OrderFilterParameter {
+	_and: [OrderFilterParameter!]
+	_or: [OrderFilterParameter!]
 	active: BooleanOperators
 	code: StringOperators
 	createdAt: DateOperators
@@ -3078,7 +3064,7 @@ type OrderLimitError implements ErrorResult {
 
 type OrderLine implements Node {
 	createdAt: DateTime!
-	customFields: OrderLineCustomFields
+	customFields: JSON
 
 	"""
 	The price of the line including discounts, excluding tax
@@ -3184,14 +3170,6 @@ type OrderLine implements Node {
 	updatedAt: DateTime!
 }
 
-type OrderLineCustomFields {
-	isSelectedAsGift: Boolean
-}
-
-input OrderLineCustomFieldsInput {
-	isSelectedAsGift: Boolean
-}
-
 type OrderList implements PaginatedList {
 	items: [Order!]!
 	totalItems: Int!
@@ -3204,7 +3182,7 @@ input OrderListOptions {
 	filter: OrderFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -3682,11 +3660,6 @@ enum Permission {
 	DeleteZone
 
 	"""
-	Allows administrator to export orders
-	"""
-	ExportOrders
-
-	"""
 	Owner means the user owns this entity, e.g. a Customer's own Order
 	"""
 	Owner
@@ -3805,16 +3778,6 @@ enum Permission {
 	Grants permission to read Zone
 	"""
 	ReadZone
-
-	"""
-	Allows setting SendCloud configuration
-	"""
-	SetSendCloudConfig
-
-	"""
-	Allows setting a webhook URL
-	"""
-	SetWebhook
 
 	"""
 	SuperAdmin has unrestricted access to all operations
@@ -3951,16 +3914,13 @@ type Product implements Node {
 	createdAt: DateTime!
 	customFields: ProductCustomFields
 	description: String!
+	enabled: Boolean!
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
 	id: ID!
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
-	primaryCollection: Collection
-	reviews(options: ProductReviewListOptions): ProductReviewList!
-	reviewsHistogram: [ProductReviewHistogramItem!]!
-	seo: Seo!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -3978,30 +3938,23 @@ type Product implements Node {
 
 type ProductCustomFields {
 	additionalInfo: String
-	featuredReview: ProductReview
 	infoUrl: String
-	popularityScore: Int
-	primaryCollection: Collection
 	relatedProducts: [Product!]
-	reviewCount: Float
-	reviewRating: Float
-	weight: Int
 }
 
 input ProductFilterParameter {
+	_and: [ProductFilterParameter!]
+	_or: [ProductFilterParameter!]
 	additionalInfo: StringOperators
 	createdAt: DateOperators
 	description: StringOperators
+	enabled: BooleanOperators
 	id: IDOperators
 	infoUrl: StringOperators
 	languageCode: StringOperators
 	name: StringOperators
-	popularityScore: NumberOperators
-	reviewCount: NumberOperators
-	reviewRating: NumberOperators
 	slug: StringOperators
 	updatedAt: DateOperators
-	weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -4016,7 +3969,7 @@ input ProductListOptions {
 	filter: ProductFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -4077,108 +4030,15 @@ type ProductOptionTranslation {
 	updatedAt: DateTime!
 }
 
-type ProductReview implements Node {
-	authorLocation: String
-	authorName: String!
-	body: String
-	createdAt: DateTime!
-	downvotes: Int!
-	id: ID!
-	product: Product!
-	productVariant: ProductVariant
-	rating: Float!
-	response: String
-	responseCreatedAt: DateTime
-	state: String!
-	summary: String!
-	updatedAt: DateTime!
-	upvotes: Int!
-}
-
-input ProductReviewFilterParameter {
-	authorLocation: StringOperators
-	authorName: StringOperators
-	body: StringOperators
-	createdAt: DateOperators
-	downvotes: NumberOperators
-	id: IDOperators
-	rating: NumberOperators
-	response: StringOperators
-	responseCreatedAt: DateOperators
-	state: StringOperators
-	summary: StringOperators
-	updatedAt: DateOperators
-	upvotes: NumberOperators
-}
-
-type ProductReviewHistogramItem {
-	bin: Int!
-	frequency: Int!
-}
-
-type ProductReviewList implements PaginatedList {
-	items: [ProductReview!]!
-	totalItems: Int!
-}
-
-input ProductReviewListOptions {
-	"""
-	Allows the results to be filtered
-	"""
-	filter: ProductReviewFilterParameter
-
-	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
-	"""
-	filterOperator: LogicalOperator
-
-	"""
-	Skips the first n results, for use in pagination
-	"""
-	skip: Int
-
-	"""
-	Specifies which properties to sort the results by
-	"""
-	sort: ProductReviewSortParameter
-
-	"""
-	Takes n results, for use in pagination
-	"""
-	take: Int
-}
-
-input ProductReviewSortParameter {
-	authorLocation: SortOrder
-	authorName: SortOrder
-	body: SortOrder
-	createdAt: SortOrder
-	downvotes: SortOrder
-	id: SortOrder
-	rating: SortOrder
-	response: SortOrder
-	responseCreatedAt: SortOrder
-	state: SortOrder
-	summary: SortOrder
-	updatedAt: SortOrder
-	upvotes: SortOrder
-}
-
 input ProductSortParameter {
 	additionalInfo: SortOrder
 	createdAt: SortOrder
 	description: SortOrder
-	featuredReview: SortOrder
 	id: SortOrder
 	infoUrl: SortOrder
 	name: SortOrder
-	popularityScore: SortOrder
-	primaryCollection: SortOrder
-	reviewCount: SortOrder
-	reviewRating: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
-	weight: SortOrder
 }
 
 type ProductTranslation {
@@ -4215,19 +4075,16 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
-	isDigital: Boolean
-	maxPerOrder: Int
 	releaseDate: DateTime
-	weight: Int
 }
 
 input ProductVariantFilterParameter {
+	_and: [ProductVariantFilterParameter!]
+	_or: [ProductVariantFilterParameter!]
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	id: IDOperators
-	isDigital: BooleanOperators
 	languageCode: StringOperators
-	maxPerOrder: NumberOperators
 	name: StringOperators
 	price: NumberOperators
 	priceWithTax: NumberOperators
@@ -4236,7 +4093,6 @@ input ProductVariantFilterParameter {
 	sku: StringOperators
 	stockLevel: StringOperators
 	updatedAt: DateOperators
-	weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -4251,7 +4107,7 @@ input ProductVariantListOptions {
 	filter: ProductVariantFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -4274,8 +4130,6 @@ input ProductVariantListOptions {
 input ProductVariantSortParameter {
 	createdAt: SortOrder
 	id: SortOrder
-	isDigital: SortOrder
-	maxPerOrder: SortOrder
 	name: SortOrder
 	price: SortOrder
 	priceWithTax: SortOrder
@@ -4284,7 +4138,6 @@ input ProductVariantSortParameter {
 	sku: SortOrder
 	stockLevel: SortOrder
 	updatedAt: SortOrder
-	weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -4357,7 +4210,6 @@ type Query {
 	The active Customer
 	"""
 	activeCustomer: Customer
-	activeCustomerWishlist: [WishlistItem!]!
 
 	"""
 	The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
@@ -4380,7 +4232,6 @@ type Query {
 	A list of Collections available to the shop
 	"""
 	collections(options: CollectionListOptions): CollectionList!
-	eligibleGifts: [ProductVariant!]!
 
 	"""
 	Returns a list of payment methods and their eligibility based on the current active Order
@@ -4512,11 +4363,6 @@ input RegisterCustomerInput {
 	title: String
 }
 
-input RegisterSellerInput {
-	seller: CreateSellerInput!
-	shopName: String!
-}
-
 type RelationCustomFieldConfig implements CustomField {
 	description: [LocalizedString!]
 	entity: String!
@@ -4526,6 +4372,7 @@ type RelationCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	scalarFields: [String!]!
 	type: String!
 	ui: JSON
@@ -4638,13 +4485,6 @@ type Seller implements Node {
 	updatedAt: DateTime!
 }
 
-type Seo {
-	description: String
-	facebookImage: Asset
-	title: String!
-	twitterImage: Asset
-}
-
 union SetCustomerForOrderResult =
 	| AlreadyLoggedInError
 	| EmailAddressConflictError
@@ -4673,7 +4513,7 @@ type ShippingMethod implements Node {
 	checker: ConfigurableOperation!
 	code: String!
 	createdAt: DateTime!
-	customFields: ShippingMethodCustomFields
+	customFields: JSON
 	description: String!
 	fulfillmentHandlerCode: String!
 	id: ID!
@@ -4683,10 +4523,6 @@ type ShippingMethod implements Node {
 	updatedAt: DateTime!
 }
 
-type ShippingMethodCustomFields {
-	isDigital: Boolean
-}
-
 type ShippingMethodList implements PaginatedList {
 	items: [ShippingMethod!]!
 	totalItems: Int!
@@ -4694,7 +4530,7 @@ type ShippingMethodList implements PaginatedList {
 
 type ShippingMethodQuote {
 	code: String!
-	customFields: ShippingMethodCustomFields
+	customFields: JSON
 	description: String!
 	id: ID!
 
@@ -4739,6 +4575,7 @@ type StringCustomFieldConfig implements CustomField {
 	options: [StringFieldOption!]
 	pattern: String
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -4767,17 +4604,6 @@ input StringOperators {
 	notEq: String
 	notIn: [String!]
 	regex: String
-}
-
-input SubmitProductReviewInput {
-	authorLocation: String
-	authorName: String!
-	body: String!
-	customerId: ID
-	productId: ID!
-	rating: Float!
-	summary: String!
-	variantId: ID
 }
 
 """
@@ -4851,6 +4677,7 @@ type TextCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -4964,14 +4791,6 @@ union VerifyCustomerAccountResult =
 	| PasswordValidationError
 	| VerificationTokenExpiredError
 	| VerificationTokenInvalidError
-
-type WishlistItem implements Node {
-	createdAt: DateTime!
-	id: ID!
-	productVariant: ProductVariant!
-	productVariantId: ID!
-	updatedAt: DateTime!
-}
 
 type Zone implements Node {
 	createdAt: DateTime!

@@ -1,5 +1,6 @@
 import { $, QwikKeyboardEvent, component$, useStore, useTask$ } from '@builder.io/qwik';
 import { DocumentHead, routeLoader$, useLocation } from '@builder.io/qwik-city';
+import { Slider } from 'qwik-slider';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CollectionCard from '~/components/collection-card/CollectionCard';
 import Filters from '~/components/facet-filter-controls/Filters';
@@ -7,6 +8,7 @@ import FiltersButton from '~/components/filters-button/FiltersButton';
 import ProductCard from '~/components/products/ProductCard';
 import { SearchResponse } from '~/generated/graphql';
 import { getCollectionBySlug } from '~/providers/shop/collections/collections';
+
 import {
 	searchQueryWithCollectionSlug,
 	searchQueryWithTerm,
@@ -87,6 +89,14 @@ export default component$(() => {
 		});
 	});
 
+	const SubCollectionSlider = {
+		scrollSpeed: 1,
+		autoScroll: false,
+		showScrollbar: true,
+		autoScrollSpeed: 10,
+		gap: 25,
+	};
+
 	return (
 		<div
 			class="max-w-6xl mx-auto px-4 py-10"
@@ -115,10 +125,12 @@ export default component$(() => {
 				{!!collectionSignal.value.children?.length && (
 					<div class="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
 						<h2 class="text-2xl font-light text-gray-900">Collections</h2>
-						<div class="mt-6 grid max-w-xs sm:max-w-none mx-auto sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
-							{collectionSignal.value.children.map((child) => (
-								<CollectionCard key={child.id} collection={child}></CollectionCard>
-							))}
+						<div class="">
+							<Slider {...SubCollectionSlider}>
+								{collectionSignal.value.children.map((child) => (
+									<CollectionCard key={child.id} collection={child}></CollectionCard>
+								))}
+							</Slider>
 						</div>
 					</div>
 				)}

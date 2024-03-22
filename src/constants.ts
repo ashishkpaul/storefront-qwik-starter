@@ -10,8 +10,9 @@ export const HOMEPAGE_IMAGE = '/homepage.webp';
 export const DEFAULT_METADATA_URL = 'https://demo.dingpack.store';
 export const DEFAULT_METADATA_TITLE = 'Dingpack Online Store';
 export const DEFAULT_METADATA_DESCRIPTION =
-	'A headless commerce storefront starter kit built with Vendure & Qwik';
-export const DEFAULT_METADATA_IMAGE = '#';
+	'Dingpack: Control, Connect And Grow Your E-commerce Empire';
+export const DEFAULT_METADATA_IMAGE =
+	'https://demo.dingpack.store/assets/preview/4b/dingpack_social_share__preview.jpg?preset=large';
 export const DEFAULT_LOCALE = 'en';
 // TODO: replace DEV_API and PROD_API with your dev and prod API urls.
 // export const DEV_API = 'https://demo.dingpack.store';

@@ -16,6 +16,7 @@
 - Theme, icons etc ✅
 - Review
 - Single Sign On (SSO)
+- Multi-tanent Account Verification
 - Wishlist
 
 **Contributions welcome!**

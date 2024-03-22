@@ -10,21 +10,18 @@ interface IProps {
 export default component$(({ collection }: IProps) => {
 	return (
 		<Link href={`/collections/${collection.slug}`} key={collection.id}>
-			<div class="max-w-[300px] relative rounded-lg overflow-hidden hover:opacity-75 xl:w-auto mx-auto">
-				<div class="w-full h-full object-center object-cover">
+			<div class="max-w-[196px] relative rounded-full overflow-hidden hover:opacity-75 xl:w-auto mx-auto">
+				<div class="object-cover rounded-full">
 					<Image
 						layout="fixed"
-						width="300"
-						height="300"
-						src={collection.featuredAsset?.preview}
+						width="196"
+						height="196"
+						src={collection.featuredAsset?.preview + '?w=196&h=196&format=webp'}
 						alt={collection.name}
 					/>
 				</div>
-				<span class="absolute w-full bottom-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50" />
-				<span class="absolute w-full bottom-2 mt-auto text-center text-xl font-bold text-white">
-					{collection.name}
-				</span>
 			</div>
+			<span class="block mt-2 text-center text-black">{collection.name}</span>
 		</Link>
 	);
 });
