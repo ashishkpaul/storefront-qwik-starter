@@ -1,27 +1,21 @@
 import { component$, useContext } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
 import { Slider } from 'qwik-slider';
+import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
 import Hero from '~/components/widgets/Hero';
 import { APP_STATE } from '~/constants';
-import {
-	searchQueryWithCollectionSlug,
-	searchQueryWithTerm,
-} from '~/providers/shop/products/products';
-import { cleanUpParams } from '~/utils';
-
-export const useSearchLoader = routeLoader$(async ({ params }) => {
-	const cleanParams = cleanUpParams(params);
-	const activeFacetValueIds: string[] = cleanParams.f?.split('-') || [];
-	const collectionSlug = cleanParams.slug ?? 'electronics'; // Assuming you have access to the collection slug somehow
-
-	return activeFacetValueIds.length
-		? await searchQueryWithTerm(collectionSlug, '', activeFacetValueIds)
-		: await searchQueryWithCollectionSlug(collectionSlug);
-});
+import { searchQueryWithCollectionSlug } from '~/providers/shop/products/products';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
+	const ShopByCategoryShowCase = {
+		scrollSpeed: 1,
+		autoScroll: false,
+		showScrollbar: false,
+		autoScrollSpeed: 10,
+		gap: 25,
+	};
+
 	const ProductsInCollectionShowCase = {
 		scrollSpeed: 1,
 		autoScroll: false,
@@ -30,29 +24,24 @@ export default component$(() => {
 		gap: 25,
 	};
 
-	// Fetch search results
-	const searchSignal = useSearchLoader();
-
 	return (
 		<div class="py-2 px-2 ">
 			<Hero />
-			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
-				<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Hot Deals`}</h2>
-				</div>
-				<Slider {...ProductsInCollectionShowCase}>
-					{searchSignal.value.items.map((item) => (
-						<ProductsInCollectionCard
-							key={item.productId}
-							productAsset={item.productAsset}
-							productName={item.productName}
-							slug={item.slug}
-							priceWithTax={item.priceWithTax}
-							currencyCode={item.currencyCode}
-						/>
-					))}
-				</Slider>
-			</section>
+
+			<div class="">
+				<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
+					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Shop by Category`}</h2>
+					<br />
+					<Slider {...ShopByCategoryShowCase}>
+						{collections.map((collection) =>
+							collection.featuredAsset ? (
+								<CollectionCard key={collection.id} collection={collection} />
+							) : null
+						)}
+					</Slider>
+				</section>
+			</div>
+
 			<div>
 				{collections.map((collection) => (
 					<section key={collection.id} class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">

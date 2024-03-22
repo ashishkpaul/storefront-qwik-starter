@@ -10,13 +10,14 @@ interface IProps {
 export default component$(({ collection }: IProps) => {
 	return (
 		<Link href={`/collections/${collection.slug}`} key={collection.id}>
-			<div class="max-w-[196px] relative rounded-full overflow-hidden hover:opacity-75 xl:w-auto mx-auto">
+			<div class="max-w-[96px] relative rounded-full overflow-hidden hover:opacity-75 xl:w-auto mx-auto">
 				<div class="object-cover rounded-full">
 					<Image
 						layout="fixed"
-						width="196"
-						height="196"
-						src={collection.featuredAsset?.preview + '?w=196&h=196&format=webp'}
+						class="flex-grow object-cover aspect-[7/8] min-w-[96px]"
+						width="96"
+						height="96"
+						src={collection.featuredAsset?.preview + '?w=96&h=96&format=webp'}
 						alt={collection.name}
 					/>
 				</div>
