@@ -1,7 +1,6 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { Slider } from 'qwik-slider';
-import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
 import Hero from '~/components/widgets/Hero';
 import { APP_STATE } from '~/constants';
@@ -23,7 +22,7 @@ export const useSearchLoader = routeLoader$(async ({ params }) => {
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
-	const hotDealsSlider = {
+	const ProductsInCollectionShowCase = {
 		scrollSpeed: 1,
 		autoScroll: false,
 		showScrollbar: true,
@@ -31,46 +30,17 @@ export default component$(() => {
 		gap: 25,
 	};
 
-	const CollectionSlider = {
-		scrollSpeed: 1,
-		autoScroll: false,
-		showScrollbar: true,
-		autoScrollSpeed: 10,
-		gap: 25,
-	};
 	// Fetch search results
 	const searchSignal = useSearchLoader();
 
-	// Render ProductCard components based on search results
 	return (
 		<div class="py-2 px-2 ">
 			<Hero />
-			<div>
-				<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
-					<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-						<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-							<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Shop by Category`}</h2>
-						</div>
-						<div class="">
-							<Slider {...CollectionSlider}>
-								{collections.map((collection) =>
-									collection.featuredAsset ? (
-										<div key={collection.id} class="rounded-lg overflow-hidden">
-											<CollectionCard collection={collection} />
-										</div>
-									) : null
-								)}
-							</Slider>
-						</div>
-					</div>
-				</section>
-			</div>
 			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 				<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
 					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Hot Deals`}</h2>
 				</div>
-				{/* <h1>Products in Collection</h1> */}
-				<Slider {...hotDealsSlider}>
+				<Slider {...ProductsInCollectionShowCase}>
 					{searchSignal.value.items.map((item) => (
 						<ProductsInCollectionCard
 							key={item.productId}
@@ -83,6 +53,33 @@ export default component$(() => {
 					))}
 				</Slider>
 			</section>
+			<div>
+				{collections.map((collection) => (
+					<section key={collection.id} class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
+						<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+							<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">
+								{collection.name}
+							</h2>
+						</div>
+						<div>
+							<Slider {...ProductsInCollectionShowCase}>
+								{searchQueryWithCollectionSlug(collection.slug).then((data) =>
+									data.items.map((item) => (
+										<ProductsInCollectionCard
+											key={item.productId}
+											productAsset={item.productAsset}
+											productName={item.productName}
+											slug={item.slug}
+											priceWithTax={item.priceWithTax}
+											currencyCode={item.currencyCode}
+										/>
+									))
+								)}
+							</Slider>
+						</div>
+					</section>
+				))}
+			</div>
 		</div>
 	);
 });
