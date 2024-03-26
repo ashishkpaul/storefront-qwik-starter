@@ -8,10 +8,13 @@ import { searchQueryWithCollectionSlug } from '~/providers/shop/products/product
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
+	const rootCollections = collections.filter((item) => item.parent?.name === '__root_collection__');
+	const allCollections = useContext(APP_STATE).collections;
+
 	const ShopByCategoryShowCase = {
 		scrollSpeed: 1,
 		autoScroll: false,
-		showScrollbar: false,
+		showScrollbar: true,
 		autoScrollSpeed: 10,
 		gap: 25,
 	};
@@ -30,10 +33,12 @@ export default component$(() => {
 
 			<div class="">
 				<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
-					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Shop by Category`}</h2>
+					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">
+						{$localize`Shop by Category`}
+					</h2>
 					<br />
 					<Slider {...ShopByCategoryShowCase}>
-						{collections.map((collection) =>
+						{allCollections.map((collection) =>
 							collection.featuredAsset ? (
 								<CollectionCard key={collection.id} collection={collection} />
 							) : null
@@ -43,7 +48,7 @@ export default component$(() => {
 			</div>
 
 			<div>
-				{collections.map((collection) => (
+				{rootCollections.map((collection) => (
 					<section key={collection.id} class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 						<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
 							<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">

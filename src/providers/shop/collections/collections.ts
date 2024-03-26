@@ -18,6 +18,7 @@ gql`
 				name
 				slug
 				parent {
+					slug
 					name
 				}
 				featuredAsset {
