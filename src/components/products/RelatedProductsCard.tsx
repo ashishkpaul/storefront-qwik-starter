@@ -17,6 +17,7 @@ export default component$(({ relatedProducts }: any) => {
 				return (
 					<ProductCard
 						productAsset={relatedProduct.featuredAsset}
+						loading="lazy"
 						productName={relatedProduct.name}
 						slug={slug}
 						priceWithTax={relatedVariant?.priceWithTax}
