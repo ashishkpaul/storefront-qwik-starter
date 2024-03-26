@@ -38,11 +38,13 @@ export default component$(() => {
 					</h2>
 					<br />
 					<Slider {...ShopByCategoryShowCase}>
+						{/* <div class="grid justify-items-center grid-cols-2 md:grid-cols-6 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8"> */}
 						{allCollections.map((collection) =>
 							collection.featuredAsset ? (
 								<CollectionCard key={collection.id} collection={collection} />
 							) : null
 						)}
+						{/* </div> */}
 					</Slider>
 				</section>
 			</div>

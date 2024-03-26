@@ -12,6 +12,10 @@ export default component$(() => {
 		gap: 25,
 	};
 
+	const filteredCollections = collections.filter(
+		(collection) => collection.customFields?.promoBannerStatus
+	);
+
 	return (
 		<section class="relative md:-mt-[76px] not-prose">
 			<div class="absolute inset-0 pointer-events-none" aria-hidden="true"></div>
@@ -53,7 +57,7 @@ export default component$(() => {
 					</div>
 					<div class="w-full lg:w-1/2">
 						<Slider {...collectionInSlider}>
-							{collections.map((collection) => (
+							{filteredCollections.map((collection) => (
 								<CarouselImageCard key={collection.id} collection={collection} />
 							))}
 						</Slider>

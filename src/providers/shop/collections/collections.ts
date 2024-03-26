@@ -33,6 +33,7 @@ gql`
 						id
 						preview
 					}
+					promoBannerStatus
 				}
 			}
 		}
