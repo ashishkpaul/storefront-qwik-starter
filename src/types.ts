@@ -1,4 +1,8 @@
-import { Collection as CollectionGql, Order } from '~/generated/graphql';
+import {
+	Collection as CollectionGql,
+	Order,
+	ProductVariantCustomFields,
+} from '~/generated/graphql';
 
 export type AppState = {
 	collections: CollectionGql[];
@@ -70,6 +74,7 @@ export type Variant = {
 	sku: string;
 	stockLevel: string;
 	featuredAsset?: any;
+	customFields?: ProductVariantCustomFields | null; // Update to use the extended custom fields
 };
 
 // activeOrder

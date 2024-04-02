@@ -68,16 +68,30 @@ export default component$(() => {
 	});
 
 	// Add these log statements before the console.log for customFields
-	// console.log('Product Signal Value:', productSignal.value);
+	console.log('Product Signal Value:', productSignal.value);
 
-	// Check if customFields is defined
-	// if (productSignal.value.customFields !== undefined) {
-	// 	console.log('Custom Fields:', productSignal.value.customFields);
+	// Check if customFields is defined for the product
+	if (productSignal.value.customFields !== undefined) {
+		console.log('Product Custom Fields:', productSignal.value.customFields);
+	} else {
+		console.log('Product Custom Fields is not available.');
+	}
 
-	// 	// Add your existing code for accessing additionalInfo here
-	// } else {
-	// 	console.log('Custom Fields is not available.');
-	// }
+	// Iterate over each variant and log DiscountAmount if available
+	productSignal.value.variants.forEach((variant) => {
+		console.log(`Variant ID: ${variant.id}`);
+		console.log(`Variant Custom Fields:`);
+		if (variant.customFields) {
+			// Check if DiscountAmount is available
+			if (typeof variant.customFields.DiscountAmount !== 'undefined') {
+				console.log(`Discount Amount for ${variant.name}: ${variant.customFields.DiscountAmount}`);
+			} else {
+				console.log('Discount Amount is not available for this variant.');
+			}
+		} else {
+			console.log('Custom Fields is not available for this variant.');
+		}
+	});
 
 	// Accordion static page
 	// const items = [

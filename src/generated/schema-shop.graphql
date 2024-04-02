@@ -3527,6 +3527,11 @@ enum Permission {
 	CreatePromotion
 
 	"""
+	Grants permission to create PromotionBanner
+	"""
+	CreatePromotionBanner
+
+	"""
 	Grants permission to create Seller
 	"""
 	CreateSeller
@@ -3635,6 +3640,11 @@ enum Permission {
 	Grants permission to delete Promotion
 	"""
 	DeletePromotion
+
+	"""
+	Grants permission to delete PromotionBanner
+	"""
+	DeletePromotionBanner
 
 	"""
 	Grants permission to delete Seller
@@ -3760,6 +3770,11 @@ enum Permission {
 	Grants permission to read Promotion
 	"""
 	ReadPromotion
+
+	"""
+	Grants permission to read PromotionBanner
+	"""
+	ReadPromotionBanner
 
 	"""
 	Grants permission to read Seller
@@ -3890,6 +3905,11 @@ enum Permission {
 	Grants permission to update Promotion
 	"""
 	UpdatePromotion
+
+	"""
+	Grants permission to update PromotionBanner
+	"""
+	UpdatePromotionBanner
 
 	"""
 	Grants permission to update Seller
@@ -4215,6 +4235,8 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
+	DiscountAmount: Float
+	ShowDiscount: Boolean
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
@@ -4222,6 +4244,8 @@ type ProductVariantCustomFields {
 }
 
 input ProductVariantFilterParameter {
+	DiscountAmount: NumberOperators
+	ShowDiscount: BooleanOperators
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	id: IDOperators
@@ -4272,6 +4296,8 @@ input ProductVariantListOptions {
 }
 
 input ProductVariantSortParameter {
+	DiscountAmount: SortOrder
+	ShowDiscount: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	isDigital: SortOrder
@@ -4300,7 +4326,7 @@ type Promotion implements Node {
 	conditions: [ConfigurableOperation!]!
 	couponCode: String
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: PromotionCustomFields
 	description: String!
 	enabled: Boolean!
 	endsAt: DateTime
@@ -4313,9 +4339,68 @@ type Promotion implements Node {
 	usageLimit: Int
 }
 
+type PromotionCustomFields {
+	promotions: Asset
+}
+
+input PromotionFilterParameter {
+	couponCode: StringOperators
+	createdAt: DateOperators
+	description: StringOperators
+	enabled: BooleanOperators
+	endsAt: DateOperators
+	id: IDOperators
+	name: StringOperators
+	perCustomerUsageLimit: NumberOperators
+	startsAt: DateOperators
+	updatedAt: DateOperators
+	usageLimit: NumberOperators
+}
+
 type PromotionList implements PaginatedList {
 	items: [Promotion!]!
 	totalItems: Int!
+}
+
+input PromotionListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: PromotionFilterParameter
+
+	"""
+	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: PromotionSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
+input PromotionSortParameter {
+	couponCode: SortOrder
+	createdAt: SortOrder
+	description: SortOrder
+	endsAt: SortOrder
+	id: SortOrder
+	name: SortOrder
+	perCustomerUsageLimit: SortOrder
+	promotions: SortOrder
+	startsAt: SortOrder
+	updatedAt: SortOrder
+	usageLimit: SortOrder
 }
 
 type PromotionTranslation {
@@ -4402,6 +4487,7 @@ type Query {
 	"""
 	facets(options: FacetListOptions): FacetList!
 	generateBraintreeClientToken(includeCustomerId: Boolean, orderId: ID): String
+	getPromotions(options: PromotionListOptions = null): PromotionList
 
 	"""
 	Returns information about the current authenticated User

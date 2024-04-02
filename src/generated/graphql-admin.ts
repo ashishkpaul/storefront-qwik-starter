@@ -949,6 +949,8 @@ export type CreateProductOptionInput = {
 };
 
 export type CreateProductVariantCustomFieldsInput = {
+	DiscountAmount?: InputMaybe<Scalars['Float']['input']>;
+	ShowDiscount?: InputMaybe<Scalars['Boolean']['input']>;
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
@@ -979,11 +981,15 @@ export type CreateProductVariantOptionInput = {
 	translations: Array<ProductOptionTranslationInput>;
 };
 
+export type CreatePromotionCustomFieldsInput = {
+	promotionsId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type CreatePromotionInput = {
 	actions: Array<ConfigurableOperationInput>;
 	conditions: Array<ConfigurableOperationInput>;
 	couponCode?: InputMaybe<Scalars['String']['input']>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreatePromotionCustomFieldsInput>;
 	enabled: Scalars['Boolean']['input'];
 	endsAt?: InputMaybe<Scalars['DateTime']['input']>;
 	perCustomerUsageLimit?: InputMaybe<Scalars['Int']['input']>;
@@ -2969,6 +2975,7 @@ export type Mutation = {
 	/** Sets the shipping method by id, which can be obtained with the `eligibleShippingMethodsForDraftOrder` query */
 	setDraftOrderShippingMethod: SetOrderShippingMethodResult;
 	setOrderCustomFields?: Maybe<Order>;
+	setPromotionsImage?: Maybe<Asset>;
 	/** Set all webhooks for the current channel. This will overwrite any existing webhooks. */
 	setWebhooks: Array<Webhook>;
 	settlePayment: SettlePaymentResult;
@@ -3559,6 +3566,10 @@ export type MutationSetDraftOrderShippingMethodArgs = {
 
 export type MutationSetOrderCustomFieldsArgs = {
 	input: UpdateOrderInput;
+};
+
+export type MutationSetPromotionsImageArgs = {
+	file: Scalars['Upload']['input'];
 };
 
 export type MutationSetWebhooksArgs = {
@@ -4298,6 +4309,8 @@ export const Permission = {
 	CreateProduct: 'CreateProduct',
 	/** Grants permission to create Promotion */
 	CreatePromotion: 'CreatePromotion',
+	/** Grants permission to create PromotionBanner */
+	CreatePromotionBanner: 'CreatePromotionBanner',
 	/** Grants permission to create Seller */
 	CreateSeller: 'CreateSeller',
 	/** Grants permission to create PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4342,6 +4355,8 @@ export const Permission = {
 	DeleteProduct: 'DeleteProduct',
 	/** Grants permission to delete Promotion */
 	DeletePromotion: 'DeletePromotion',
+	/** Grants permission to delete PromotionBanner */
+	DeletePromotionBanner: 'DeletePromotionBanner',
 	/** Grants permission to delete Seller */
 	DeleteSeller: 'DeleteSeller',
 	/** Grants permission to delete PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4392,6 +4407,8 @@ export const Permission = {
 	ReadProduct: 'ReadProduct',
 	/** Grants permission to read Promotion */
 	ReadPromotion: 'ReadPromotion',
+	/** Grants permission to read PromotionBanner */
+	ReadPromotionBanner: 'ReadPromotionBanner',
 	/** Grants permission to read Seller */
 	ReadSeller: 'ReadSeller',
 	/** Grants permission to read PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4444,6 +4461,8 @@ export const Permission = {
 	UpdateProduct: 'UpdateProduct',
 	/** Grants permission to update Promotion */
 	UpdatePromotion: 'UpdatePromotion',
+	/** Grants permission to update PromotionBanner */
+	UpdatePromotionBanner: 'UpdatePromotionBanner',
 	/** Grants permission to update Seller */
 	UpdateSeller: 'UpdateSeller',
 	/** Grants permission to update PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4814,6 +4833,8 @@ export type ProductVariantStockMovementsArgs = {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
+	DiscountAmount?: Maybe<Scalars['Float']['output']>;
+	ShowDiscount?: Maybe<Scalars['Boolean']['output']>;
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
@@ -4821,6 +4842,8 @@ export type ProductVariantCustomFields = {
 };
 
 export type ProductVariantFilterParameter = {
+	DiscountAmount?: InputMaybe<NumberOperators>;
+	ShowDiscount?: InputMaybe<BooleanOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
 	enabled?: InputMaybe<BooleanOperators>;
@@ -4881,6 +4904,8 @@ export type ProductVariantPriceInput = {
 };
 
 export type ProductVariantSortParameter = {
+	DiscountAmount?: InputMaybe<SortOrder>;
+	ShowDiscount?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	isDigital?: InputMaybe<SortOrder>;
@@ -4921,7 +4946,7 @@ export type Promotion = Node & {
 	conditions: Array<ConfigurableOperation>;
 	couponCode?: Maybe<Scalars['String']['output']>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<PromotionCustomFields>;
 	description: Scalars['String']['output'];
 	enabled: Scalars['Boolean']['output'];
 	endsAt?: Maybe<Scalars['DateTime']['output']>;
@@ -4932,6 +4957,11 @@ export type Promotion = Node & {
 	translations: Array<PromotionTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
 	usageLimit?: Maybe<Scalars['Int']['output']>;
+};
+
+export type PromotionCustomFields = {
+	__typename?: 'PromotionCustomFields';
+	promotions?: Maybe<Asset>;
 };
 
 export type PromotionFilterParameter = {
@@ -4975,6 +5005,7 @@ export type PromotionSortParameter = {
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	perCustomerUsageLimit?: InputMaybe<SortOrder>;
+	promotions?: InputMaybe<SortOrder>;
 	startsAt?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	usageLimit?: InputMaybe<SortOrder>;
@@ -6551,6 +6582,8 @@ export type UpdateProductReviewInput = {
 };
 
 export type UpdateProductVariantCustomFieldsInput = {
+	DiscountAmount?: InputMaybe<Scalars['Float']['input']>;
+	ShowDiscount?: InputMaybe<Scalars['Boolean']['input']>;
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
@@ -6579,11 +6612,15 @@ export type UpdateProductVariantInput = {
 	useGlobalOutOfStockThreshold?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type UpdatePromotionCustomFieldsInput = {
+	promotionsId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type UpdatePromotionInput = {
 	actions?: InputMaybe<Array<ConfigurableOperationInput>>;
 	conditions?: InputMaybe<Array<ConfigurableOperationInput>>;
 	couponCode?: InputMaybe<Scalars['String']['input']>;
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<UpdatePromotionCustomFieldsInput>;
 	enabled?: InputMaybe<Scalars['Boolean']['input']>;
 	endsAt?: InputMaybe<Scalars['DateTime']['input']>;
 	id: Scalars['ID']['input'];

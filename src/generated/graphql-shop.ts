@@ -2485,6 +2485,8 @@ export const Permission = {
 	CreateProduct: 'CreateProduct',
 	/** Grants permission to create Promotion */
 	CreatePromotion: 'CreatePromotion',
+	/** Grants permission to create PromotionBanner */
+	CreatePromotionBanner: 'CreatePromotionBanner',
 	/** Grants permission to create Seller */
 	CreateSeller: 'CreateSeller',
 	/** Grants permission to create PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -2529,6 +2531,8 @@ export const Permission = {
 	DeleteProduct: 'DeleteProduct',
 	/** Grants permission to delete Promotion */
 	DeletePromotion: 'DeletePromotion',
+	/** Grants permission to delete PromotionBanner */
+	DeletePromotionBanner: 'DeletePromotionBanner',
 	/** Grants permission to delete Seller */
 	DeleteSeller: 'DeleteSeller',
 	/** Grants permission to delete PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -2579,6 +2583,8 @@ export const Permission = {
 	ReadProduct: 'ReadProduct',
 	/** Grants permission to read Promotion */
 	ReadPromotion: 'ReadPromotion',
+	/** Grants permission to read PromotionBanner */
+	ReadPromotionBanner: 'ReadPromotionBanner',
 	/** Grants permission to read Seller */
 	ReadSeller: 'ReadSeller',
 	/** Grants permission to read PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -2631,6 +2637,8 @@ export const Permission = {
 	UpdateProduct: 'UpdateProduct',
 	/** Grants permission to update Promotion */
 	UpdatePromotion: 'UpdatePromotion',
+	/** Grants permission to update PromotionBanner */
+	UpdatePromotionBanner: 'UpdatePromotionBanner',
 	/** Grants permission to update Seller */
 	UpdateSeller: 'UpdateSeller',
 	/** Grants permission to update PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -2916,6 +2924,8 @@ export type ProductVariant = Node & {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
+	DiscountAmount?: Maybe<Scalars['Float']['output']>;
+	ShowDiscount?: Maybe<Scalars['Boolean']['output']>;
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
@@ -2923,6 +2933,8 @@ export type ProductVariantCustomFields = {
 };
 
 export type ProductVariantFilterParameter = {
+	DiscountAmount?: InputMaybe<NumberOperators>;
+	ShowDiscount?: InputMaybe<BooleanOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
@@ -2960,6 +2972,8 @@ export type ProductVariantListOptions = {
 };
 
 export type ProductVariantSortParameter = {
+	DiscountAmount?: InputMaybe<SortOrder>;
+	ShowDiscount?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	isDigital?: InputMaybe<SortOrder>;
@@ -2990,7 +3004,7 @@ export type Promotion = Node & {
 	conditions: Array<ConfigurableOperation>;
 	couponCode?: Maybe<Scalars['String']['output']>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<Scalars['JSON']['output']>;
+	customFields?: Maybe<PromotionCustomFields>;
 	description: Scalars['String']['output'];
 	enabled: Scalars['Boolean']['output'];
 	endsAt?: Maybe<Scalars['DateTime']['output']>;
@@ -3003,10 +3017,56 @@ export type Promotion = Node & {
 	usageLimit?: Maybe<Scalars['Int']['output']>;
 };
 
+export type PromotionCustomFields = {
+	__typename?: 'PromotionCustomFields';
+	promotions?: Maybe<Asset>;
+};
+
+export type PromotionFilterParameter = {
+	couponCode?: InputMaybe<StringOperators>;
+	createdAt?: InputMaybe<DateOperators>;
+	description?: InputMaybe<StringOperators>;
+	enabled?: InputMaybe<BooleanOperators>;
+	endsAt?: InputMaybe<DateOperators>;
+	id?: InputMaybe<IdOperators>;
+	name?: InputMaybe<StringOperators>;
+	perCustomerUsageLimit?: InputMaybe<NumberOperators>;
+	startsAt?: InputMaybe<DateOperators>;
+	updatedAt?: InputMaybe<DateOperators>;
+	usageLimit?: InputMaybe<NumberOperators>;
+};
+
 export type PromotionList = PaginatedList & {
 	__typename?: 'PromotionList';
 	items: Array<Promotion>;
 	totalItems: Scalars['Int']['output'];
+};
+
+export type PromotionListOptions = {
+	/** Allows the results to be filtered */
+	filter?: InputMaybe<PromotionFilterParameter>;
+	/** Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND. */
+	filterOperator?: InputMaybe<LogicalOperator>;
+	/** Skips the first n results, for use in pagination */
+	skip?: InputMaybe<Scalars['Int']['input']>;
+	/** Specifies which properties to sort the results by */
+	sort?: InputMaybe<PromotionSortParameter>;
+	/** Takes n results, for use in pagination */
+	take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type PromotionSortParameter = {
+	couponCode?: InputMaybe<SortOrder>;
+	createdAt?: InputMaybe<SortOrder>;
+	description?: InputMaybe<SortOrder>;
+	endsAt?: InputMaybe<SortOrder>;
+	id?: InputMaybe<SortOrder>;
+	name?: InputMaybe<SortOrder>;
+	perCustomerUsageLimit?: InputMaybe<SortOrder>;
+	promotions?: InputMaybe<SortOrder>;
+	startsAt?: InputMaybe<SortOrder>;
+	updatedAt?: InputMaybe<SortOrder>;
+	usageLimit?: InputMaybe<SortOrder>;
 };
 
 export type PromotionTranslation = {
@@ -3071,6 +3131,7 @@ export type Query = {
 	/** A list of Facets available to the shop */
 	facets: FacetList;
 	generateBraintreeClientToken?: Maybe<Scalars['String']['output']>;
+	getPromotions?: Maybe<PromotionList>;
 	/** Returns information about the current authenticated User */
 	me?: Maybe<CurrentUser>;
 	/** Returns the possible next states that the activeOrder can transition to */
@@ -3115,6 +3176,10 @@ export type QueryFacetsArgs = {
 export type QueryGenerateBraintreeClientTokenArgs = {
 	includeCustomerId?: InputMaybe<Scalars['Boolean']['input']>;
 	orderId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type QueryGetPromotionsArgs = {
+	options?: InputMaybe<PromotionListOptions>;
 };
 
 export type QueryOrderArgs = {
@@ -4005,9 +4070,7 @@ export type GenerateBraintreeClientTokenQuery = {
 };
 
 // export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
-export type CollectionsQueryVariables = Exact<{
-	take: InputMaybe<Scalars['Int']['input']>;
-}>;
+export type CollectionsQueryVariables = Exact<{ take: InputMaybe<Scalars['Int']['input']> }>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
@@ -5094,6 +5157,11 @@ export type DetailedProductFragment = {
 		sku: string;
 		stockLevel: string;
 		featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+		customFields?: {
+			__typename?: 'ProductVariantCustomFields';
+			DiscountAmount?: number | null;
+			ShowDiscount?: boolean | null;
+		} | null;
 	}>;
 	customFields?: {
 		__typename?: 'ProductCustomFields';
@@ -5171,6 +5239,11 @@ export type ProductQuery = {
 			sku: string;
 			stockLevel: string;
 			featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+			customFields?: {
+				__typename?: 'ProductVariantCustomFields';
+				DiscountAmount?: number | null;
+				ShowDiscount?: boolean | null;
+			} | null;
 		}>;
 		customFields?: {
 			__typename?: 'ProductCustomFields';
@@ -5388,6 +5461,10 @@ export const DetailedProductFragmentDoc = gql`
 			featuredAsset {
 				id
 				preview
+			}
+			customFields {
+				DiscountAmount
+				ShowDiscount
 			}
 		}
 		customFields {

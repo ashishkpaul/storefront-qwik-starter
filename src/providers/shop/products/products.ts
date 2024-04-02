@@ -66,6 +66,10 @@ export const detailedProductFragment = gql`
 				id
 				preview
 			}
+			customFields {
+				DiscountAmount
+				ShowDiscount
+			}
 		}
 		customFields {
 			additionalInfo

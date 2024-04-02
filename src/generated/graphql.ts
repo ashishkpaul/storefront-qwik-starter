@@ -2666,6 +2666,11 @@ export type ProductVariant = Node & {
 };
 
 export type ProductVariantCustomFields = {
+	DiscountAmount?: Maybe<Scalars['Int']>;
+	isDigital?: Maybe<Scalars['Boolean']>;
+	maxPerOrder?: Maybe<Scalars['Int']>;
+	releaseDate?: Maybe<Scalars['DateTime']>;
+	weight?: Maybe<Scalars['Int']>;
 	__typename?: 'ProductVariantCustomFields';
 	printfulVariantId?: Maybe<Scalars['String']>;
 };
@@ -3689,6 +3694,7 @@ export type GenerateBraintreeClientTokenQuery = {
 };
 
 export type CollectionsQueryVariables = Exact<{ [key: string]: never }>;
+// export type CollectionsQueryVariables = Exact<{ take: InputMaybe<Scalars['Int']['input']>; }>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
@@ -5201,8 +5207,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections {
-		collections {
+	query collections($take: Int) {
+		collections(options: { take: $take }) {
 			items {
 				id
 				name
