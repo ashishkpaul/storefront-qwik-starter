@@ -2924,8 +2924,7 @@ export type ProductVariant = Node & {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
-	DiscountAmount?: Maybe<Scalars['Float']['output']>;
-	ShowDiscount?: Maybe<Scalars['Boolean']['output']>;
+	DiscountAmount?: Maybe<Scalars['Int']['output']>;
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
@@ -2934,7 +2933,6 @@ export type ProductVariantCustomFields = {
 
 export type ProductVariantFilterParameter = {
 	DiscountAmount?: InputMaybe<NumberOperators>;
-	ShowDiscount?: InputMaybe<BooleanOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
@@ -2973,7 +2971,6 @@ export type ProductVariantListOptions = {
 
 export type ProductVariantSortParameter = {
 	DiscountAmount?: InputMaybe<SortOrder>;
-	ShowDiscount?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	isDigital?: InputMaybe<SortOrder>;
@@ -5160,7 +5157,6 @@ export type DetailedProductFragment = {
 		customFields?: {
 			__typename?: 'ProductVariantCustomFields';
 			DiscountAmount?: number | null;
-			ShowDiscount?: boolean | null;
 		} | null;
 	}>;
 	customFields?: {
@@ -5242,7 +5238,6 @@ export type ProductQuery = {
 			customFields?: {
 				__typename?: 'ProductVariantCustomFields';
 				DiscountAmount?: number | null;
-				ShowDiscount?: boolean | null;
 			} | null;
 		}>;
 		customFields?: {
@@ -5464,7 +5459,6 @@ export const DetailedProductFragmentDoc = gql`
 			}
 			customFields {
 				DiscountAmount
-				ShowDiscount
 			}
 		}
 		customFields {

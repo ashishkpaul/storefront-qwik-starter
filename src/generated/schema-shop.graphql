@@ -4235,8 +4235,7 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
-	DiscountAmount: Float
-	ShowDiscount: Boolean
+	DiscountAmount: Int
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
@@ -4245,7 +4244,6 @@ type ProductVariantCustomFields {
 
 input ProductVariantFilterParameter {
 	DiscountAmount: NumberOperators
-	ShowDiscount: BooleanOperators
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	id: IDOperators
@@ -4297,7 +4295,6 @@ input ProductVariantListOptions {
 
 input ProductVariantSortParameter {
 	DiscountAmount: SortOrder
-	ShowDiscount: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	isDigital: SortOrder

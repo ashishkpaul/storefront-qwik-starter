@@ -7,6 +7,7 @@ import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
+import DiscountAmount from '~/components/products/DiscountAmount';
 import Price from '~/components/products/Price';
 import ProductCard from '~/components/products/ProductCard';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
@@ -17,7 +18,7 @@ import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug } from '~/providers/shop/products/products';
 import { Variant } from '~/types';
-import { cleanUpParams, formatPrice, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
+import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
@@ -235,48 +236,11 @@ export default component$(() => {
 							<div class="mt-4 text-gray-700">
 								{/* Display DiscountAmount if available */}
 								{selectedVariantSignal.value?.customFields?.DiscountAmount !== undefined && (
-									<>
-										{/* First line: Limited time deal + Discount percentage */}
-										<div class="flex flex-wrap items-center">
-											{selectedVariantSignal.value.customFields?.DiscountAmount !== null && (
-												<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
-													Limited time deal
-												</span>
-											)}
-											{selectedVariantSignal.value.customFields?.DiscountAmount !== null && (
-												<span class="bg-green-500 text-white py-1 px-2 rounded-md mr-2">
-													{Math.round(
-														(selectedVariantSignal.value.customFields.DiscountAmount /
-															(selectedVariantSignal.value.priceWithTax +
-																selectedVariantSignal.value.customFields?.DiscountAmount)) *
-															100
-													)}
-													% off
-												</span>
-											)}
-										</div>
-										{/* Second line: M.R.P and DiscountAmount */}
-										<div class="flex items-center mt-1">
-											M.R.P:{' '}
-											<span
-												class={`${selectedVariantSignal.value.customFields?.DiscountAmount !== null ? 'line-through' : ''}`}
-											>
-												{formatPrice(
-													selectedVariantSignal.value.priceWithTax +
-														selectedVariantSignal.value.customFields?.DiscountAmount,
-													'INR'
-												)}
-											</span>
-											{', '}
-											Discount:{' '}
-											{selectedVariantSignal.value.customFields?.DiscountAmount !== null
-												? formatPrice(
-														selectedVariantSignal.value.customFields.DiscountAmount,
-														'INR'
-													)
-												: 'N/A'}
-										</div>
-									</>
+									<DiscountAmount
+										discountAmount={selectedVariantSignal.value.customFields?.DiscountAmount}
+										priceWithTax={selectedVariantSignal.value.priceWithTax}
+										currencyCode="INR" // Assuming currency code is always 'INR'
+									/>
 								)}
 							</div>
 

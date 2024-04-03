@@ -68,7 +68,6 @@ export const detailedProductFragment = gql`
 			}
 			customFields {
 				DiscountAmount
-				ShowDiscount
 			}
 		}
 		customFields {
