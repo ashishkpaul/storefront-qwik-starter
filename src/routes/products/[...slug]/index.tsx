@@ -231,6 +231,7 @@ export default component$(() => {
 									</button>
 								</div>
 							</div>
+
 							<div class="mt-4 text-gray-700">
 								{/* Display DiscountAmount if available */}
 								{selectedVariantSignal.value?.customFields?.DiscountAmount !== undefined && (
@@ -246,7 +247,8 @@ export default component$(() => {
 												<span class="bg-green-500 text-white py-1 px-2 rounded-md mr-2">
 													{Math.round(
 														(selectedVariantSignal.value.customFields.DiscountAmount /
-															selectedVariantSignal.value.priceWithTax) *
+															(selectedVariantSignal.value.priceWithTax +
+																selectedVariantSignal.value.customFields?.DiscountAmount)) *
 															100
 													)}
 													% off
