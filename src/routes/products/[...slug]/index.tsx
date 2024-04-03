@@ -17,7 +17,7 @@ import { Order, OrderLine, Product } from '~/generated/graphql';
 import { addItemToOrderMutation } from '~/providers/shop/orders/order';
 import { getProductBySlug } from '~/providers/shop/products/products';
 import { Variant } from '~/types';
-import { cleanUpParams, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
+import { cleanUpParams, formatPrice, generateDocumentHead, isEnvVariableEnabled } from '~/utils';
 export const useProductLoader = routeLoader$(async ({ params }) => {
 	const { slug } = cleanUpParams(params);
 	const product = await getProductBySlug(slug);
@@ -78,20 +78,20 @@ export default component$(() => {
 	}
 
 	// Iterate over each variant and log DiscountAmount if available
-	productSignal.value.variants.forEach((variant) => {
-		console.log(`Variant ID: ${variant.id}`);
-		console.log(`Variant Custom Fields:`);
-		if (variant.customFields) {
-			// Check if DiscountAmount is available
-			if (typeof variant.customFields.DiscountAmount !== 'undefined') {
-				console.log(`Discount Amount for ${variant.name}: ${variant.customFields.DiscountAmount}`);
-			} else {
-				console.log('Discount Amount is not available for this variant.');
-			}
-		} else {
-			console.log('Custom Fields is not available for this variant.');
-		}
-	});
+	// productSignal.value.variants.forEach((variant) => {
+	// 	console.log(`Variant ID: ${variant.id}`);
+	// 	console.log(`Variant Custom Fields:`);
+	// 	if (variant.customFields) {
+	// 		// Check if DiscountAmount is available
+	// 		if (typeof variant.customFields.DiscountAmount !== 'undefined') {
+	// 			console.log(`Discount Amount for ${variant.name}: ${variant.customFields.DiscountAmount}`);
+	// 		} else {
+	// 			console.log('Discount Amount is not available for this variant.');
+	// 		}
+	// 	} else {
+	// 		console.log('Custom Fields is not available for this variant.');
+	// 	}
+	// });
 
 	// Accordion static page
 	// const items = [
@@ -231,6 +231,53 @@ export default component$(() => {
 									</button>
 								</div>
 							</div>
+							<div class="mt-4 text-gray-700">
+								{/* Display DiscountAmount if available */}
+								{selectedVariantSignal.value?.customFields?.DiscountAmount !== undefined && (
+									<>
+										{/* First line: Limited time deal + Discount percentage */}
+										<div class="flex flex-wrap items-center">
+											{selectedVariantSignal.value.customFields?.DiscountAmount !== null && (
+												<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
+													Limited time deal
+												</span>
+											)}
+											{selectedVariantSignal.value.customFields?.DiscountAmount !== null && (
+												<span class="bg-green-500 text-white py-1 px-2 rounded-md mr-2">
+													{Math.round(
+														(selectedVariantSignal.value.customFields.DiscountAmount /
+															selectedVariantSignal.value.priceWithTax) *
+															100
+													)}
+													% off
+												</span>
+											)}
+										</div>
+										{/* Second line: M.R.P and DiscountAmount */}
+										<div class="flex items-center mt-1">
+											M.R.P:{' '}
+											<span
+												class={`${selectedVariantSignal.value.customFields?.DiscountAmount !== null ? 'line-through' : ''}`}
+											>
+												{formatPrice(
+													selectedVariantSignal.value.priceWithTax +
+														selectedVariantSignal.value.customFields?.DiscountAmount,
+													'INR'
+												)}
+											</span>
+											{', '}
+											Discount:{' '}
+											{selectedVariantSignal.value.customFields?.DiscountAmount !== null
+												? formatPrice(
+														selectedVariantSignal.value.customFields.DiscountAmount,
+														'INR'
+													)
+												: 'N/A'}
+										</div>
+									</>
+								)}
+							</div>
+
 							<div class="mt-2 flex items-center space-x-2">
 								<span class="text-gray-500">{selectedVariantSignal.value?.sku}</span>
 								<StockLevelLabel stockLevel={selectedVariantSignal.value?.stockLevel} />
@@ -240,7 +287,6 @@ export default component$(() => {
 									<Alert message={addItemToOrderErrorSignal.value} />
 								</div>
 							)}
-
 							<section class="mt-12 pt-12 border-t text-xs">
 								<h3 class="text-gray-600 font-bold mb-2">{$localize`Shipping & Returns`}</h3>
 								<div class="text-gray-500 space-y-1">
