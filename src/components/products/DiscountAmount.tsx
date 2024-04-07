@@ -6,7 +6,7 @@ export default component$<{
 	priceWithTax: number | undefined;
 	currencyCode: string | undefined;
 	forcedClass?: string;
-}>(({ discountAmount, priceWithTax, currencyCode, forcedClass }) => {
+}>(({ discountAmount, priceWithTax, currencyCode }) => {
 	if (typeof priceWithTax === 'undefined' || typeof discountAmount === 'undefined') {
 		return <div></div>;
 	}
