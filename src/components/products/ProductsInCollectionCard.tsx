@@ -1,13 +1,21 @@
 import { $, component$ } from '@builder.io/qwik';
 import { Image } from 'qwik-image';
-import { getProductBySlug } from '~/providers/shop/products/products';
+import { getProductById } from '~/providers/shop/products/products';
 import { changeUrlParamsWithoutRefresh } from '~/utils';
 import Price from './Price';
 
 export default component$(
-	({ productAsset, productName, slug, priceWithTax, currencyCode, productSignalSetter }: any) => {
+	({
+		productAsset,
+		productName,
+		slug,
+		priceWithTax,
+		currencyCode,
+		productSignalSetter,
+		MRP,
+	}: any) => {
 		const handleProductClick = $(async () => {
-			const product = await getProductBySlug(slug);
+			const product = await getProductById(slug); // Using getProductById with slug
 			productSignalSetter(product);
 			changeUrlParamsWithoutRefresh(productName, [slug]);
 		});
@@ -30,6 +38,12 @@ export default component$(
 					currencyCode={currencyCode}
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
+				{MRP && (
+					<div class="text-sm text-gray-700">
+						MRP: {MRP}
+						{MRP !== null && MRP !== undefined && <span> - Limited time deal</span>}
+					</div>
+				)}
 			</a>
 		);
 	}

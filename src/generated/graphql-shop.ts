@@ -5148,6 +5148,7 @@ export type DetailedProductFragment = {
 	variants: Array<{
 		__typename?: 'ProductVariant';
 		id: string;
+		productId: string;
 		name: string;
 		priceWithTax: any;
 		currencyCode: CurrencyCode;
@@ -5226,6 +5227,7 @@ export type ProductQuery = {
 		variants: Array<{
 			__typename?: 'ProductVariant';
 			id: string;
+			productId: string;
 			name: string;
 			priceWithTax: any;
 			currencyCode: CurrencyCode;
@@ -5442,6 +5444,7 @@ export const DetailedProductFragmentDoc = gql`
 		}
 		variants {
 			id
+			productId
 			name
 			priceWithTax
 			currencyCode

@@ -4,7 +4,7 @@ import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
 import Hero from '~/components/widgets/Hero';
 import { APP_STATE } from '~/constants';
-import { searchQueryWithCollectionSlug } from '~/providers/shop/products/products';
+import { getProductMRP, searchQueryWithCollectionSlug } from '~/providers/shop/products/products';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
@@ -50,7 +50,7 @@ export default component$(() => {
 			</div>
 
 			<div>
-				{rootCollections.map((collection) => (
+				{rootCollections.map(async (collection) => (
 					<section key={collection.id} class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 						<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
 							<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">
@@ -59,17 +59,21 @@ export default component$(() => {
 						</div>
 						<div>
 							<Slider {...ProductsInCollectionShowCase}>
-								{searchQueryWithCollectionSlug(collection.slug).then((data) =>
-									data.items.map((item) => (
-										<ProductsInCollectionCard
-											key={item.productId}
-											productAsset={item.productAsset}
-											productName={item.productName}
-											slug={item.slug}
-											priceWithTax={item.priceWithTax}
-											currencyCode={item.currencyCode}
-										/>
-									))
+								{searchQueryWithCollectionSlug(collection.slug).then(async (data) =>
+									data.items.map(async (item) => {
+										const MRP = await getProductMRP(item.productId); // Fetch MRP for each product
+										return (
+											<ProductsInCollectionCard
+												key={item.productId}
+												productAsset={item.productAsset}
+												productName={item.productName}
+												slug={item.slug}
+												priceWithTax={item.priceWithTax}
+												currencyCode={item.currencyCode}
+												MRP={MRP} // Pass MRP value as a prop
+											/>
+										);
+									})
 								)}
 							</Slider>
 						</div>

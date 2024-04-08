@@ -21,6 +21,16 @@ export const getProductBySlug = async (slug: string) => {
 	return shopSdk.product({ slug }).then((res: ProductQuery) => res.product as Product);
 };
 
+// Function to retrieve a product by its ID
+export const getProductById = async (id: string) => {
+	return shopSdk.product({ id }).then((res: ProductQuery) => res.product as Product);
+};
+
+export const getProductMRP = async (productId: string) => {
+	const product = await getProductById(productId);
+	return product.variants[0]?.customFields?.MRP || null;
+};
+
 export const detailedProductFragment = gql`
 	fragment DetailedProduct on Product {
 		id
@@ -57,6 +67,7 @@ export const detailedProductFragment = gql`
 		}
 		variants {
 			id
+			productId
 			name
 			priceWithTax
 			currencyCode
