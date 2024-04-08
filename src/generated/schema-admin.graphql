@@ -980,7 +980,7 @@ input CreateProductOptionInput {
 }
 
 input CreateProductVariantCustomFieldsInput {
-	DiscountAmount: Int
+	MRP: Int
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
@@ -5971,7 +5971,7 @@ type ProductVariant implements Node {
 }
 
 type ProductVariantCustomFields {
-	DiscountAmount: Int
+	MRP: Int
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime
@@ -5979,7 +5979,7 @@ type ProductVariantCustomFields {
 }
 
 input ProductVariantFilterParameter {
-	DiscountAmount: NumberOperators
+	MRP: NumberOperators
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	enabled: BooleanOperators
@@ -6052,7 +6052,7 @@ input ProductVariantPriceInput {
 }
 
 input ProductVariantSortParameter {
-	DiscountAmount: SortOrder
+	MRP: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	isDigital: SortOrder
@@ -7614,7 +7614,7 @@ input UpdateProductReviewInput {
 }
 
 input UpdateProductVariantCustomFieldsInput {
-	DiscountAmount: Int
+	MRP: Int
 	isDigital: Boolean
 	maxPerOrder: Int
 	releaseDate: DateTime

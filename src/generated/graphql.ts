@@ -2666,7 +2666,7 @@ export type ProductVariant = Node & {
 };
 
 export type ProductVariantCustomFields = {
-	DiscountAmount?: Maybe<Scalars['Int']>;
+	MRP?: Maybe<Scalars['Int']>;
 	isDigital?: Maybe<Scalars['Boolean']>;
 	maxPerOrder?: Maybe<Scalars['Int']>;
 	releaseDate?: Maybe<Scalars['DateTime']>;

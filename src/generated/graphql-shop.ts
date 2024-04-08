@@ -2924,7 +2924,7 @@ export type ProductVariant = Node & {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
-	DiscountAmount?: Maybe<Scalars['Int']['output']>;
+	MRP?: Maybe<Scalars['Int']['output']>;
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
@@ -2932,7 +2932,7 @@ export type ProductVariantCustomFields = {
 };
 
 export type ProductVariantFilterParameter = {
-	DiscountAmount?: InputMaybe<NumberOperators>;
+	MRP?: InputMaybe<NumberOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
@@ -2970,7 +2970,7 @@ export type ProductVariantListOptions = {
 };
 
 export type ProductVariantSortParameter = {
-	DiscountAmount?: InputMaybe<SortOrder>;
+	MRP?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	isDigital?: InputMaybe<SortOrder>;
@@ -5154,10 +5154,7 @@ export type DetailedProductFragment = {
 		sku: string;
 		stockLevel: string;
 		featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
-		customFields?: {
-			__typename?: 'ProductVariantCustomFields';
-			DiscountAmount?: number | null;
-		} | null;
+		customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
 	}>;
 	customFields?: {
 		__typename?: 'ProductCustomFields';
@@ -5235,10 +5232,7 @@ export type ProductQuery = {
 			sku: string;
 			stockLevel: string;
 			featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
-			customFields?: {
-				__typename?: 'ProductVariantCustomFields';
-				DiscountAmount?: number | null;
-			} | null;
+			customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
 		}>;
 		customFields?: {
 			__typename?: 'ProductCustomFields';
@@ -5458,7 +5452,7 @@ export const DetailedProductFragmentDoc = gql`
 				preview
 			}
 			customFields {
-				DiscountAmount
+				MRP
 			}
 		}
 		customFields {

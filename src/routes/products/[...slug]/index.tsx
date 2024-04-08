@@ -7,9 +7,9 @@ import Alert from '~/components/alert/Alert';
 import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
-import DiscountAmount from '~/components/products/DiscountAmount';
 import Price from '~/components/products/Price';
 import ProductCard from '~/components/products/ProductCard';
+import ProductVariantMRP from '~/components/products/ProductVariantMRP';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
 import TopReviews from '~/components/top-reviews/TopReviews';
 import { ProductAdditionalInfo } from '~/components/widgets/ProductAdditionalInfo';
@@ -77,32 +77,6 @@ export default component$(() => {
 	} else {
 		console.log('Product Custom Fields is not available.');
 	}
-
-	// Iterate over each variant and log DiscountAmount if available
-	// productSignal.value.variants.forEach((variant) => {
-	// 	console.log(`Variant ID: ${variant.id}`);
-	// 	console.log(`Variant Custom Fields:`);
-	// 	if (variant.customFields) {
-	// 		// Check if DiscountAmount is available
-	// 		if (typeof variant.customFields.DiscountAmount !== 'undefined') {
-	// 			console.log(`Discount Amount for ${variant.name}: ${variant.customFields.DiscountAmount}`);
-	// 		} else {
-	// 			console.log('Discount Amount is not available for this variant.');
-	// 		}
-	// 	} else {
-	// 		console.log('Custom Fields is not available for this variant.');
-	// 	}
-	// });
-
-	// Accordion static page
-	// const items = [
-	// 	{
-	// 		title: 'Additional Information',
-	// 		content: 'Content for Product Additioanl Info', // Pass product as prop
-	// 	},
-	// 	{ title: 'Item 2', content: 'Content for Item 2' },
-	// 	// ... more items
-	// ];
 
 	return (
 		<div>
@@ -234,10 +208,10 @@ export default component$(() => {
 							</div>
 
 							<div class="mt-4 text-gray-700">
-								{/* Display DiscountAmount if available */}
-								{selectedVariantSignal.value?.customFields?.DiscountAmount !== undefined && (
-									<DiscountAmount
-										discountAmount={selectedVariantSignal.value.customFields?.DiscountAmount}
+								{/* Display M.R.P, discountAmount and discountPercentage  if available */}
+								{selectedVariantSignal.value?.customFields?.MRP !== undefined && (
+									<ProductVariantMRP
+										ProductVariantMRP={selectedVariantSignal.value.customFields?.MRP}
 										priceWithTax={selectedVariantSignal.value.priceWithTax}
 										currencyCode="INR" // Assuming currency code is always 'INR'
 									/>

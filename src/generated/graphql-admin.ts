@@ -949,7 +949,7 @@ export type CreateProductOptionInput = {
 };
 
 export type CreateProductVariantCustomFieldsInput = {
-	DiscountAmount?: InputMaybe<Scalars['Int']['input']>;
+	MRP?: InputMaybe<Scalars['Int']['input']>;
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4832,7 +4832,7 @@ export type ProductVariantStockMovementsArgs = {
 
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
-	DiscountAmount?: Maybe<Scalars['Int']['output']>;
+	MRP?: Maybe<Scalars['Int']['output']>;
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
@@ -4840,7 +4840,7 @@ export type ProductVariantCustomFields = {
 };
 
 export type ProductVariantFilterParameter = {
-	DiscountAmount?: InputMaybe<NumberOperators>;
+	MRP?: InputMaybe<NumberOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
 	enabled?: InputMaybe<BooleanOperators>;
@@ -4901,7 +4901,7 @@ export type ProductVariantPriceInput = {
 };
 
 export type ProductVariantSortParameter = {
-	DiscountAmount?: InputMaybe<SortOrder>;
+	MRP?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	isDigital?: InputMaybe<SortOrder>;
@@ -6578,7 +6578,7 @@ export type UpdateProductReviewInput = {
 };
 
 export type UpdateProductVariantCustomFieldsInput = {
-	DiscountAmount?: InputMaybe<Scalars['Int']['input']>;
+	MRP?: InputMaybe<Scalars['Int']['input']>;
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;

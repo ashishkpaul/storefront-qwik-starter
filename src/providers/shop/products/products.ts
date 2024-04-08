@@ -67,7 +67,7 @@ export const detailedProductFragment = gql`
 				preview
 			}
 			customFields {
-				DiscountAmount
+				MRP
 			}
 		}
 		customFields {
