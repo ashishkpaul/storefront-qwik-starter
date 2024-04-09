@@ -4085,6 +4085,13 @@ export type CollectionsQuery = {
 				promoBannerStatus?: boolean | null;
 				promoBanner?: { __typename?: 'Asset'; id: string; preview: string } | null;
 			} | null;
+			productVariants: {
+				__typename?: 'ProductVariantList';
+				items: Array<{
+					__typename?: 'ProductVariant';
+					customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
+				}>;
+			};
 		}>;
 	};
 };
@@ -5718,6 +5725,13 @@ export const CollectionsDocument = gql`
 						preview
 					}
 					promoBannerStatus
+				}
+				productVariants(options: { take: 12 }) {
+					items {
+						customFields {
+							MRP
+						}
+					}
 				}
 			}
 		}
