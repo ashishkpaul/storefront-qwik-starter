@@ -10,7 +10,7 @@ import { SearchResponse } from '~/generated/graphql';
 import { getCollectionBySlug } from '~/providers/shop/collections/collections';
 
 import {
-	getMRPFromProduct,
+	getProductMRP,
 	searchQueryWithCollectionSlug,
 	searchQueryWithTerm,
 } from '~/providers/shop/products/products';
@@ -150,19 +150,21 @@ export default component$(() => {
 				)}
 				<div class="sm:col-span-5 lg:col-span-4">
 					<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-						{state.search.items.map((item) => (
-							<ProductCard
-								key={item.productId}
-								productAsset={item.productAsset}
-								productName={item.productName}
-								slug={item.slug}
-								priceWithTax={item.priceWithTax}
-								currencyCode={item.currencyCode}
-								// MRP={item.productVariants[0]?.customFields?.MRP} // Accessing MRP field
-								// MRP={getMRPFromCollection(collectionSignal.value)} // Accessing MRP value
-								MRP={getMRPFromProduct(item)} // Call getMRPFromProduct function
-							></ProductCard>
-						))}
+						{Promise.all(
+							state.search.items.map(async (item) => {
+								return (
+									<ProductCard
+										key={item.productId}
+										productAsset={item.productAsset}
+										productName={item.productName}
+										slug={item.slug}
+										priceWithTax={item.priceWithTax}
+										currencyCode={item.currencyCode}
+										MRP={await getProductMRP(item.productId)}
+									></ProductCard>
+								);
+							})
+						)}
 					</div>
 				</div>
 			</div>
