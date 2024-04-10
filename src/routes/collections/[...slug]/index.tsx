@@ -10,6 +10,7 @@ import { SearchResponse } from '~/generated/graphql';
 import { getCollectionBySlug } from '~/providers/shop/collections/collections';
 
 import {
+	getMRPFromProduct,
 	searchQueryWithCollectionSlug,
 	searchQueryWithTerm,
 } from '~/providers/shop/products/products';
@@ -157,6 +158,9 @@ export default component$(() => {
 								slug={item.slug}
 								priceWithTax={item.priceWithTax}
 								currencyCode={item.currencyCode}
+								// MRP={item.productVariants[0]?.customFields?.MRP} // Accessing MRP field
+								// MRP={getMRPFromCollection(collectionSignal.value)} // Accessing MRP value
+								MRP={getMRPFromProduct(item)} // Call getMRPFromProduct function
 							></ProductCard>
 						))}
 					</div>

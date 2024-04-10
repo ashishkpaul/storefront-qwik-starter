@@ -21,6 +21,7 @@ gql`
 				name
 				slug
 				parent {
+					id
 					slug
 					name
 				}
@@ -30,10 +31,10 @@ gql`
 				}
 				customFields {
 					promoBanner {
-						id
 						preview
 					}
 					promoBannerStatus
+					popularityScore
 				}
 			}
 		}

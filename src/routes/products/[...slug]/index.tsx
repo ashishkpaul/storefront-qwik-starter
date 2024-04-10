@@ -68,15 +68,15 @@ export default component$(() => {
 		quantitySignal.value = await calculateQuantities(productSignal.value);
 	});
 
-	// Add these log statements before the console.log for customFields
-	console.log('Product Signal Value:', productSignal.value);
+	// // Add these log statements before the console.log for customFields
+	// console.log('Product Signal Value:', productSignal.value);
 
-	// Check if customFields is defined for the product
-	if (productSignal.value.customFields !== undefined) {
-		console.log('Product Custom Fields:', productSignal.value.customFields);
-	} else {
-		console.log('Product Custom Fields is not available.');
-	}
+	// // Check if customFields is defined for the product
+	// if (productSignal.value.customFields !== undefined) {
+	// 	console.log('Product Custom Fields:', productSignal.value.customFields);
+	// } else {
+	// 	console.log('Product Custom Fields is not available.');
+	// }
 
 	return (
 		<div>

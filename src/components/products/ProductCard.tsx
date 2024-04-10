@@ -1,6 +1,6 @@
 import { $, component$ } from '@builder.io/qwik';
 import { Image } from 'qwik-image';
-import { getProductBySlug } from '~/providers/shop/products/products';
+import { getProductBySlug, getProductMRP } from '~/providers/shop/products/products';
 import { changeUrlParamsWithoutRefresh } from '~/utils';
 import Price from './Price';
 
@@ -11,6 +11,11 @@ export default component$(
 			productSignalSetter(product);
 			changeUrlParamsWithoutRefresh(productName, [slug]);
 		});
+
+		const getProductMRPValue = async () => {
+			const product = await getProductBySlug(slug);
+			return getProductMRP(product.id); // Assuming product ID is required to retrieve MRP
+		};
 
 		return (
 			<a class="flex flex-col mx-auto" href={`/products/${slug}/`} onClick$={handleProductClick}>
@@ -30,6 +35,7 @@ export default component$(
 					currencyCode={currencyCode}
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
+				<div class="text-sm text-gray-700">MRP: {getProductMRPValue()}</div>
 			</a>
 		);
 	}

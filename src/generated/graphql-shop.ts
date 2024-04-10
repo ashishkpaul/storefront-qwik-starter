@@ -4066,7 +4066,6 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
-// export type CollectionsQueryVariables = Exact<{ [key: string]: never; }>;
 export type CollectionsQueryVariables = Exact<{ take: InputMaybe<Scalars['Int']['input']> }>;
 
 export type CollectionsQuery = {
@@ -4078,12 +4077,13 @@ export type CollectionsQuery = {
 			id: string;
 			name: string;
 			slug: string;
-			parent?: { __typename?: 'Collection'; slug: string; name: string } | null;
+			parent?: { __typename?: 'Collection'; id: string; slug: string; name: string } | null;
 			featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
 			customFields?: {
 				__typename?: 'CollectionCustomFields';
 				promoBannerStatus?: boolean | null;
-				promoBanner?: { __typename?: 'Asset'; id: string; preview: string } | null;
+				popularityScore?: number | null;
+				promoBanner?: { __typename?: 'Asset'; preview: string } | null;
 			} | null;
 			productVariants: {
 				__typename?: 'ProductVariantList';
@@ -5712,6 +5712,7 @@ export const CollectionsDocument = gql`
 				name
 				slug
 				parent {
+					id
 					slug
 					name
 				}
@@ -5721,12 +5722,12 @@ export const CollectionsDocument = gql`
 				}
 				customFields {
 					promoBanner {
-						id
 						preview
 					}
 					promoBannerStatus
+					popularityScore
 				}
-				productVariants(options: { take: 12 }) {
+				productVariants(options: { take: 20 }) {
 					items {
 						customFields {
 							MRP

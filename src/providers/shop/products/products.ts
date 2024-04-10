@@ -1,5 +1,11 @@
 import gql from 'graphql-tag';
-import { Product, ProductQuery, SearchInput, SearchResponse } from '~/generated/graphql';
+import {
+	Product,
+	ProductQuery,
+	ProductVariant,
+	SearchInput,
+	SearchResponse,
+} from '~/generated/graphql';
 import { shopSdk } from '~/graphql-wrapper';
 
 export const search = async (searchInput: SearchInput) => {
@@ -29,6 +35,11 @@ export const getProductById = async (id: string) => {
 export const getProductMRP = async (productId: string) => {
 	const product = await getProductById(productId);
 	return product.variants[0]?.customFields?.MRP || null;
+};
+
+export const getMRPFromProduct = (product: any): number | null => {
+	const productVariant: ProductVariant | undefined = product.productVariants?.items?.[0];
+	return productVariant?.customFields?.MRP || null;
 };
 
 export const detailedProductFragment = gql`
