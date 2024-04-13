@@ -34,7 +34,12 @@ export const getProductById = async (id: string) => {
 
 export const getProductMRP = async (productId: string) => {
 	const product = await getProductById(productId);
-	return product.variants[0]?.customFields?.MRP || null;
+	const variant = product.variants[0];
+	if (variant && variant.customFields && variant.customFields.MRP !== undefined) {
+		return variant.customFields.MRP;
+	} else {
+		return null; // Return null if MRP is undefined or not available
+	}
 };
 
 export const getMRPFromProduct = (product: any): number | null => {
@@ -161,6 +166,9 @@ export const listedProductFragment = gql`
 			... on SinglePrice {
 				value
 			}
+		}
+		customProductVariantMappings {
+			MRP
 		}
 	}
 `;

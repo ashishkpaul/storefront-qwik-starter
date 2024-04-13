@@ -1957,6 +1957,10 @@ type CustomFields {
 	Zone: [CustomFieldConfig!]!
 }
 
+type CustomProductVariantMappings {
+	MRP: Int!
+}
+
 type Customer implements Node {
 	addresses: [Address!]
 	createdAt: DateTime!
@@ -5637,6 +5641,16 @@ type PriceRange {
 	min: Money!
 }
 
+type PriceRangeBucket {
+	count: Int!
+	to: Int!
+}
+
+input PriceRangeInput {
+	max: Int!
+	min: Int!
+}
+
 type Product implements Node {
 	assets: [Asset!]!
 	channels: [Channel!]!
@@ -6654,6 +6668,8 @@ input SearchInput {
 	facetValueFilters: [FacetValueFilterInput!]
 	groupByProduct: Boolean
 	inStock: Boolean
+	priceRange: PriceRangeInput
+	priceRangeWithTax: PriceRangeInput
 	skip: Int
 	sort: SearchResultSortParameter
 	take: Int
@@ -6668,7 +6684,15 @@ type SearchResponse {
 	collections: [CollectionResult!]!
 	facetValues: [FacetValueResult!]!
 	items: [SearchResult!]!
+	prices: SearchResponsePriceData!
 	totalItems: Int!
+}
+
+type SearchResponsePriceData {
+	buckets: [PriceRangeBucket!]!
+	bucketsWithTax: [PriceRangeBucket!]!
+	range: PriceRange!
+	rangeWithTax: PriceRange!
 }
 
 type SearchResult {
@@ -6682,11 +6706,14 @@ type SearchResult {
 	"""
 	collectionIds: [ID!]!
 	currencyCode: CurrencyCode!
+	customMappings: CustomProductVariantMappings!
+		@deprecated(reason: "Use customProductMappings or customProductVariantMappings")
+	customProductVariantMappings: CustomProductVariantMappings!
 	description: String!
 	enabled: Boolean!
 	facetIds: [ID!]!
 	facetValueIds: [ID!]!
-	inStock: Boolean!
+	inStock: Boolean
 	price: SearchResultPrice!
 	priceWithTax: SearchResultPrice!
 	productAsset: SearchResultAsset

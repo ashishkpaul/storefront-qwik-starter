@@ -745,6 +745,11 @@ export type CustomFieldConfig =
 	| StringCustomFieldConfig
 	| TextCustomFieldConfig;
 
+export type CustomProductVariantMappings = {
+	__typename?: 'CustomProductVariantMappings';
+	MRP: number | null; // Update the type to allow for null
+};
+
 export type Customer = Node & {
 	__typename?: 'Customer';
 	addresses?: Maybe<Array<Address>>;
@@ -3034,6 +3039,8 @@ export type SearchResult = {
 	/** An array of ids of the Collections in which this result appears */
 	collectionIds: Array<Scalars['ID']>;
 	currencyCode: CurrencyCode;
+	customMappings: CustomProductVariantMappings;
+	customProductVariantMappings: CustomProductVariantMappings;
 	description: Scalars['String'];
 	facetIds: Array<Scalars['ID']>;
 	facetValueIds: Array<Scalars['ID']>;
@@ -4834,6 +4841,7 @@ export type ListedProductFragment = {
 	priceWithTax:
 		| { __typename?: 'PriceRange'; min: any; max: any }
 		| { __typename?: 'SinglePrice'; value: any };
+	customProductVariantMappings: { __typename?: 'CustomProductVariantMappings'; MRP: number };
 };
 
 export type SearchQueryVariables = Exact<{
@@ -4855,6 +4863,7 @@ export type SearchQuery = {
 			priceWithTax:
 				| { __typename?: 'PriceRange'; min: any; max: any }
 				| { __typename?: 'SinglePrice'; value: any };
+			customProductVariantMappings: { __typename?: 'CustomProductVariantMappings'; MRP: number };
 		}>;
 		facetValues: Array<{
 			__typename?: 'FacetValueResult';
@@ -5027,6 +5036,9 @@ export const ListedProductFragmentDoc = gql`
 			... on SinglePrice {
 				value
 			}
+		}
+		customProductVariantMappings {
+			MRP
 		}
 	}
 `;

@@ -797,6 +797,11 @@ export type CustomFieldConfig =
 	| StringCustomFieldConfig
 	| TextCustomFieldConfig;
 
+export type CustomProductVariantMappings = {
+	__typename?: 'CustomProductVariantMappings';
+	MRP: Scalars['Int']['output'];
+};
+
 export type Customer = Node & {
 	__typename?: 'Customer';
 	addresses?: Maybe<Array<Address>>;
@@ -2667,6 +2672,17 @@ export type PriceRange = {
 	min: Scalars['Money']['output'];
 };
 
+export type PriceRangeBucket = {
+	__typename?: 'PriceRangeBucket';
+	count: Scalars['Int']['output'];
+	to: Scalars['Int']['output'];
+};
+
+export type PriceRangeInput = {
+	max: Scalars['Int']['input'];
+	min: Scalars['Int']['input'];
+};
+
 export type Product = Node & {
 	__typename?: 'Product';
 	assets: Array<Asset>;
@@ -3333,6 +3349,8 @@ export type SearchInput = {
 	facetValueFilters?: InputMaybe<Array<FacetValueFilterInput>>;
 	groupByProduct?: InputMaybe<Scalars['Boolean']['input']>;
 	inStock?: InputMaybe<Scalars['Boolean']['input']>;
+	priceRange?: InputMaybe<PriceRangeInput>;
+	priceRangeWithTax?: InputMaybe<PriceRangeInput>;
 	skip?: InputMaybe<Scalars['Int']['input']>;
 	sort?: InputMaybe<SearchResultSortParameter>;
 	take?: InputMaybe<Scalars['Int']['input']>;
@@ -3349,7 +3367,16 @@ export type SearchResponse = {
 	collections: Array<CollectionResult>;
 	facetValues: Array<FacetValueResult>;
 	items: Array<SearchResult>;
+	prices: SearchResponsePriceData;
 	totalItems: Scalars['Int']['output'];
+};
+
+export type SearchResponsePriceData = {
+	__typename?: 'SearchResponsePriceData';
+	buckets: Array<PriceRangeBucket>;
+	bucketsWithTax: Array<PriceRangeBucket>;
+	range: PriceRange;
+	rangeWithTax: PriceRange;
 };
 
 export type SearchResult = {
@@ -3357,10 +3384,13 @@ export type SearchResult = {
 	/** An array of ids of the Collections in which this result appears */
 	collectionIds: Array<Scalars['ID']['output']>;
 	currencyCode: CurrencyCode;
+	/** @deprecated Use customProductMappings or customProductVariantMappings */
+	customMappings: CustomProductVariantMappings;
+	customProductVariantMappings: CustomProductVariantMappings;
 	description: Scalars['String']['output'];
 	facetIds: Array<Scalars['ID']['output']>;
 	facetValueIds: Array<Scalars['ID']['output']>;
-	inStock: Scalars['Boolean']['output'];
+	inStock?: Maybe<Scalars['Boolean']['output']>;
 	price: SearchResultPrice;
 	priceWithTax: SearchResultPrice;
 	productAsset?: Maybe<SearchResultAsset>;
@@ -4085,13 +4115,6 @@ export type CollectionsQuery = {
 				popularityScore?: number | null;
 				promoBanner?: { __typename?: 'Asset'; preview: string } | null;
 			} | null;
-			productVariants: {
-				__typename?: 'ProductVariantList';
-				items: Array<{
-					__typename?: 'ProductVariant';
-					customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
-				}>;
-			};
 		}>;
 	};
 };
@@ -5287,6 +5310,7 @@ export type ListedProductFragment = {
 	priceWithTax:
 		| { __typename?: 'PriceRange'; min: any; max: any }
 		| { __typename?: 'SinglePrice'; value: any };
+	customProductVariantMappings: { __typename?: 'CustomProductVariantMappings'; MRP: number };
 };
 
 export type SearchQueryVariables = Exact<{
@@ -5308,6 +5332,7 @@ export type SearchQuery = {
 			priceWithTax:
 				| { __typename?: 'PriceRange'; min: any; max: any }
 				| { __typename?: 'SinglePrice'; value: any };
+			customProductVariantMappings: { __typename?: 'CustomProductVariantMappings'; MRP: number };
 		}>;
 		facetValues: Array<{
 			__typename?: 'FacetValueResult';
@@ -5526,6 +5551,9 @@ export const ListedProductFragmentDoc = gql`
 				value
 			}
 		}
+		customProductVariantMappings {
+			MRP
+		}
 	}
 `;
 export const LoginDocument = gql`
@@ -5726,13 +5754,6 @@ export const CollectionsDocument = gql`
 					}
 					promoBannerStatus
 					popularityScore
-				}
-				productVariants(options: { take: 20 }) {
-					items {
-						customFields {
-							MRP
-						}
-					}
 				}
 			}
 		}
