@@ -10,7 +10,7 @@ import { SearchResponse } from '~/generated/graphql';
 import { getCollectionBySlug } from '~/providers/shop/collections/collections';
 
 import {
-	getProductMRP,
+	// getProductMRP,
 	searchQueryWithCollectionSlug,
 	searchQueryWithTerm,
 } from '~/providers/shop/products/products';
@@ -160,8 +160,8 @@ export default component$(() => {
 										slug={item.slug}
 										priceWithTax={item.priceWithTax}
 										currencyCode={item.currencyCode}
-										MRP={await getProductMRP(item.productId)}
-									></ProductCard>
+										customProductVariantMappings={item.customProductVariantMappings} // Add this prop
+									/>
 								);
 							})
 						)}

@@ -1,21 +1,29 @@
 import { $, component$ } from '@builder.io/qwik';
 import { Image } from 'qwik-image';
-import { getProductBySlug, getProductMRP } from '~/providers/shop/products/products';
-import { changeUrlParamsWithoutRefresh } from '~/utils';
+import { getProductBySlug } from '~/providers/shop/products/products';
+import { changeUrlParamsWithoutRefresh, formatPrice } from '~/utils';
 import Price from './Price';
 
 export default component$(
-	({ productAsset, productName, slug, priceWithTax, currencyCode, productSignalSetter }: any) => {
+	({
+		productAsset,
+		productName,
+		slug,
+		priceWithTax,
+		currencyCode,
+		productSignalSetter,
+		customProductVariantMappings,
+	}: any) => {
 		const handleProductClick = $(async () => {
 			const product = await getProductBySlug(slug);
 			productSignalSetter(product);
 			changeUrlParamsWithoutRefresh(productName, [slug]);
 		});
 
-		const getProductMRPValue = async () => {
-			const product = await getProductBySlug(slug);
-			return getProductMRP(product.id); // Assuming product ID is required to retrieve MRP
-		};
+		const MRP = customProductVariantMappings?.MRP;
+		const minPrice = priceWithTax.min || priceWithTax.max;
+		const discountPercentage = MRP && minPrice ? Math.round(((MRP - minPrice) / MRP) * 100) : null;
+		const hasDiscount = discountPercentage && discountPercentage > 0;
 
 		return (
 			<a class="flex flex-col mx-auto" href={`/products/${slug}/`} onClick$={handleProductClick}>
@@ -35,7 +43,19 @@ export default component$(
 					currencyCode={currencyCode}
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
-				<div class="text-sm text-gray-700">MRP: {getProductMRPValue()}</div>
+				{hasDiscount && (
+					<div class="flex flex-wrap items-center mt-1">
+						<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
+							Limited time deal
+						</span>
+						<span class="bg-green-500 text-white py-1 px-2 rounded-md mr-2">
+							{discountPercentage}% off
+						</span>
+						<span class={MRP !== null ? 'line-through' : ''}>
+							MRP: {formatPrice(MRP || 0, currencyCode || 'INR')}
+						</span>
+					</div>
+				)}
 			</a>
 		);
 	}

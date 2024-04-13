@@ -4,7 +4,10 @@ import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
 import Hero from '~/components/widgets/Hero';
 import { APP_STATE } from '~/constants';
-import { getProductMRP, searchQueryWithCollectionSlug } from '~/providers/shop/products/products';
+import {
+	// getProductMRP,
+	searchQueryWithCollectionSlug,
+} from '~/providers/shop/products/products';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
@@ -60,20 +63,18 @@ export default component$(() => {
 						<div>
 							<Slider {...ProductsInCollectionShowCase}>
 								{searchQueryWithCollectionSlug(collection.slug).then(async (data) =>
-									data.items.map(async (item) => {
-										const MRP = await getProductMRP(item.productId); // Fetch MRP for each product
-										return (
-											<ProductsInCollectionCard
-												key={item.productId}
-												productAsset={item.productAsset}
-												productName={item.productName}
-												slug={item.slug}
-												priceWithTax={item.priceWithTax}
-												currencyCode={item.currencyCode}
-												MRP={MRP} // Pass MRP value as a prop
-											/>
-										);
-									})
+									data.items.map((item) => (
+										<ProductsInCollectionCard
+											key={item.productId}
+											productAsset={item.productAsset}
+											productName={item.productName}
+											slug={item.slug}
+											priceWithTax={item.priceWithTax}
+											currencyCode={item.currencyCode}
+											// Access MRP directly from customProductVariantMappings
+											MRP={item.customProductVariantMappings?.MRP}
+										/>
+									))
 								)}
 							</Slider>
 						</div>
