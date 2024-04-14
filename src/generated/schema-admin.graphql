@@ -1958,7 +1958,7 @@ type CustomFields {
 }
 
 type CustomProductVariantMappings {
-	MRP: Int!
+	MRP: Int
 }
 
 type Customer implements Node {

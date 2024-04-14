@@ -1,11 +1,5 @@
 import gql from 'graphql-tag';
-import {
-	Product,
-	ProductQuery,
-	ProductVariant,
-	SearchInput,
-	SearchResponse,
-} from '~/generated/graphql';
+import { Product, ProductVariant, SearchInput, SearchResponse } from '~/generated/graphql';
 import { shopSdk } from '~/graphql-wrapper';
 
 export const search = async (searchInput: SearchInput) => {
@@ -23,23 +17,37 @@ export const searchQueryWithTerm = async (
 	facetValueIds: string[]
 ) => search({ collectionSlug, term, facetValueFilters: [{ or: facetValueIds }] });
 
-export const getProductBySlug = async (slug: string) => {
-	return shopSdk.product({ slug }).then((res: ProductQuery) => res.product as Product);
-};
-
-// Function to retrieve a product by its ID
-export const getProductById = async (id: string) => {
-	return shopSdk.product({ id }).then((res: ProductQuery) => res.product as Product);
-};
-
-export const getProductMRP = async (productId: string) => {
-	const product = await getProductById(productId);
-	const variant = product.variants[0];
-	if (variant && variant.customFields && variant.customFields.MRP !== undefined) {
-		return variant.customFields.MRP;
-	} else {
-		return null; // Return null if MRP is undefined or not available
+export const getProductBySlug = async (slug: string): Promise<Product | null> => {
+	try {
+		const res = await shopSdk.product({ slug });
+		return res.product as Product;
+	} catch (error) {
+		console.error('Error fetching product:', error);
+		return null;
 	}
+};
+
+export const getProductById = async (id: string): Promise<Product | null> => {
+	try {
+		const res = await shopSdk.product({ id });
+		return res.product as Product;
+	} catch (error) {
+		console.error('Error fetching product:', error);
+		return null;
+	}
+};
+
+export const getProductMRP = async (productId: string): Promise<number | null> => {
+	const product = await getProductById(productId);
+
+	if (product && product.variants && product.variants.length > 0) {
+		const variant = product.variants[0];
+		if (variant.customFields && variant.customFields.MRP !== undefined) {
+			return variant.customFields.MRP;
+		}
+	}
+
+	return null; // Return null if product or MRP is not available
 };
 
 export const getMRPFromProduct = (product: any): number | null => {
@@ -133,6 +141,9 @@ export const detailedProductFragment = gql`
 					featuredAsset {
 						id
 						preview
+					}
+					customFields {
+						MRP
 					}
 				}
 			}

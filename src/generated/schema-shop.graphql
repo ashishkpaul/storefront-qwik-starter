@@ -1238,7 +1238,7 @@ union CustomFieldConfig =
 	| TextCustomFieldConfig
 
 type CustomProductVariantMappings {
-	MRP: Int!
+	MRP: Int
 }
 
 type Customer implements Node {

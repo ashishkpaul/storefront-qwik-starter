@@ -2548,6 +2548,13 @@ export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	printfulProductId?: Maybe<Scalars['String']>;
 	relatedProducts?: Maybe<Array<Product>>;
+	// featuredReview?: Maybe<ProductReview>;
+	infoUrl?: Maybe<Scalars['String']>;
+	popularityScore?: Maybe<Scalars['Int']>;
+	primaryCollection?: Maybe<Collection>;
+	reviewCount?: Maybe<Scalars['Float']>;
+	reviewRating?: Maybe<Scalars['Float']>;
+	weight?: Maybe<Scalars['Int']>;
 };
 
 export type ProductFilterParameter = {
@@ -2681,6 +2688,7 @@ export type ProductVariantCustomFields = {
 };
 
 export type ProductVariantFilterParameter = {
+	MRP?: InputMaybe<NumberOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
@@ -2715,8 +2723,10 @@ export type ProductVariantListOptions = {
 };
 
 export type ProductVariantSortParameter = {
+	MRP?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
+	isDigital?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	price?: InputMaybe<SortOrder>;
 	priceWithTax?: InputMaybe<SortOrder>;
@@ -4782,7 +4792,40 @@ export type DetailedProductFragment = {
 		sku: string;
 		stockLevel: string;
 		featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+		customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
 	}>;
+	customFields?: {
+		__typename?: 'ProductCustomFields';
+		additionalInfo?: string | null;
+		infoUrl?: string | null;
+		relatedProducts?: Array<{
+			__typename?: 'Product';
+			id: string;
+			name: string;
+			slug: string;
+			description: string;
+			facetValues: Array<{
+				__typename?: 'FacetValue';
+				id: string;
+				code: string;
+				name: string;
+				facet: { __typename?: 'Facet'; id: string; code: string; name: string };
+			}>;
+			featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+			assets: Array<{ __typename?: 'Asset'; id: string; preview: string }>;
+			variants: Array<{
+				__typename?: 'ProductVariant';
+				id: string;
+				name: string;
+				priceWithTax: any;
+				currencyCode: CurrencyCode;
+				sku: string;
+				stockLevel: string;
+				featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+				customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
+			}>;
+		}> | null;
+	} | null;
 };
 
 export type ProductQueryVariables = Exact<{
@@ -4827,9 +4870,42 @@ export type ProductQuery = {
 			sku: string;
 			stockLevel: string;
 			featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+			customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
 		}>;
+		customFields?: {
+			__typename?: 'ProductCustomFields';
+			additionalInfo?: string | null;
+			infoUrl?: string | null;
+			relatedProducts?: Array<{
+				__typename?: 'Product';
+				id: string;
+				name: string;
+				slug: string;
+				description: string;
+				facetValues: Array<{
+					__typename?: 'FacetValue';
+					id: string;
+					code: string;
+					name: string;
+					facet: { __typename?: 'Facet'; id: string; code: string; name: string };
+				}>;
+				featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+				assets: Array<{ __typename?: 'Asset'; id: string; preview: string }>;
+				variants: Array<{
+					__typename?: 'ProductVariant';
+					id: string;
+					name: string;
+					priceWithTax: any;
+					currencyCode: CurrencyCode;
+					sku: string;
+					stockLevel: string;
+					featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+					customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
+				}>;
+			}> | null;
+		} | null;
 	} | null;
-};
+} | null;
 
 export type ListedProductFragment = {
 	__typename?: 'SearchResult';
@@ -5015,9 +5091,56 @@ export const DetailedProductFragmentDoc = gql`
 				id
 				preview
 			}
+			customFields {
+				MRP
+			}
+		}
+		customFields {
+			additionalInfo
+			infoUrl
+			relatedProducts {
+				id
+				name
+				slug
+				description
+				facetValues {
+					facet {
+						id
+						code
+						name
+					}
+					id
+					code
+					name
+				}
+				featuredAsset {
+					id
+					preview
+				}
+				assets {
+					id
+					preview
+				}
+				variants {
+					id
+					name
+					priceWithTax
+					currencyCode
+					sku
+					stockLevel
+					featuredAsset {
+						id
+						preview
+					}
+					customFields {
+						MRP
+					}
+				}
+			}
 		}
 	}
 `;
+
 export const ListedProductFragmentDoc = gql`
 	fragment ListedProduct on SearchResult {
 		productId

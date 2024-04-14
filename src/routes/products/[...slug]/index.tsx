@@ -8,8 +8,9 @@ import Breadcrumbs from '~/components/breadcrumbs/Breadcrumbs';
 import CheckIcon from '~/components/icons/CheckIcon';
 import HeartIcon from '~/components/icons/HeartIcon';
 import Price from '~/components/products/Price';
-import ProductCard from '~/components/products/ProductCard';
+// import ProductCard from '~/components/products/ProductCard';
 import ProductVariantMRP from '~/components/products/ProductVariantMRP';
+import RelatedProductsCard from '~/components/products/RelatedProductsCard';
 import StockLevelLabel from '~/components/stock-level-label/StockLevelLabel';
 import TopReviews from '~/components/top-reviews/TopReviews';
 import { ProductAdditionalInfo } from '~/components/widgets/ProductAdditionalInfo';
@@ -35,6 +36,11 @@ export const useProductLoader = routeLoader$(async ({ params }) => {
 
 export default component$(() => {
 	const appState = useContext(APP_STATE);
+	const productSignal = useProductLoader();
+	if (!productSignal.value) {
+		return <div>Loading...</div>;
+	}
+
 	const relatedProductSlider = {
 		scrollSpeed: 1,
 		autoScroll: false,
@@ -54,7 +60,6 @@ export default component$(() => {
 		return result;
 	});
 
-	const productSignal = useProductLoader();
 	const currentImageSig = useSignal(productSignal.value.assets[0]);
 	const selectedVariantIdSignal = useSignal(productSignal.value.variants[0].id);
 	const selectedVariantSignal = useComputed$(() =>
@@ -261,7 +266,7 @@ export default component$(() => {
 					{productSignal.value.customFields?.relatedProducts?.map((relatedProduct: any) => {
 						const relatedVariant = relatedProduct.variants?.[0];
 						return (
-							<ProductCard
+							<RelatedProductsCard
 								productAsset={relatedProduct.featuredAsset}
 								productName={relatedProduct.name}
 								slug={relatedProduct.slug} // Pass the slug prop
@@ -269,6 +274,7 @@ export default component$(() => {
 								currencyCode={relatedVariant?.currencyCode}
 								key={relatedProduct.id}
 								productSignalSetter={productSignal}
+								customProductVariantMappings={relatedVariant?.customFields?.MRP}
 							/>
 						);
 					})}
@@ -286,6 +292,10 @@ export default component$(() => {
 
 export const head: DocumentHead = ({ resolveValue, url }) => {
 	const product = resolveValue(useProductLoader);
+	if (!product) {
+		// Return default values or handle the case when product is null
+		return generateDocumentHead(url.href, '', '', '');
+	}
 	return generateDocumentHead(
 		url.href,
 		product.name,

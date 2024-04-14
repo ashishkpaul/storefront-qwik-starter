@@ -20,6 +20,8 @@ export default component$(
 			changeUrlParamsWithoutRefresh(productName, [slug]);
 		});
 
+		// console.log('Custom Product Variant Mappings:', customProductVariantMappings);
+
 		const MRP = customProductVariantMappings?.MRP;
 		const minPrice = priceWithTax.min || priceWithTax.max;
 		const discountPercentage = MRP && minPrice ? Math.round(((MRP - minPrice) / MRP) * 100) : null;

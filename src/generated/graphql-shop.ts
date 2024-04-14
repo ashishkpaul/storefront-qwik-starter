@@ -799,7 +799,7 @@ export type CustomFieldConfig =
 
 export type CustomProductVariantMappings = {
 	__typename?: 'CustomProductVariantMappings';
-	MRP: Scalars['Int']['output'];
+	MRP?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Customer = Node & {
@@ -5215,6 +5215,7 @@ export type DetailedProductFragment = {
 				sku: string;
 				stockLevel: string;
 				featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+				customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
 			}>;
 		}> | null;
 	} | null;
@@ -5294,6 +5295,7 @@ export type ProductQuery = {
 					sku: string;
 					stockLevel: string;
 					featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+					customFields?: { __typename?: 'ProductVariantCustomFields'; MRP?: number | null } | null;
 				}>;
 			}> | null;
 		} | null;
@@ -5310,7 +5312,10 @@ export type ListedProductFragment = {
 	priceWithTax:
 		| { __typename?: 'PriceRange'; min: any; max: any }
 		| { __typename?: 'SinglePrice'; value: any };
-	customProductVariantMappings: { __typename?: 'CustomProductVariantMappings'; MRP: number };
+	customProductVariantMappings: {
+		__typename?: 'CustomProductVariantMappings';
+		MRP?: number | null;
+	};
 };
 
 export type SearchQueryVariables = Exact<{
@@ -5332,7 +5337,10 @@ export type SearchQuery = {
 			priceWithTax:
 				| { __typename?: 'PriceRange'; min: any; max: any }
 				| { __typename?: 'SinglePrice'; value: any };
-			customProductVariantMappings: { __typename?: 'CustomProductVariantMappings'; MRP: number };
+			customProductVariantMappings: {
+				__typename?: 'CustomProductVariantMappings';
+				MRP?: number | null;
+			};
 		}>;
 		facetValues: Array<{
 			__typename?: 'FacetValueResult';
@@ -5526,6 +5534,9 @@ export const DetailedProductFragmentDoc = gql`
 					featuredAsset {
 						id
 						preview
+					}
+					customFields {
+						MRP
 					}
 				}
 			}

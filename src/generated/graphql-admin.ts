@@ -1462,7 +1462,7 @@ export type CustomFields = {
 
 export type CustomProductVariantMappings = {
 	__typename?: 'CustomProductVariantMappings';
-	MRP: Scalars['Int']['output'];
+	MRP?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Customer = Node & {
