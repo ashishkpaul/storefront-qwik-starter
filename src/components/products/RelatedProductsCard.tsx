@@ -13,7 +13,7 @@ export default component$(
 		priceWithTax,
 		currencyCode,
 		productSignalSetter,
-		customProductVariantMappings,
+		MaxRetailPrice,
 	}: any) => {
 		const handleProductClick = $(async () => {
 			const product = await getProductBySlug(slug);
@@ -21,9 +21,9 @@ export default component$(
 			changeUrlParamsWithoutRefresh(productName, [slug]);
 		});
 
-		// console.log('Custom Product Variant Mappings MRP:', customProductVariantMappings);
+		// console.log('Custom Product Variant Mappings MRP:', MaxRetailPrice);
 
-		const MRP = customProductVariantMappings;
+		const MRP = MaxRetailPrice;
 		const minPrice = priceWithTax.min || priceWithTax.max;
 		const discountPercentage = MRP && minPrice ? Math.round(((MRP - minPrice) / MRP) * 100) : null;
 		const hasDiscount = discountPercentage && discountPercentage > 0;
@@ -47,7 +47,7 @@ export default component$(
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
 				{hasDiscount && (
-					<div class="flex flex-wrap items-center mt-1">
+					<div class="flex flex-wrap items-center mt-1 text-xs">
 						<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
 							Limited time deal
 						</span>
@@ -60,7 +60,7 @@ export default component$(
 						)}
 					</div>
 				)}
-				{/* Conditionally render customProductVariantMappings */}
+				{/* Conditionally render MaxRetailPrice */}
 				<ProductVariantMRP
 					ProductVariantMRP={MRP} // Pass MRP to ProductVariantMRP component
 					priceWithTax={priceWithTax}

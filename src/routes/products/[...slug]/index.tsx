@@ -274,7 +274,7 @@ export default component$(() => {
 								currencyCode={relatedVariant?.currencyCode}
 								key={relatedProduct.id}
 								productSignalSetter={productSignal}
-								customProductVariantMappings={relatedVariant?.customFields?.MRP}
+								MaxRetailPrice={relatedVariant?.customFields?.MRP}
 							/>
 						);
 					})}

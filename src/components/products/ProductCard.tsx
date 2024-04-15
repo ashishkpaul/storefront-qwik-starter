@@ -26,6 +26,7 @@ export default component$(
 		const minPrice = priceWithTax.min || priceWithTax.max;
 		const discountPercentage = MRP && minPrice ? Math.round(((MRP - minPrice) / MRP) * 100) : null;
 		const hasDiscount = discountPercentage && discountPercentage > 0;
+		const discountAmount = MRP && minPrice ? MRP - minPrice : null; // Calculate discount amount
 
 		return (
 			<a class="flex flex-col mx-auto" href={`/products/${slug}/`} onClick$={handleProductClick}>
@@ -46,7 +47,7 @@ export default component$(
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
 				{hasDiscount && (
-					<div class="flex flex-wrap items-center mt-1">
+					<div class="flex flex-wrap items-center mt-1 text-xs">
 						<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
 							Limited time deal
 						</span>
@@ -54,8 +55,13 @@ export default component$(
 							{discountPercentage}% off
 						</span>
 						<span class={MRP !== null ? 'line-through' : ''}>
-							MRP: {formatPrice(MRP || 0, currencyCode || 'INR')}
+							<span class="text-gray-500">MRP:</span> {formatPrice(MRP || 0, currencyCode || 'INR')}
 						</span>
+						{discountAmount !== null && ( // Render discount amount if available
+							<span class="ml-2 text-gray-500">
+								{formatPrice(discountAmount, currencyCode || 'INR')} off
+							</span>
+						)}
 					</div>
 				)}
 			</a>

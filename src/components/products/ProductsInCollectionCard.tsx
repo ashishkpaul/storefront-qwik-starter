@@ -21,6 +21,7 @@ export default component$(
 		const formattedMRP = formatPrice(MRP || 0, currencyCode || 'INR'); // Pre-format MRP (if always available)
 
 		let calculatedDiscountPercentage = null;
+		let discountAmount = 0;
 
 		const handleProductClick = $(async () => {
 			const product = await getProductBySlug(slug);
@@ -32,7 +33,7 @@ export default component$(
 			const minPrice = priceWithTax.min || priceWithTax.max;
 
 			if (MRP > minPrice) {
-				const discountAmount = MRP - minPrice;
+				discountAmount = MRP - minPrice;
 				calculatedDiscountPercentage = Math.round((discountAmount / MRP) * 100);
 			}
 		}
@@ -56,7 +57,7 @@ export default component$(
 					forcedClass="text-sm font-medium text-gray-900"
 				/>
 				{MRP && priceWithTax && MRP > priceWithTax.min && (
-					<div class="flex flex-wrap items-center mt-1">
+					<div class="flex flex-wrap items-center mt-1 text-xs">
 						<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
 							Limited time deal
 						</span>
@@ -65,7 +66,13 @@ export default component$(
 								{calculatedDiscountPercentage}% off
 							</span>
 						)}
-						<span class={MRP !== null ? 'line-through' : ''}>{formattedMRP}</span>
+						<span class="text-gray-500">MRP:</span> {/* Add MRP label */}
+						<span class="line-through ml-1">{formattedMRP}</span> {/* Formatted MRP */}
+						{discountAmount > 0 && (
+							<span class="ml-2 text-gray-500">
+								{formatPrice(discountAmount, currencyCode)} off
+							</span>
+						)}
 					</div>
 				)}
 			</a>

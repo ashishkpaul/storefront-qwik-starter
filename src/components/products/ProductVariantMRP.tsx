@@ -24,24 +24,26 @@ export default component$<{
 				{/* First line: Limited time deal + Discount percentage */}
 				<div class="flex flex-wrap items-center">
 					{ProductVariantMRP !== null && (
-						<span class="bg-yellow-500 text-white py-1 px-2 rounded-md mr-2">
+						<span class="bg-yellow-500 text-white text-xs py-1 px-2 rounded-md mr-2">
 							Limited time deal
 						</span>
 					)}
 					{discountPercentage !== null && (
-						<span class="bg-green-500 text-white py-1 px-2 rounded-md mr-2">
+						<span class="bg-green-500 text-white text-xs py-1 px-2 rounded-md mr-2">
 							{discountPercentage}% off
 						</span>
 					)}
 				</div>
 				{/* Second line: M.R.P and DiscountAmount */}
-				<div class="flex items-center mt-1">
-					M.R.P:{' '}
+				<div class="flex items-center mt-1 text-xs">
+					<span class="text-gray-500">MRP:</span>{' '}
 					<span class={ProductVariantMRP !== null ? 'line-through' : ''}>
 						{formatPrice(ProductVariantMRP || 0, currencyCode || 'INR')}
 					</span>
 					{', '}
-					Discount: {formatPrice(discountAmount || 0, currencyCode || 'INR')}
+					{discountAmount > 0 && (
+						<span class="ml-2 text-gray-500">{formatPrice(discountAmount, currencyCode)} off</span>
+					)}
 				</div>
 				{/* Third line: Display discount percentage */}
 				{/* {discountPercentage !== null && (
