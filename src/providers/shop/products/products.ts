@@ -1,5 +1,11 @@
 import gql from 'graphql-tag';
-import { Product, ProductVariant, SearchInput, SearchResponse } from '~/generated/graphql';
+import {
+	Product,
+	ProductQuery,
+	ProductVariant,
+	SearchInput,
+	SearchResponse,
+} from '~/generated/graphql';
 import { shopSdk } from '~/graphql-wrapper';
 
 export const search = async (searchInput: SearchInput) => {
@@ -19,8 +25,13 @@ export const searchQueryWithTerm = async (
 
 export const getProductBySlug = async (slug: string): Promise<Product | null> => {
 	try {
-		const res = await shopSdk.product({ slug });
-		return res.product as Product;
+		const res: ProductQuery = await shopSdk.product({ slug });
+		if (res.product) {
+			return res.product as Product;
+		} else {
+			console.error('Product not found.');
+			return null;
+		}
 	} catch (error) {
 		console.error('Error fetching product:', error);
 		return null;
