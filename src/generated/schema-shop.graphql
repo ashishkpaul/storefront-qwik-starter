@@ -104,6 +104,7 @@ type BooleanCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -186,6 +187,8 @@ type CollectionCustomFields {
 }
 
 input CollectionFilterParameter {
+	_and: [CollectionFilterParameter!]
+	_or: [CollectionFilterParameter!]
 	createdAt: DateOperators
 	description: StringOperators
 	id: IDOperators
@@ -211,7 +214,7 @@ input CollectionListOptions {
 	filter: CollectionFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1222,6 +1225,7 @@ interface CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -1261,6 +1265,8 @@ type CustomerCustomFields {
 }
 
 input CustomerFilterParameter {
+	_and: [CustomerFilterParameter!]
+	_or: [CustomerFilterParameter!]
 	createdAt: DateOperators
 	emailAddress: StringOperators
 	firstName: StringOperators
@@ -1293,7 +1299,7 @@ input CustomerListOptions {
 	filter: CustomerFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1367,6 +1373,7 @@ type DateTimeCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	step: Int
 	type: String!
 	ui: JSON
@@ -1465,6 +1472,8 @@ type Facet implements Node {
 }
 
 input FacetFilterParameter {
+	_and: [FacetFilterParameter!]
+	_or: [FacetFilterParameter!]
 	code: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
@@ -1485,7 +1494,7 @@ input FacetListOptions {
 	filter: FacetFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1548,6 +1557,8 @@ input FacetValueFilterInput {
 }
 
 input FacetValueFilterParameter {
+	_and: [FacetValueFilterParameter!]
+	_or: [FacetValueFilterParameter!]
 	code: StringOperators
 	createdAt: DateOperators
 	facetId: IDOperators
@@ -1569,7 +1580,7 @@ input FacetValueListOptions {
 	filter: FacetValueFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1625,6 +1636,7 @@ type FloatCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	step: Float
 	type: String!
 	ui: JSON
@@ -1678,6 +1690,8 @@ type HistoryEntry implements Node {
 }
 
 input HistoryEntryFilterParameter {
+	_and: [HistoryEntryFilterParameter!]
+	_or: [HistoryEntryFilterParameter!]
 	createdAt: DateOperators
 	id: IDOperators
 	type: StringOperators
@@ -1696,7 +1710,7 @@ input HistoryEntryListOptions {
 	filter: HistoryEntryFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -1740,6 +1754,7 @@ enum HistoryEntryType {
 	ORDER_CANCELLATION
 	ORDER_COUPON_APPLIED
 	ORDER_COUPON_REMOVED
+	ORDER_CUSTOMER_UPDATED
 	ORDER_FULFILLMENT
 	ORDER_FULFILLMENT_TRANSITION
 	ORDER_MODIFIED
@@ -1822,6 +1837,7 @@ type IntCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	step: Int
 	type: String!
 	ui: JSON
@@ -2647,6 +2663,7 @@ type LocaleStringCustomFieldConfig implements CustomField {
 	nullable: Boolean
 	pattern: String
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -2659,6 +2676,7 @@ type LocaleTextCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -3050,6 +3068,8 @@ type OrderCustomFields {
 }
 
 input OrderFilterParameter {
+	_and: [OrderFilterParameter!]
+	_or: [OrderFilterParameter!]
 	active: BooleanOperators
 	code: StringOperators
 	createdAt: DateOperators
@@ -3208,7 +3228,7 @@ input OrderListOptions {
 	filter: OrderFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -3985,6 +4005,7 @@ type Product implements Node {
 	createdAt: DateTime!
 	customFields: ProductCustomFields
 	description: String!
+	enabled: Boolean!
 	facetValues: [FacetValue!]!
 	featuredAsset: Asset
 	id: ID!
@@ -4023,9 +4044,12 @@ type ProductCustomFields {
 }
 
 input ProductFilterParameter {
+	_and: [ProductFilterParameter!]
+	_or: [ProductFilterParameter!]
 	additionalInfo: StringOperators
 	createdAt: DateOperators
 	description: StringOperators
+	enabled: BooleanOperators
 	id: IDOperators
 	infoUrl: StringOperators
 	languageCode: StringOperators
@@ -4050,7 +4074,7 @@ input ProductListOptions {
 	filter: ProductFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -4130,6 +4154,8 @@ type ProductReview implements Node {
 }
 
 input ProductReviewFilterParameter {
+	_and: [ProductReviewFilterParameter!]
+	_or: [ProductReviewFilterParameter!]
 	authorLocation: StringOperators
 	authorName: StringOperators
 	body: StringOperators
@@ -4162,7 +4188,7 @@ input ProductReviewListOptions {
 	filter: ProductReviewFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -4258,6 +4284,8 @@ type ProductVariantCustomFields {
 
 input ProductVariantFilterParameter {
 	MRP: NumberOperators
+	_and: [ProductVariantFilterParameter!]
+	_or: [ProductVariantFilterParameter!]
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	id: IDOperators
@@ -4287,7 +4315,7 @@ input ProductVariantListOptions {
 	filter: ProductVariantFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -4355,6 +4383,8 @@ type PromotionCustomFields {
 }
 
 input PromotionFilterParameter {
+	_and: [PromotionFilterParameter!]
+	_or: [PromotionFilterParameter!]
 	couponCode: StringOperators
 	createdAt: DateOperators
 	description: StringOperators
@@ -4380,7 +4410,7 @@ input PromotionListOptions {
 	filter: PromotionFilterParameter
 
 	"""
-	Specifies whether multiple "filter" arguments should be combines with a logical AND or OR operation. Defaults to AND.
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
 	"""
 	filterOperator: LogicalOperator
 
@@ -4623,6 +4653,7 @@ type RelationCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	scalarFields: [String!]!
 	type: String!
 	ui: JSON
@@ -4849,6 +4880,7 @@ type StringCustomFieldConfig implements CustomField {
 	options: [StringFieldOption!]
 	pattern: String
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
@@ -4961,6 +4993,7 @@ type TextCustomFieldConfig implements CustomField {
 	name: String!
 	nullable: Boolean
 	readonly: Boolean
+	requiresPermission: [Permission!]
 	type: String!
 	ui: JSON
 }
