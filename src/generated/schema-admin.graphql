@@ -965,7 +965,6 @@ input CreateProductCustomFieldsInput {
 	featuredReviewId: ID
 	infoUrl: String
 	popularityScore: Int
-	primaryCollectionId: ID
 	relatedProductsIds: [ID!]
 	reviewCount: Float
 	reviewRating: Float
@@ -1000,6 +999,7 @@ input CreateProductVariantCustomFieldsInput {
 	MRP: Int
 	isDigital: Boolean
 	maxPerOrder: Int
+	onlyAllowPer: [String!]
 	releaseDate: DateTime
 	weight: Int
 }
@@ -1028,15 +1028,11 @@ input CreateProductVariantOptionInput {
 	translations: [ProductOptionTranslationInput!]!
 }
 
-input CreatePromotionCustomFieldsInput {
-	promotionsId: ID
-}
-
 input CreatePromotionInput {
 	actions: [ConfigurableOperationInput!]!
 	conditions: [ConfigurableOperationInput!]!
 	couponCode: String
-	customFields: CreatePromotionCustomFieldsInput
+	customFields: JSON
 	enabled: Boolean!
 	endsAt: DateTime
 	perCustomerUsageLimit: Int
@@ -1062,6 +1058,17 @@ input CreateRoleInput {
 }
 
 input CreateSellerCustomFieldsInput {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: Int
+	SellerVatNo: String
+	SellerWebsite: String
 	connectedAccountId: String
 }
 
@@ -2002,6 +2009,7 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
+	stripeCustomerId: String
 	websiteUrl: String
 }
 
@@ -2015,6 +2023,7 @@ input CustomerFilterParameter {
 	lastName: StringOperators
 	phoneNumber: StringOperators
 	postalCode: StringOperators
+	stripeCustomerId: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
 	websiteUrl: StringOperators
@@ -2116,6 +2125,7 @@ input CustomerSortParameter {
 	id: SortOrder
 	lastName: SortOrder
 	phoneNumber: SortOrder
+	stripeCustomerId: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
 	websiteUrl: SortOrder
@@ -4419,7 +4429,6 @@ type Mutation {
 	Allows a different Customer to be assigned to an Order. Added in v2.2.0.
 	"""
 	setOrderCustomer(input: SetOrderCustomerInput!): Order
-	setPromotionsImage(file: Upload!): Asset
 
 	"""
 	Set all webhooks for the current channel. This will overwrite any existing webhooks.
@@ -5292,11 +5301,6 @@ enum Permission {
 	CreatePromotion
 
 	"""
-	Grants permission to create PromotionBanner
-	"""
-	CreatePromotionBanner
-
-	"""
 	Grants permission to create Seller
 	"""
 	CreateSeller
@@ -5405,11 +5409,6 @@ enum Permission {
 	Grants permission to delete Promotion
 	"""
 	DeletePromotion
-
-	"""
-	Grants permission to delete PromotionBanner
-	"""
-	DeletePromotionBanner
 
 	"""
 	Grants permission to delete Seller
@@ -5535,11 +5534,6 @@ enum Permission {
 	Grants permission to read Promotion
 	"""
 	ReadPromotion
-
-	"""
-	Grants permission to read PromotionBanner
-	"""
-	ReadPromotionBanner
 
 	"""
 	Grants permission to read Seller
@@ -5672,11 +5666,6 @@ enum Permission {
 	UpdatePromotion
 
 	"""
-	Grants permission to update PromotionBanner
-	"""
-	UpdatePromotionBanner
-
-	"""
 	Grants permission to update Seller
 	"""
 	UpdateSeller
@@ -5789,7 +5778,6 @@ type ProductCustomFields {
 	featuredReview: ProductReview
 	infoUrl: String
 	popularityScore: Int
-	primaryCollection: Collection
 	relatedProducts: [Product!]
 	reviewCount: Float
 	reviewRating: Float
@@ -6016,7 +6004,6 @@ input ProductSortParameter {
 	infoUrl: SortOrder
 	name: SortOrder
 	popularityScore: SortOrder
-	primaryCollection: SortOrder
 	reviewCount: SortOrder
 	reviewRating: SortOrder
 	seoDescription: SortOrder
@@ -6094,6 +6081,7 @@ type ProductVariantCustomFields {
 	MRP: Int
 	isDigital: Boolean
 	maxPerOrder: Int
+	onlyAllowPer: [String!]
 	releaseDate: DateTime
 	weight: Int
 }
@@ -6111,6 +6099,7 @@ input ProductVariantFilterParameter {
 	languageCode: StringOperators
 	maxPerOrder: NumberOperators
 	name: StringOperators
+	onlyAllowPer: StringListOperators
 	outOfStockThreshold: NumberOperators
 	price: NumberOperators
 	priceWithTax: NumberOperators
@@ -6214,7 +6203,7 @@ type Promotion implements Node {
 	conditions: [ConfigurableOperation!]!
 	couponCode: String
 	createdAt: DateTime!
-	customFields: PromotionCustomFields
+	customFields: JSON
 	description: String!
 	enabled: Boolean!
 	endsAt: DateTime
@@ -6225,10 +6214,6 @@ type Promotion implements Node {
 	translations: [PromotionTranslation!]!
 	updatedAt: DateTime!
 	usageLimit: Int
-}
-
-type PromotionCustomFields {
-	promotions: Asset
 }
 
 input PromotionFilterParameter {
@@ -6287,7 +6272,6 @@ input PromotionSortParameter {
 	id: SortOrder
 	name: SortOrder
 	perCustomerUsageLimit: SortOrder
-	promotions: SortOrder
 	startsAt: SortOrder
 	updatedAt: SortOrder
 	usageLimit: SortOrder
@@ -6895,10 +6879,32 @@ type Seller implements Node {
 }
 
 type SellerCustomFields {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: Int
+	SellerVatNo: String
+	SellerWebsite: String
 	connectedAccountId: String
 }
 
 input SellerFilterParameter {
+	SellerBillingAddress: StringOperators
+	SellerBillingCity: StringOperators
+	SellerBillingCountry: StringOperators
+	SellerBillingCycle: StringOperators
+	SellerBillingPostalCode: StringOperators
+	SellerBillingState: StringOperators
+	SellerIndustry: StringOperators
+	SellerOthersNote: StringOperators
+	SellerPhoneNo: NumberOperators
+	SellerVatNo: StringOperators
+	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
 	_or: [SellerFilterParameter!]
 	connectedAccountId: StringOperators
@@ -6941,6 +6947,17 @@ input SellerListOptions {
 }
 
 input SellerSortParameter {
+	SellerBillingAddress: SortOrder
+	SellerBillingCity: SortOrder
+	SellerBillingCountry: SortOrder
+	SellerBillingCycle: SortOrder
+	SellerBillingPostalCode: SortOrder
+	SellerBillingState: SortOrder
+	SellerIndustry: SortOrder
+	SellerOthersNote: SortOrder
+	SellerPhoneNo: SortOrder
+	SellerVatNo: SortOrder
+	SellerWebsite: SortOrder
 	connectedAccountId: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
@@ -7766,7 +7783,6 @@ input UpdateProductCustomFieldsInput {
 	featuredReviewId: ID
 	infoUrl: String
 	popularityScore: Int
-	primaryCollectionId: ID
 	relatedProductsIds: [ID!]
 	reviewCount: Float
 	reviewRating: Float
@@ -7809,6 +7825,7 @@ input UpdateProductVariantCustomFieldsInput {
 	MRP: Int
 	isDigital: Boolean
 	maxPerOrder: Int
+	onlyAllowPer: [String!]
 	releaseDate: DateTime
 	weight: Int
 }
@@ -7841,15 +7858,11 @@ input UpdateProductVariantInput {
 	useGlobalOutOfStockThreshold: Boolean
 }
 
-input UpdatePromotionCustomFieldsInput {
-	promotionsId: ID
-}
-
 input UpdatePromotionInput {
 	actions: [ConfigurableOperationInput!]
 	conditions: [ConfigurableOperationInput!]
 	couponCode: String
-	customFields: UpdatePromotionCustomFieldsInput
+	customFields: JSON
 	enabled: Boolean
 	endsAt: DateTime
 	id: ID!
@@ -7878,6 +7891,17 @@ input UpdateRoleInput {
 }
 
 input UpdateSellerCustomFieldsInput {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: Int
+	SellerVatNo: String
+	SellerWebsite: String
 	connectedAccountId: String
 }
 

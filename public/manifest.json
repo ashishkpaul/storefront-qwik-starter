@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/web-manifest-combined.json",
-	"name": "DingPack",
+	"name": "Buylits",
 	"short_name": "Local City Online Store",
 	"start_url": ".",
 	"display": "standalone",

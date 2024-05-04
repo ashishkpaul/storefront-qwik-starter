@@ -934,7 +934,6 @@ export type CreateProductCustomFieldsInput = {
 	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
-	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	reviewCount?: InputMaybe<Scalars['Float']['input']>;
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
@@ -969,6 +968,7 @@ export type CreateProductVariantCustomFieldsInput = {
 	MRP?: InputMaybe<Scalars['Int']['input']>;
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
+	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -997,15 +997,11 @@ export type CreateProductVariantOptionInput = {
 	translations: Array<ProductOptionTranslationInput>;
 };
 
-export type CreatePromotionCustomFieldsInput = {
-	promotionsId?: InputMaybe<Scalars['ID']['input']>;
-};
-
 export type CreatePromotionInput = {
 	actions: Array<ConfigurableOperationInput>;
 	conditions: Array<ConfigurableOperationInput>;
 	couponCode?: InputMaybe<Scalars['String']['input']>;
-	customFields?: InputMaybe<CreatePromotionCustomFieldsInput>;
+	customFields?: InputMaybe<Scalars['JSON']['input']>;
 	enabled: Scalars['Boolean']['input'];
 	endsAt?: InputMaybe<Scalars['DateTime']['input']>;
 	perCustomerUsageLimit?: InputMaybe<Scalars['Int']['input']>;
@@ -1031,6 +1027,17 @@ export type CreateRoleInput = {
 };
 
 export type CreateSellerCustomFieldsInput = {
+	SellerBillingAddress?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCity?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCountry?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
+	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
+	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
+	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
+	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
 	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1516,6 +1523,7 @@ export type CustomerOrdersArgs = {
 
 export type CustomerCustomFields = {
 	__typename?: 'CustomerCustomFields';
+	stripeCustomerId?: Maybe<Scalars['String']['output']>;
 	websiteUrl?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1529,6 +1537,7 @@ export type CustomerFilterParameter = {
 	lastName?: InputMaybe<StringOperators>;
 	phoneNumber?: InputMaybe<StringOperators>;
 	postalCode?: InputMaybe<StringOperators>;
+	stripeCustomerId?: InputMaybe<StringOperators>;
 	title?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 	websiteUrl?: InputMaybe<StringOperators>;
@@ -1609,6 +1618,7 @@ export type CustomerSortParameter = {
 	id?: InputMaybe<SortOrder>;
 	lastName?: InputMaybe<SortOrder>;
 	phoneNumber?: InputMaybe<SortOrder>;
+	stripeCustomerId?: InputMaybe<SortOrder>;
 	title?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	websiteUrl?: InputMaybe<SortOrder>;
@@ -3072,7 +3082,6 @@ export type Mutation = {
 	setOrderCustomFields?: Maybe<Order>;
 	/** Allows a different Customer to be assigned to an Order. Added in v2.2.0. */
 	setOrderCustomer?: Maybe<Order>;
-	setPromotionsImage?: Maybe<Asset>;
 	/** Set all webhooks for the current channel. This will overwrite any existing webhooks. */
 	setWebhooks: Array<Webhook>;
 	settlePayment: SettlePaymentResult;
@@ -3671,10 +3680,6 @@ export type MutationSetOrderCustomFieldsArgs = {
 
 export type MutationSetOrderCustomerArgs = {
 	input: SetOrderCustomerInput;
-};
-
-export type MutationSetPromotionsImageArgs = {
-	file: Scalars['Upload']['input'];
 };
 
 export type MutationSetWebhooksArgs = {
@@ -4418,8 +4423,6 @@ export const Permission = {
 	CreateProduct: 'CreateProduct',
 	/** Grants permission to create Promotion */
 	CreatePromotion: 'CreatePromotion',
-	/** Grants permission to create PromotionBanner */
-	CreatePromotionBanner: 'CreatePromotionBanner',
 	/** Grants permission to create Seller */
 	CreateSeller: 'CreateSeller',
 	/** Grants permission to create PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4464,8 +4467,6 @@ export const Permission = {
 	DeleteProduct: 'DeleteProduct',
 	/** Grants permission to delete Promotion */
 	DeletePromotion: 'DeletePromotion',
-	/** Grants permission to delete PromotionBanner */
-	DeletePromotionBanner: 'DeletePromotionBanner',
 	/** Grants permission to delete Seller */
 	DeleteSeller: 'DeleteSeller',
 	/** Grants permission to delete PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4516,8 +4517,6 @@ export const Permission = {
 	ReadProduct: 'ReadProduct',
 	/** Grants permission to read Promotion */
 	ReadPromotion: 'ReadPromotion',
-	/** Grants permission to read PromotionBanner */
-	ReadPromotionBanner: 'ReadPromotionBanner',
 	/** Grants permission to read Seller */
 	ReadSeller: 'ReadSeller',
 	/** Grants permission to read PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4570,8 +4569,6 @@ export const Permission = {
 	UpdateProduct: 'UpdateProduct',
 	/** Grants permission to update Promotion */
 	UpdatePromotion: 'UpdatePromotion',
-	/** Grants permission to update PromotionBanner */
-	UpdatePromotionBanner: 'UpdatePromotionBanner',
 	/** Grants permission to update Seller */
 	UpdateSeller: 'UpdateSeller',
 	/** Grants permission to update PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings */
@@ -4665,7 +4662,6 @@ export type ProductCustomFields = {
 	featuredReview?: Maybe<ProductReview>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
-	primaryCollection?: Maybe<Collection>;
 	relatedProducts?: Maybe<Array<Product>>;
 	reviewCount?: Maybe<Scalars['Float']['output']>;
 	reviewRating?: Maybe<Scalars['Float']['output']>;
@@ -4873,7 +4869,6 @@ export type ProductSortParameter = {
 	infoUrl?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
-	primaryCollection?: InputMaybe<SortOrder>;
 	reviewCount?: InputMaybe<SortOrder>;
 	reviewRating?: InputMaybe<SortOrder>;
 	seoDescription?: InputMaybe<SortOrder>;
@@ -4961,6 +4956,7 @@ export type ProductVariantCustomFields = {
 	MRP?: Maybe<Scalars['Int']['output']>;
 	isDigital?: Maybe<Scalars['Boolean']['output']>;
 	maxPerOrder?: Maybe<Scalars['Int']['output']>;
+	onlyAllowPer?: Maybe<Array<Scalars['String']['output']>>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
 	weight?: Maybe<Scalars['Int']['output']>;
 };
@@ -4978,6 +4974,7 @@ export type ProductVariantFilterParameter = {
 	languageCode?: InputMaybe<StringOperators>;
 	maxPerOrder?: InputMaybe<NumberOperators>;
 	name?: InputMaybe<StringOperators>;
+	onlyAllowPer?: InputMaybe<StringListOperators>;
 	outOfStockThreshold?: InputMaybe<NumberOperators>;
 	price?: InputMaybe<NumberOperators>;
 	priceWithTax?: InputMaybe<NumberOperators>;
@@ -5071,7 +5068,7 @@ export type Promotion = Node & {
 	conditions: Array<ConfigurableOperation>;
 	couponCode?: Maybe<Scalars['String']['output']>;
 	createdAt: Scalars['DateTime']['output'];
-	customFields?: Maybe<PromotionCustomFields>;
+	customFields?: Maybe<Scalars['JSON']['output']>;
 	description: Scalars['String']['output'];
 	enabled: Scalars['Boolean']['output'];
 	endsAt?: Maybe<Scalars['DateTime']['output']>;
@@ -5082,11 +5079,6 @@ export type Promotion = Node & {
 	translations: Array<PromotionTranslation>;
 	updatedAt: Scalars['DateTime']['output'];
 	usageLimit?: Maybe<Scalars['Int']['output']>;
-};
-
-export type PromotionCustomFields = {
-	__typename?: 'PromotionCustomFields';
-	promotions?: Maybe<Asset>;
 };
 
 export type PromotionFilterParameter = {
@@ -5132,7 +5124,6 @@ export type PromotionSortParameter = {
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	perCustomerUsageLimit?: InputMaybe<SortOrder>;
-	promotions?: InputMaybe<SortOrder>;
 	startsAt?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	usageLimit?: InputMaybe<SortOrder>;
@@ -5919,10 +5910,32 @@ export type Seller = Node & {
 
 export type SellerCustomFields = {
 	__typename?: 'SellerCustomFields';
+	SellerBillingAddress?: Maybe<Scalars['String']['output']>;
+	SellerBillingCity?: Maybe<Scalars['String']['output']>;
+	SellerBillingCountry?: Maybe<Scalars['String']['output']>;
+	SellerBillingCycle?: Maybe<Scalars['String']['output']>;
+	SellerBillingPostalCode?: Maybe<Scalars['String']['output']>;
+	SellerBillingState?: Maybe<Scalars['String']['output']>;
+	SellerIndustry?: Maybe<Scalars['String']['output']>;
+	SellerOthersNote?: Maybe<Scalars['String']['output']>;
+	SellerPhoneNo?: Maybe<Scalars['Int']['output']>;
+	SellerVatNo?: Maybe<Scalars['String']['output']>;
+	SellerWebsite?: Maybe<Scalars['String']['output']>;
 	connectedAccountId?: Maybe<Scalars['String']['output']>;
 };
 
 export type SellerFilterParameter = {
+	SellerBillingAddress?: InputMaybe<StringOperators>;
+	SellerBillingCity?: InputMaybe<StringOperators>;
+	SellerBillingCountry?: InputMaybe<StringOperators>;
+	SellerBillingCycle?: InputMaybe<StringOperators>;
+	SellerBillingPostalCode?: InputMaybe<StringOperators>;
+	SellerBillingState?: InputMaybe<StringOperators>;
+	SellerIndustry?: InputMaybe<StringOperators>;
+	SellerOthersNote?: InputMaybe<StringOperators>;
+	SellerPhoneNo?: InputMaybe<NumberOperators>;
+	SellerVatNo?: InputMaybe<StringOperators>;
+	SellerWebsite?: InputMaybe<StringOperators>;
 	_and?: InputMaybe<Array<SellerFilterParameter>>;
 	_or?: InputMaybe<Array<SellerFilterParameter>>;
 	connectedAccountId?: InputMaybe<StringOperators>;
@@ -5952,6 +5965,17 @@ export type SellerListOptions = {
 };
 
 export type SellerSortParameter = {
+	SellerBillingAddress?: InputMaybe<SortOrder>;
+	SellerBillingCity?: InputMaybe<SortOrder>;
+	SellerBillingCountry?: InputMaybe<SortOrder>;
+	SellerBillingCycle?: InputMaybe<SortOrder>;
+	SellerBillingPostalCode?: InputMaybe<SortOrder>;
+	SellerBillingState?: InputMaybe<SortOrder>;
+	SellerIndustry?: InputMaybe<SortOrder>;
+	SellerOthersNote?: InputMaybe<SortOrder>;
+	SellerPhoneNo?: InputMaybe<SortOrder>;
+	SellerVatNo?: InputMaybe<SortOrder>;
+	SellerWebsite?: InputMaybe<SortOrder>;
 	connectedAccountId?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
@@ -6732,7 +6756,6 @@ export type UpdateProductCustomFieldsInput = {
 	featuredReviewId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
-	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	reviewCount?: InputMaybe<Scalars['Float']['input']>;
 	reviewRating?: InputMaybe<Scalars['Float']['input']>;
@@ -6775,6 +6798,7 @@ export type UpdateProductVariantCustomFieldsInput = {
 	MRP?: InputMaybe<Scalars['Int']['input']>;
 	isDigital?: InputMaybe<Scalars['Boolean']['input']>;
 	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
+	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
 	weight?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6801,15 +6825,11 @@ export type UpdateProductVariantInput = {
 	useGlobalOutOfStockThreshold?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type UpdatePromotionCustomFieldsInput = {
-	promotionsId?: InputMaybe<Scalars['ID']['input']>;
-};
-
 export type UpdatePromotionInput = {
 	actions?: InputMaybe<Array<ConfigurableOperationInput>>;
 	conditions?: InputMaybe<Array<ConfigurableOperationInput>>;
 	couponCode?: InputMaybe<Scalars['String']['input']>;
-	customFields?: InputMaybe<UpdatePromotionCustomFieldsInput>;
+	customFields?: InputMaybe<Scalars['JSON']['input']>;
 	enabled?: InputMaybe<Scalars['Boolean']['input']>;
 	endsAt?: InputMaybe<Scalars['DateTime']['input']>;
 	id: Scalars['ID']['input'];
@@ -6838,6 +6858,17 @@ export type UpdateRoleInput = {
 };
 
 export type UpdateSellerCustomFieldsInput = {
+	SellerBillingAddress?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCity?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCountry?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
+	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
+	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
+	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
+	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
 	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
 };
 
