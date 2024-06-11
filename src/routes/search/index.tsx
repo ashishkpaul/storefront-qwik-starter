@@ -9,14 +9,14 @@ import { FacetWithValues } from '~/types';
 import { changeUrlParamsWithoutRefresh, enableDisableFacetValues, groupFacetValues } from '~/utils';
 
 export const executeQuery = $(
-	async (term: string, activeFacetValueIds: string[]) =>
-		await searchQueryWithTerm('', term, activeFacetValueIds)
+	async (term: string, activeFacetValueIds: string[], take: 25) =>
+		await searchQueryWithTerm('', term, activeFacetValueIds, take)
 );
 
 export const useSearchLoader = routeLoader$(async ({ query }) => {
 	const term = query.get('q') || '';
 	const activeFacetValueIds: string[] = query.get('f')?.split('-') || [];
-	const search = await executeQuery(term, activeFacetValueIds);
+	const search = await executeQuery(term, activeFacetValueIds, 25);
 	return { search, query };
 });
 
@@ -44,7 +44,7 @@ export default component$(() => {
 		const term = searchLoader.value.query.get('q') || '';
 		const activeFacetValueIds: string[] = searchLoader.value.query.get('f')?.split('-') || [];
 
-		state.search = await executeQuery(term, activeFacetValueIds);
+		state.search = await executeQuery(term, activeFacetValueIds, 25);
 		state.facedValues = groupFacetValues(state.search, activeFacetValueIds);
 		state.facetValueIds = activeFacetValueIds;
 	});
@@ -60,7 +60,7 @@ export default component$(() => {
 		state.facetValueIds = facetValueIds;
 		changeUrlParamsWithoutRefresh(term, facetValueIds);
 
-		state.search = await executeQuery(term, state.facetValueIds);
+		state.search = await executeQuery(term, state.facetValueIds, 25);
 	});
 
 	const onOpenCloseFilter = $((id: string) => {

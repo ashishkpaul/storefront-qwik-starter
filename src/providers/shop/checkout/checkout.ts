@@ -21,7 +21,7 @@ export const getAvailableCountriesQuery = async () => {
 };
 
 export const addPaymentToOrderMutation = async (
-	input: PaymentInput = { method: 'standard-payment', metadata: {} }
+	input: PaymentInput = { method: 'nitus-payment-method', metadata: {} }
 ) => {
 	return shopSdk
 		.addPaymentToOrder({ input })

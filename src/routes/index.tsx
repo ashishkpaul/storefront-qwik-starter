@@ -30,6 +30,8 @@ export default component$(() => {
 		gap: 25,
 	};
 
+	const take = 25; // Set a default value for `take`
+
 	return (
 		<div class="py-2 px-2 ">
 			<Hero />
@@ -62,20 +64,18 @@ export default component$(() => {
 						</div>
 						<div>
 							<Slider {...ProductsInCollectionShowCase}>
-								{searchQueryWithCollectionSlug(collection.slug).then(async (data) =>
-									data.items.map((item) => (
-										<ProductsInCollectionCard
-											key={item.productId}
-											productAsset={item.productAsset}
-											productName={item.productName}
-											slug={item.slug}
-											priceWithTax={item.priceWithTax}
-											currencyCode={item.currencyCode}
-											// Access MRP directly from customProductVariantMappings
-											MRP={item.customProductVariantMappings?.MRP}
-										/>
-									))
-								)}
+								{(await searchQueryWithCollectionSlug(collection.slug, take)).items.map((item) => (
+									<ProductsInCollectionCard
+										key={item.productId}
+										productAsset={item.productAsset}
+										productName={item.productName}
+										slug={item.slug}
+										priceWithTax={item.priceWithTax}
+										currencyCode={item.currencyCode}
+										// Access MRP directly from customProductVariantMappings
+										MRP={item.customProductVariantMappings?.MRP}
+									/>
+								))}
 							</Slider>
 						</div>
 					</section>

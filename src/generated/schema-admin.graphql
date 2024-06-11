@@ -8,13 +8,11 @@ union AddFulfillmentToOrderResult =
 	| ItemsAlreadyFulfilledError
 
 input AddItemInput {
-	customFields: OrderLineCustomFieldsInput
 	productVariantId: ID!
 	quantity: Int!
 }
 
 input AddItemToDraftOrderInput {
-	customFields: OrderLineCustomFieldsInput
 	productVariantId: ID!
 	quantity: Int!
 }
@@ -52,7 +50,6 @@ type Address implements Node {
 }
 
 input AdjustDraftOrderLineInput {
-	customFields: OrderLineCustomFieldsInput
 	orderLineId: ID!
 	quantity: Int!
 }
@@ -174,6 +171,67 @@ union ApplyCouponCodeResult =
 	| CouponCodeInvalidError
 	| CouponCodeLimitError
 	| Order
+
+type Artical implements Node {
+	content: String!
+	createdAt: DateTime!
+	customFields: JSON
+	id: ID!
+	isPublished: Boolean!
+	title: String!
+	updatedAt: DateTime!
+}
+
+input ArticalFilterParameter {
+	_and: [ArticalFilterParameter!]
+	_or: [ArticalFilterParameter!]
+	content: StringOperators
+	createdAt: DateOperators
+	id: IDOperators
+	isPublished: BooleanOperators
+	title: StringOperators
+	updatedAt: DateOperators
+}
+
+type ArticalList implements PaginatedList {
+	items: [Artical!]!
+	totalItems: Int!
+}
+
+input ArticalListOptions {
+	"""
+	Allows the results to be filtered
+	"""
+	filter: ArticalFilterParameter
+
+	"""
+	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
+	"""
+	filterOperator: LogicalOperator
+
+	"""
+	Skips the first n results, for use in pagination
+	"""
+	skip: Int
+
+	"""
+	Specifies which properties to sort the results by
+	"""
+	sort: ArticalSortParameter
+
+	"""
+	Takes n results, for use in pagination
+	"""
+	take: Int
+}
+
+input ArticalSortParameter {
+	content: SortOrder
+	createdAt: SortOrder
+	id: SortOrder
+	title: SortOrder
+	updatedAt: SortOrder
+}
 
 type Asset implements Node {
 	createdAt: DateTime!
@@ -309,6 +367,7 @@ input AssignStockLocationsToChannelInput {
 }
 
 input AuthenticationInput {
+	keycloak: KeycloakAuthInput
 	native: NativeAuthInput
 }
 
@@ -830,6 +889,13 @@ input CreateAdministratorInput {
 	roleIds: [ID!]!
 }
 
+input CreateArticalInput {
+	content: String!
+	customFields: JSON
+	isPublished: Boolean!
+	title: String!
+}
+
 input CreateAssetInput {
 	customFields: JSON
 	file: Upload!
@@ -896,6 +962,7 @@ input CreateCountryInput {
 }
 
 input CreateCustomerCustomFieldsInput {
+	avatarId: ID
 	websiteUrl: String
 }
 
@@ -916,9 +983,14 @@ input CreateCustomerInput {
 
 union CreateCustomerResult = Customer | EmailAddressConflictError
 
+input CreateFacetCustomFieldsInput {
+	showOnProductDetail: Boolean
+	showOnProductDetailIfIds: [ID!]
+}
+
 input CreateFacetInput {
 	code: String!
-	customFields: JSON
+	customFields: CreateFacetCustomFieldsInput
 	isPrivate: Boolean!
 	translations: [FacetTranslationInput!]!
 	values: [CreateFacetValueWithFacetInput!]
@@ -962,14 +1034,11 @@ input CreatePaymentMethodInput {
 input CreateProductCustomFieldsInput {
 	additionalInfo: String
 	facebookImageId: ID
-	featuredReviewId: ID
 	infoUrl: String
 	popularityScore: Int
+	primaryCollectionId: ID
 	relatedProductsIds: [ID!]
-	reviewCount: Float
-	reviewRating: Float
 	twitterImageId: ID
-	weight: Int
 }
 
 input CreateProductInput {
@@ -997,11 +1066,10 @@ input CreateProductOptionInput {
 
 input CreateProductVariantCustomFieldsInput {
 	MRP: Int
-	isDigital: Boolean
+	gtin: String
 	maxPerOrder: Int
 	onlyAllowPer: [String!]
 	releaseDate: DateTime
-	weight: Int
 }
 
 input CreateProductVariantInput {
@@ -1064,12 +1132,12 @@ input CreateSellerCustomFieldsInput {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
 	SellerPhoneNo: Int
 	SellerVatNo: String
 	SellerWebsite: String
-	connectedAccountId: String
 }
 
 input CreateSellerInput {
@@ -1077,15 +1145,11 @@ input CreateSellerInput {
 	name: String!
 }
 
-input CreateShippingMethodCustomFieldsInput {
-	isDigital: Boolean
-}
-
 input CreateShippingMethodInput {
 	calculator: ConfigurableOperationInput!
 	checker: ConfigurableOperationInput!
 	code: String!
-	customFields: CreateShippingMethodCustomFieldsInput
+	customFields: JSON
 	fulfillmentHandler: String!
 	translations: [ShippingMethodTranslationInput!]!
 }
@@ -1959,11 +2023,18 @@ which allows custom fields to be defined on user-supplies entities.
 type CustomFields {
 	Address: [CustomFieldConfig!]!
 	Administrator: [CustomFieldConfig!]!
+	Artical: [CustomFieldConfig!]!
 	Asset: [CustomFieldConfig!]!
 	Channel: [CustomFieldConfig!]!
 	Collection: [CustomFieldConfig!]!
 	Customer: [CustomFieldConfig!]!
 	CustomerGroup: [CustomFieldConfig!]!
+	ExtendeCustomer: [CustomFieldConfig!]!
+	ExtendedCollection: [CustomFieldConfig!]!
+	ExtendedOrder: [CustomFieldConfig!]!
+	ExtendedProduct: [CustomFieldConfig!]!
+	ExtendedProductVariant: [CustomFieldConfig!]!
+	ExtendedSeller: [CustomFieldConfig!]!
 	Facet: [CustomFieldConfig!]!
 	FacetValue: [CustomFieldConfig!]!
 	Fulfillment: [CustomFieldConfig!]!
@@ -2009,7 +2080,7 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
-	stripeCustomerId: String
+	avatar: Asset
 	websiteUrl: String
 }
 
@@ -2023,7 +2094,6 @@ input CustomerFilterParameter {
 	lastName: StringOperators
 	phoneNumber: StringOperators
 	postalCode: StringOperators
-	stripeCustomerId: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
 	websiteUrl: StringOperators
@@ -2119,13 +2189,13 @@ input CustomerListOptions {
 }
 
 input CustomerSortParameter {
+	avatar: SortOrder
 	createdAt: SortOrder
 	emailAddress: SortOrder
 	firstName: SortOrder
 	id: SortOrder
 	lastName: SortOrder
 	phoneNumber: SortOrder
-	stripeCustomerId: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
 	websiteUrl: SortOrder
@@ -2324,7 +2394,7 @@ interface ErrorResult {
 type Facet implements Node {
 	code: String!
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: FacetCustomFields
 	id: ID!
 	isPrivate: Boolean!
 	languageCode: LanguageCode!
@@ -2339,6 +2409,11 @@ type Facet implements Node {
 	values: [FacetValue!]!
 }
 
+type FacetCustomFields {
+	showOnProductDetail: Boolean
+	showOnProductDetailIf: [FacetValue!]
+}
+
 input FacetFilterParameter {
 	_and: [FacetFilterParameter!]
 	_or: [FacetFilterParameter!]
@@ -2348,6 +2423,7 @@ input FacetFilterParameter {
 	isPrivate: BooleanOperators
 	languageCode: StringOperators
 	name: StringOperators
+	showOnProductDetail: BooleanOperators
 	updatedAt: DateOperators
 }
 
@@ -2396,6 +2472,7 @@ input FacetSortParameter {
 	createdAt: SortOrder
 	id: SortOrder
 	name: SortOrder
+	showOnProductDetail: SortOrder
 	updatedAt: SortOrder
 }
 
@@ -2540,7 +2617,7 @@ input FulfillOrderInput {
 
 type Fulfillment implements Node {
 	createdAt: DateTime!
-	customFields: FulfillmentCustomFields
+	customFields: JSON
 	id: ID!
 	lines: [FulfillmentLine!]!
 	method: String!
@@ -2549,10 +2626,6 @@ type Fulfillment implements Node {
 	summary: [FulfillmentLine!]! @deprecated(reason: "Use the `lines` field instead")
 	trackingCode: String
 	updatedAt: DateTime!
-}
-
-type FulfillmentCustomFields {
-	downloadUrls: [String!]
 }
 
 type FulfillmentLine {
@@ -2887,6 +2960,10 @@ enum JobState {
 	PENDING
 	RETRYING
 	RUNNING
+}
+
+input KeycloakAuthInput {
+	token: String!
 }
 
 """
@@ -3899,7 +3976,6 @@ type Mutation {
 	Applies the given coupon code to the draft Order
 	"""
 	applyCouponCodeToDraftOrder(couponCode: String!, orderId: ID!): ApplyCouponCodeResult!
-	approveProductReview(id: ID!): ProductReview
 
 	"""
 	Assign assets to channel
@@ -3963,6 +4039,7 @@ type Mutation {
 	Create a new Administrator
 	"""
 	createAdministrator(input: CreateAdministratorInput!): Administrator!
+	createArtical(input: CreateArticalInput!): Artical!
 
 	"""
 	Create a new Asset
@@ -4091,6 +4168,7 @@ type Mutation {
 	Delete multiple Administrators
 	"""
 	deleteAdministrators(ids: [ID!]!): [DeletionResponse!]!
+	deleteArtical(id: ID!): DeletionResponse!
 
 	"""
 	Delete an Asset
@@ -4314,7 +4392,6 @@ type Mutation {
 	moveCollection(input: MoveCollectionInput!): Collection!
 	refundOrder(input: RefundOrderInput!): RefundOrderResult!
 	reindex: Job!
-	rejectProductReview(id: ID!): ProductReview
 
 	"""
 	Removes Collections from the specified Channel
@@ -4449,6 +4526,7 @@ type Mutation {
 	Update an existing Administrator
 	"""
 	updateAdministrator(input: UpdateAdministratorInput!): Administrator!
+	updateArtical(input: UpdateArticalInput!): Artical!
 
 	"""
 	Update an existing Asset
@@ -4517,7 +4595,6 @@ type Mutation {
 	Update an existing ProductOptionGroup
 	"""
 	updateProductOptionGroup(input: UpdateProductOptionGroupInput!): ProductOptionGroup!
-	updateProductReview(input: UpdateProductReviewInput!): ProductReview!
 
 	"""
 	Update existing ProductVariants
@@ -4797,7 +4874,7 @@ type OrderLimitError implements ErrorResult {
 
 type OrderLine implements Node {
 	createdAt: DateTime!
-	customFields: OrderLineCustomFields
+	customFields: JSON
 
 	"""
 	The price of the line including discounts, excluding tax
@@ -4903,16 +4980,7 @@ type OrderLine implements Node {
 	updatedAt: DateTime!
 }
 
-type OrderLineCustomFields {
-	isSelectedAsGift: Boolean
-}
-
-input OrderLineCustomFieldsInput {
-	isSelectedAsGift: Boolean
-}
-
 input OrderLineInput {
-	customFields: OrderLineCustomFieldsInput
 	orderLineId: ID!
 	quantity: Int!
 }
@@ -5456,11 +5524,6 @@ enum Permission {
 	DeleteZone
 
 	"""
-	Allows administrator to export orders
-	"""
-	ExportOrders
-
-	"""
 	Owner means the user owns this entity, e.g. a Customer's own Order
 	"""
 	Owner
@@ -5755,8 +5818,6 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
-	reviews(options: ProductReviewListOptions): ProductReviewList!
-	reviewsHistogram: [ProductReviewHistogramItem!]!
 	slug: String!
 	translations: [ProductTranslation!]!
 	updatedAt: DateTime!
@@ -5775,16 +5836,13 @@ type Product implements Node {
 type ProductCustomFields {
 	additionalInfo: String
 	facebookImage: Asset
-	featuredReview: ProductReview
 	infoUrl: String
 	popularityScore: Int
+	primaryCollection: Collection
 	relatedProducts: [Product!]
-	reviewCount: Float
-	reviewRating: Float
 	seoDescription: String
 	seoTitle: String
 	twitterImage: Asset
-	weight: Int
 }
 
 input ProductFilterParameter {
@@ -5800,14 +5858,11 @@ input ProductFilterParameter {
 	languageCode: StringOperators
 	name: StringOperators
 	popularityScore: NumberOperators
-	reviewCount: NumberOperators
-	reviewRating: NumberOperators
 	seoDescription: StringOperators
 	seoTitle: StringOperators
 	sku: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
-	weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -5904,114 +5959,21 @@ input ProductOptionTranslationInput {
 	name: String
 }
 
-type ProductReview implements Node {
-	author: Customer
-	authorLocation: String
-	authorName: String!
-	body: String
-	createdAt: DateTime!
-	downvotes: Int!
-	id: ID!
-	product: Product!
-	productVariant: ProductVariant
-	rating: Float!
-	response: String
-	responseCreatedAt: DateTime
-	state: String!
-	summary: String!
-	updatedAt: DateTime!
-	upvotes: Int!
-}
-
-input ProductReviewFilterParameter {
-	_and: [ProductReviewFilterParameter!]
-	_or: [ProductReviewFilterParameter!]
-	authorLocation: StringOperators
-	authorName: StringOperators
-	body: StringOperators
-	createdAt: DateOperators
-	downvotes: NumberOperators
-	id: IDOperators
-	rating: NumberOperators
-	response: StringOperators
-	responseCreatedAt: DateOperators
-	state: StringOperators
-	summary: StringOperators
-	updatedAt: DateOperators
-	upvotes: NumberOperators
-}
-
-type ProductReviewHistogramItem {
-	bin: Int!
-	frequency: Int!
-}
-
-type ProductReviewList implements PaginatedList {
-	items: [ProductReview!]!
-	totalItems: Int!
-}
-
-input ProductReviewListOptions {
-	"""
-	Allows the results to be filtered
-	"""
-	filter: ProductReviewFilterParameter
-
-	"""
-	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
-	"""
-	filterOperator: LogicalOperator
-
-	"""
-	Skips the first n results, for use in pagination
-	"""
-	skip: Int
-
-	"""
-	Specifies which properties to sort the results by
-	"""
-	sort: ProductReviewSortParameter
-
-	"""
-	Takes n results, for use in pagination
-	"""
-	take: Int
-}
-
-input ProductReviewSortParameter {
-	authorLocation: SortOrder
-	authorName: SortOrder
-	body: SortOrder
-	createdAt: SortOrder
-	downvotes: SortOrder
-	id: SortOrder
-	rating: SortOrder
-	response: SortOrder
-	responseCreatedAt: SortOrder
-	state: SortOrder
-	summary: SortOrder
-	updatedAt: SortOrder
-	upvotes: SortOrder
-}
-
 input ProductSortParameter {
 	additionalInfo: SortOrder
 	createdAt: SortOrder
 	description: SortOrder
 	facebookImage: SortOrder
-	featuredReview: SortOrder
 	id: SortOrder
 	infoUrl: SortOrder
 	name: SortOrder
 	popularityScore: SortOrder
-	reviewCount: SortOrder
-	reviewRating: SortOrder
+	primaryCollection: SortOrder
 	seoDescription: SortOrder
 	seoTitle: SortOrder
 	slug: SortOrder
 	twitterImage: SortOrder
 	updatedAt: SortOrder
-	weight: SortOrder
 }
 
 type ProductTranslation {
@@ -6079,11 +6041,10 @@ type ProductVariant implements Node {
 
 type ProductVariantCustomFields {
 	MRP: Int
-	isDigital: Boolean
+	gtin: String
 	maxPerOrder: Int
 	onlyAllowPer: [String!]
 	releaseDate: DateTime
-	weight: Int
 }
 
 input ProductVariantFilterParameter {
@@ -6094,8 +6055,8 @@ input ProductVariantFilterParameter {
 	currencyCode: StringOperators
 	enabled: BooleanOperators
 	facetValueId: IDOperators
+	gtin: StringOperators
 	id: IDOperators
-	isDigital: BooleanOperators
 	languageCode: StringOperators
 	maxPerOrder: NumberOperators
 	name: StringOperators
@@ -6112,7 +6073,6 @@ input ProductVariantFilterParameter {
 	trackInventory: StringOperators
 	updatedAt: DateOperators
 	useGlobalOutOfStockThreshold: BooleanOperators
-	weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -6166,8 +6126,8 @@ input ProductVariantPriceInput {
 input ProductVariantSortParameter {
 	MRP: SortOrder
 	createdAt: SortOrder
+	gtin: SortOrder
 	id: SortOrder
-	isDigital: SortOrder
 	maxPerOrder: SortOrder
 	name: SortOrder
 	outOfStockThreshold: SortOrder
@@ -6180,7 +6140,6 @@ input ProductVariantSortParameter {
 	stockLevel: SortOrder
 	stockOnHand: SortOrder
 	updatedAt: SortOrder
-	weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -6385,6 +6344,8 @@ type Query {
 	activeChannel: Channel!
 	administrator(id: ID!): Administrator
 	administrators(options: AdministratorListOptions): AdministratorList!
+	artical(id: ID!): Artical
+	articals(options: ArticalListOptions): ArticalList!
 
 	"""
 	Get a single Asset by id
@@ -6395,7 +6356,6 @@ type Query {
 	Get a list of Assets
 	"""
 	assets(options: AssetListOptions): AssetList!
-	availableOrderExportStrategies: [String!]!
 
 	"""
 	Get all available Vendure events that can be used to trigger webhooks
@@ -6470,8 +6430,6 @@ type Query {
 	product(id: ID, slug: String): Product
 	productOptionGroup(id: ID!): ProductOptionGroup
 	productOptionGroups(filterTerm: String): [ProductOptionGroup!]!
-	productReview(id: ID!): ProductReview
-	productReviews(options: ProductReviewListOptions): ProductReviewList!
 
 	"""
 	Get a ProductVariant by id
@@ -6482,7 +6440,6 @@ type Query {
 	List ProductVariants either all or for the specific product.
 	"""
 	productVariants(options: ProductVariantListOptions, productId: ID): ProductVariantList!
-	productVariantsWithLowStock: [ProductVariant!]!
 
 	"""
 	List Products
@@ -6494,6 +6451,7 @@ type Query {
 	promotions(options: PromotionListOptions): PromotionList!
 	province(id: ID!): Province
 	provinces(options: ProvinceListOptions): ProvinceList!
+	requiredFacets: [Facet!]!
 	role(id: ID!): Role
 	roles(options: RoleListOptions): RoleList!
 	search(input: SearchInput!): SearchResponse!
@@ -6885,12 +6843,12 @@ type SellerCustomFields {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
 	SellerPhoneNo: Int
 	SellerVatNo: String
 	SellerWebsite: String
-	connectedAccountId: String
 }
 
 input SellerFilterParameter {
@@ -6900,6 +6858,7 @@ input SellerFilterParameter {
 	SellerBillingCycle: StringOperators
 	SellerBillingPostalCode: StringOperators
 	SellerBillingState: StringOperators
+	SellerEmailID: StringOperators
 	SellerIndustry: StringOperators
 	SellerOthersNote: StringOperators
 	SellerPhoneNo: NumberOperators
@@ -6907,7 +6866,6 @@ input SellerFilterParameter {
 	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
 	_or: [SellerFilterParameter!]
-	connectedAccountId: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
 	name: StringOperators
@@ -6953,12 +6911,12 @@ input SellerSortParameter {
 	SellerBillingCycle: SortOrder
 	SellerBillingPostalCode: SortOrder
 	SellerBillingState: SortOrder
+	SellerEmailID: SortOrder
 	SellerIndustry: SortOrder
 	SellerOthersNote: SortOrder
 	SellerPhoneNo: SortOrder
 	SellerVatNo: SortOrder
 	SellerWebsite: SortOrder
-	connectedAccountId: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	name: SortOrder
@@ -7042,7 +7000,7 @@ type ShippingMethod implements Node {
 	checker: ConfigurableOperation!
 	code: String!
 	createdAt: DateTime!
-	customFields: ShippingMethodCustomFields
+	customFields: JSON
 	description: String!
 	fulfillmentHandlerCode: String!
 	id: ID!
@@ -7050,10 +7008,6 @@ type ShippingMethod implements Node {
 	name: String!
 	translations: [ShippingMethodTranslation!]!
 	updatedAt: DateTime!
-}
-
-type ShippingMethodCustomFields {
-	isDigital: Boolean
 }
 
 input ShippingMethodFilterParameter {
@@ -7064,7 +7018,6 @@ input ShippingMethodFilterParameter {
 	description: StringOperators
 	fulfillmentHandlerCode: StringOperators
 	id: IDOperators
-	isDigital: BooleanOperators
 	languageCode: StringOperators
 	name: StringOperators
 	updatedAt: DateOperators
@@ -7104,7 +7057,7 @@ input ShippingMethodListOptions {
 
 type ShippingMethodQuote {
 	code: String!
-	customFields: ShippingMethodCustomFields
+	customFields: JSON
 	description: String!
 	id: ID!
 
@@ -7123,7 +7076,6 @@ input ShippingMethodSortParameter {
 	description: SortOrder
 	fulfillmentHandlerCode: SortOrder
 	id: SortOrder
-	isDigital: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
 }
@@ -7611,6 +7563,14 @@ input UpdateAdministratorInput {
 	roleIds: [ID!]
 }
 
+input UpdateArticalInput {
+	content: String
+	customFields: JSON
+	id: ID!
+	isPublished: Boolean
+	title: String
+}
+
 input UpdateAssetInput {
 	customFields: JSON
 	focalPoint: CoordinateInput
@@ -7681,6 +7641,7 @@ input UpdateCountryInput {
 }
 
 input UpdateCustomerCustomFieldsInput {
+	avatarId: ID
 	websiteUrl: String
 }
 
@@ -7707,9 +7668,14 @@ input UpdateCustomerNoteInput {
 
 union UpdateCustomerResult = Customer | EmailAddressConflictError
 
+input UpdateFacetCustomFieldsInput {
+	showOnProductDetail: Boolean
+	showOnProductDetailIfIds: [ID!]
+}
+
 input UpdateFacetInput {
 	code: String
-	customFields: JSON
+	customFields: UpdateFacetCustomFieldsInput
 	id: ID!
 	isPrivate: Boolean
 	translations: [FacetTranslationInput!]
@@ -7780,14 +7746,11 @@ input UpdatePaymentMethodInput {
 input UpdateProductCustomFieldsInput {
 	additionalInfo: String
 	facebookImageId: ID
-	featuredReviewId: ID
 	infoUrl: String
 	popularityScore: Int
+	primaryCollectionId: ID
 	relatedProductsIds: [ID!]
-	reviewCount: Float
-	reviewRating: Float
 	twitterImageId: ID
-	weight: Int
 }
 
 input UpdateProductInput {
@@ -7814,20 +7777,12 @@ input UpdateProductOptionInput {
 	translations: [ProductOptionGroupTranslationInput!]
 }
 
-input UpdateProductReviewInput {
-	body: String
-	id: ID!
-	response: String
-	summary: String
-}
-
 input UpdateProductVariantCustomFieldsInput {
 	MRP: Int
-	isDigital: Boolean
+	gtin: String
 	maxPerOrder: Int
 	onlyAllowPer: [String!]
 	releaseDate: DateTime
-	weight: Int
 }
 
 input UpdateProductVariantInput {
@@ -7897,12 +7852,12 @@ input UpdateSellerCustomFieldsInput {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
 	SellerPhoneNo: Int
 	SellerVatNo: String
 	SellerWebsite: String
-	connectedAccountId: String
 }
 
 input UpdateSellerInput {
@@ -7911,15 +7866,11 @@ input UpdateSellerInput {
 	name: String
 }
 
-input UpdateShippingMethodCustomFieldsInput {
-	isDigital: Boolean
-}
-
 input UpdateShippingMethodInput {
 	calculator: ConfigurableOperationInput
 	checker: ConfigurableOperationInput
 	code: String
-	customFields: UpdateShippingMethodCustomFieldsInput
+	customFields: JSON
 	fulfillmentHandler: String
 	id: ID!
 	translations: [ShippingMethodTranslationInput!]!

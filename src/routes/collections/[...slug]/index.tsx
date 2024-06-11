@@ -30,15 +30,17 @@ export const useCollectionLoader = routeLoader$(async ({ params }) => {
 export const useSearchLoader = routeLoader$(async ({ params: p, url }) => {
 	const params = cleanUpParams(p);
 	const activeFacetValueIds: string[] = url.searchParams.get('f')?.split('-') || [];
+	const take = 25; // Set the default `take` value here
 	return activeFacetValueIds.length
-		? await searchQueryWithTerm(params.slug, '', activeFacetValueIds)
-		: await searchQueryWithCollectionSlug(params.slug);
+		? await searchQueryWithTerm(params.slug, '', activeFacetValueIds, take)
+		: await searchQueryWithCollectionSlug(params.slug, take);
 });
 
 export default component$(() => {
 	const { params: p, url } = useLocation();
 	const params = cleanUpParams(p);
 	const activeFacetValueIds: string[] = url.searchParams.get('f')?.split('-') || [];
+	const take = 25; // Set the default `take` value here
 
 	const collectionSignal = useCollectionLoader();
 	const searchSignal = useSearchLoader();
@@ -60,8 +62,8 @@ export default component$(() => {
 		params.slug = cleanUpParams(p).slug;
 		state.facetValueIds = url.searchParams.get('f')?.split('-') || [];
 		state.search = state.facetValueIds.length
-			? await searchQueryWithTerm(params.slug, '', state.facetValueIds)
-			: await searchQueryWithCollectionSlug(params.slug);
+			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take)
+			: await searchQueryWithCollectionSlug(params.slug, take);
 		state.facedValues = groupFacetValues(state.search as SearchResponse, state.facetValueIds);
 	});
 
@@ -77,8 +79,8 @@ export default component$(() => {
 		changeUrlParamsWithoutRefresh('', facetValueIds);
 
 		state.search = facetValueIds.length
-			? await searchQueryWithTerm(params.slug, '', state.facetValueIds)
-			: await searchQueryWithCollectionSlug(params.slug);
+			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take)
+			: await searchQueryWithCollectionSlug(params.slug, take);
 	});
 
 	const onOpenCloseFilter = $((id: string) => {
