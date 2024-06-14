@@ -7,7 +7,7 @@ import Filters from '~/components/facet-filter-controls/Filters';
 import FiltersButton from '~/components/filters-button/FiltersButton';
 import ProductCard from '~/components/products/ProductCard';
 import { SearchResponse } from '~/generated/graphql';
-import { getCollectionBySlug } from '~/providers/shop/collections/collections';
+import { getCollectionBySlug, getNextPage } from '~/providers/shop/collections/collections';
 
 import {
 	// getProductMRP,
@@ -50,11 +50,17 @@ export default component$(() => {
 		search: SearchResponse;
 		facedValues: FacetWithValues[];
 		facetValueIds: string[];
+		currentPage: number;
+		totalCount: number;
+		isLoadingNextPage: boolean;
 	}>({
 		showMenu: false,
 		search: searchSignal.value as SearchResponse,
 		facedValues: groupFacetValues(searchSignal.value as SearchResponse, activeFacetValueIds),
 		facetValueIds: activeFacetValueIds,
+		currentPage: 0,
+		totalCount: searchSignal.value.totalItems,
+		isLoadingNextPage: false,
 	});
 
 	useTask$(async ({ track }) => {
@@ -65,6 +71,7 @@ export default component$(() => {
 			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take)
 			: await searchQueryWithCollectionSlug(params.slug, take);
 		state.facedValues = groupFacetValues(state.search as SearchResponse, state.facetValueIds);
+		state.totalCount = state.search.totalItems;
 	});
 
 	const onFilterChange = $(async (id: string) => {
@@ -81,6 +88,7 @@ export default component$(() => {
 		state.search = facetValueIds.length
 			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take)
 			: await searchQueryWithCollectionSlug(params.slug, take);
+		state.totalCount = state.search.totalItems;
 	});
 
 	const onOpenCloseFilter = $((id: string) => {
@@ -90,6 +98,26 @@ export default component$(() => {
 			}
 			return f;
 		});
+	});
+
+	const loadNextPage = $(async () => {
+		if (state.isLoadingNextPage) return;
+		state.isLoadingNextPage = true;
+
+		const nextPageData = await getNextPage({
+			rangeStart: state.search.items.length, // Start from the current length of items
+			collectionSlug: params.slug,
+			facetValueIds: state.facetValueIds,
+		});
+
+		console.log('Next page data:', nextPageData);
+
+		// Append nextPageData.array to state.search.items
+		state.search.items = [...state.search.items, ...nextPageData.array];
+
+		// No need to increment currentPage in this case
+
+		state.isLoadingNextPage = false;
 	});
 
 	const SubCollectionSlider = {
@@ -168,6 +196,15 @@ export default component$(() => {
 							})
 						)}
 					</div>
+					{state.search.items.length < state.totalCount && (
+						<button
+							class="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+							onClick$={loadNextPage}
+							disabled={state.isLoadingNextPage}
+						>
+							{state.isLoadingNextPage ? 'Loading...' : 'Load More'}
+						</button>
+					)}
 				</div>
 			</div>
 		</div>

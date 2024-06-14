@@ -3904,12 +3904,16 @@ export type GenerateBraintreeClientTokenQuery = {
 	generateBraintreeClientToken?: string | null;
 };
 
-export type CollectionsQueryVariables = Exact<{ take: InputMaybe<Scalars['Int']['input']> }>;
+export type CollectionsQueryVariables = Exact<{
+	take?: InputMaybe<Scalars['Int']['input']>;
+	skip?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 export type CollectionsQuery = {
 	__typename?: 'Query';
 	collections: {
 		__typename?: 'CollectionList';
+		totalItems: number;
 		items: Array<{
 			__typename?: 'Collection';
 			id: string;
@@ -5552,8 +5556,8 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	}
 `;
 export const CollectionsDocument = gql`
-	query collections($take: Int) {
-		collections(options: { take: $take }) {
+	query collections($take: Int, $skip: Int) {
+		collections(options: { take: $take, skip: $skip }) {
 			items {
 				id
 				name
@@ -5575,6 +5579,7 @@ export const CollectionsDocument = gql`
 					popularityScore
 				}
 			}
+			totalItems
 		}
 	}
 `;
