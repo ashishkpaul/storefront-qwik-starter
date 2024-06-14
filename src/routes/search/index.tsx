@@ -116,6 +116,7 @@ export default component$(() => {
 								slug={item.slug}
 								priceWithTax={item.priceWithTax}
 								currencyCode={item.currencyCode}
+								customProductVariantMappings={item.customProductVariantMappings} // Add this prop
 							></ProductCard>
 						))}
 					</div>

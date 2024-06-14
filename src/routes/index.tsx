@@ -1,4 +1,5 @@
 import { component$, useContext } from '@builder.io/qwik';
+import { Link } from '@builder.io/qwik-city';
 import { Slider } from 'qwik-slider';
 import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
@@ -58,9 +59,13 @@ export default component$(() => {
 				{rootCollections.map(async (collection) => (
 					<section key={collection.id} class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
 						<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-							<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">
-								{collection.name}
-							</h2>
+							<Link
+								href={`/collections/${collection.slug}`}
+								key={collection.id}
+								class="text-gray-900 hover:text-indigo-500"
+							>
+								<h2 class="text-2xl font-light tracking-tight font-serif">{collection.name}</h2>
+							</Link>
 						</div>
 						<div>
 							<Slider {...ProductsInCollectionShowCase}>
