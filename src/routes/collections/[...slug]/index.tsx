@@ -181,30 +181,30 @@ export default component$(() => {
 				<div class="sm:col-span-5 lg:col-span-4">
 					<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 						{Promise.all(
-							state.search.items.map(async (item) => {
-								return (
-									<ProductCard
-										key={item.productId}
-										productAsset={item.productAsset}
-										productName={item.productName}
-										slug={item.slug}
-										priceWithTax={item.priceWithTax}
-										currencyCode={item.currencyCode}
-										customProductVariantMappings={item.customProductVariantMappings} // Add this prop
-									/>
-								);
-							})
+							state.search.items.map(async (item) => (
+								<ProductCard
+									key={item.productId}
+									productAsset={item.productAsset}
+									productName={item.productName}
+									slug={item.slug}
+									priceWithTax={item.priceWithTax}
+									currencyCode={item.currencyCode}
+									customProductVariantMappings={item.customProductVariantMappings} // Add this prop
+								/>
+							))
 						)}
 					</div>
-					{state.search.items.length < state.totalCount && (
-						<button
-							class="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-							onClick$={loadNextPage}
-							disabled={state.isLoadingNextPage}
-						>
-							{state.isLoadingNextPage ? 'Loading...' : 'Load More'}
-						</button>
-					)}
+					<div class="flex justify-end mt-4">
+						{state.search.items.length < state.totalCount && (
+							<button
+								class="px-4 py-2 bg-blue-500 text-white rounded"
+								onClick$={loadNextPage}
+								disabled={state.isLoadingNextPage}
+							>
+								{state.isLoadingNextPage ? 'Loading...' : 'Load More'}
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>
