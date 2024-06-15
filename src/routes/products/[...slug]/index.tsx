@@ -258,28 +258,32 @@ export default component$(() => {
 			</div>
 			<ProductAdditionalInfo product={productSignal.value} />
 			{/* Display related products */}
-			<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
-				<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
-					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Related Products`}</h2>
-				</div>
-				<Slider {...relatedProductSlider}>
-					{productSignal.value.customFields?.relatedProducts?.map((relatedProduct: any) => {
-						const relatedVariant = relatedProduct.variants?.[0];
-						return (
-							<RelatedProductsCard
-								productAsset={relatedProduct.featuredAsset}
-								productName={relatedProduct.name}
-								slug={relatedProduct.slug} // Pass the slug prop
-								priceWithTax={relatedVariant?.priceWithTax}
-								currencyCode={relatedVariant?.currencyCode}
-								key={relatedProduct.id}
-								productSignalSetter={productSignal}
-								MaxRetailPrice={relatedVariant?.customFields?.MRP}
-							/>
-						);
-					})}
-				</Slider>
-			</section>
+			{productSignal.value.customFields?.relatedProducts?.some(
+				(relatedProduct: any) => relatedProduct.variants
+			) && (
+				<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
+					<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+						<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">{$localize`Related Products`}</h2>
+					</div>
+					<Slider {...relatedProductSlider}>
+						{productSignal.value.customFields?.relatedProducts?.map((relatedProduct: any) => {
+							const relatedVariant = relatedProduct.variants?.[0];
+							return (
+								<RelatedProductsCard
+									productAsset={relatedProduct.featuredAsset}
+									productName={relatedProduct.name}
+									slug={relatedProduct.slug} // Pass the slug prop
+									priceWithTax={relatedVariant?.priceWithTax}
+									currencyCode={relatedVariant?.currencyCode}
+									key={relatedProduct.id}
+									productSignalSetter={productSignal}
+									MaxRetailPrice={relatedVariant?.customFields?.MRP}
+								/>
+							);
+						})}
+					</Slider>
+				</section>
+			)}
 
 			{isEnvVariableEnabled('VITE_SHOW_REVIEWS') && (
 				<div class="mt-24">

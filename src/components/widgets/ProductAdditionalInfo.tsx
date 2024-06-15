@@ -6,17 +6,30 @@ interface AdditionalInfoProps {
 }
 
 export const ProductAdditionalInfo = component$((props: AdditionalInfoProps) => {
-	// console.log('Product Additional Info Props:', props);
+	const additionalInfo = (props.product.customFields as ProductCustomFields)?.additionalInfo;
+
+	// Log additionalInfo to the console
+	// console.log('Additional Info:', additionalInfo);
+
+	// Function to strip HTML tags and check for non-whitespace content
+	const hasContent = (htmlString: string | null) => {
+		if (!htmlString) return false;
+		// Strip HTML tags and check if there's any non-whitespace content
+		const text = htmlString.replace(/<[^>]*>/g, '').trim();
+		return text.length > 0;
+	};
+
 	return (
-		<div class="max-w-2xl mx-auto py-2 px-4 sm:py-4 sm:px-6 lg:max-w-6xl lg:px-8">
-			<h2 class="text-lg font-medium text-orange-900">Additional Info</h2>
-			<div
-				class="text-base text-gray-700"
-				dangerouslySetInnerHTML={
-					(props.product.customFields as ProductCustomFields)?.additionalInfo ?? ''
-				}
-			/>
-		</div>
+		<section class="pt-12 xl:max-w-7xl xl:mx-auto xl:px-8">
+			{additionalInfo && hasContent(additionalInfo) && (
+				<div class="sm:px-6 lg:px-8 xl:px-0 pb-4">
+					<h2 class="text-2xl font-light tracking-tight text-gray-900 font-serif">
+						Additional Info
+					</h2>
+					<div class="text-base text-gray-700" dangerouslySetInnerHTML={additionalInfo} />
+				</div>
+			)}
+		</section>
 	);
 });
 
