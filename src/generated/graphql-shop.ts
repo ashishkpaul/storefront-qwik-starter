@@ -4054,6 +4054,7 @@ export type ActiveCustomerOrdersQuery = {
 				__typename?: 'Order';
 				id: string;
 				orderPlacedAt?: any | null;
+				createdAt: any;
 				code: string;
 				state: string;
 				totalWithTax: any;
@@ -5659,6 +5660,7 @@ export const ActiveCustomerOrdersDocument = gql`
 				items {
 					id
 					orderPlacedAt
+					createdAt
 					code
 					state
 					totalWithTax

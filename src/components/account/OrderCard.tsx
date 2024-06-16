@@ -3,7 +3,7 @@ import { useNavigate } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
 import { HighlightedButton } from '~/components/buttons/HighlightedButton';
 import { Order } from '~/generated/graphql';
-import { formatPrice } from '~/utils'; // Assuming formatDate function exists to format dates
+import { formatDateTime, formatPrice } from '~/utils'; // Assuming formatDate function exists to format dates
 
 type IProps = {
 	order: Order;
@@ -33,7 +33,7 @@ export default component$<IProps>(({ order }) => {
 						{order.state}
 					</span>
 					<p class="my-2">{formatPrice(order?.totalWithTax, order?.currencyCode || 'USD')}</p>
-					{/* <p class="text-xs text-gray-500">Placed on: {formatDateTime(order.orderPlacedAt)}</p> */}
+					<p class="text-xs text-gray-500">Placed on: {formatDateTime(order?.orderPlacedAt)}</p>
 				</div>
 			</div>
 			<div>

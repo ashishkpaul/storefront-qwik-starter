@@ -146,6 +146,7 @@ gql`
 				items {
 					id
 					orderPlacedAt
+					createdAt
 					code
 					state
 					totalWithTax
