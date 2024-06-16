@@ -1,4 +1,4 @@
-import { $, component$, useSignal } from '@builder.io/qwik';
+import { $, component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import XCircleIcon from '~/components/icons/XCircleIcon';
 import { registerCustomerAccountMutation } from '~/providers/shop/account/account';
@@ -13,6 +13,9 @@ export default component$(() => {
 	const error = useSignal('');
 	const websiteUrl = useSignal(''); // Add a signal for the websiteUrl input field
 	const phoneNumber = useSignal(''); // Add a signal for the phoneNumber input field
+
+	// Use useSignal to create a reference to the container div
+	const containerRef = useSignal<HTMLDivElement>();
 
 	const registerCustomer = $(async (): Promise<void> => {
 		if (
@@ -54,8 +57,17 @@ export default component$(() => {
 		}
 	});
 
+	// Scroll to the top when success or error changes
+	useVisibleTask$(({ track }) => {
+		track(() => successSignal.value);
+		track(() => error.value);
+		if ((successSignal.value || error.value) && containerRef.value) {
+			containerRef.value.scrollIntoView({ behavior: 'smooth' });
+		}
+	});
+
 	return (
-		<div class="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+		<div class="flex flex-col justify-center py-12 sm:px-6 lg:px-8" ref={containerRef}>
 			<div class="sm:mx-auto sm:w-full sm:max-w-md">
 				<h2 class="mt-6 text-center text-3xl text-gray-900">Create a new account</h2>
 				<p class="mt-2 text-center text-sm text-gray-600">
