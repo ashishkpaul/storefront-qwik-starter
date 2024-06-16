@@ -16,7 +16,7 @@ export default component$<{ onForward$: QRL<() => void> }>(({ onForward$ }) => {
 		<div class="flex flex-col space-y-24 items-center">
 			{paymentMethods.value?.map((method) => (
 				<div key={method.code} class="flex flex-col items-center">
-					{method.code === 'nitus-payment-method' && (
+					{method.code === 'standard-payment' && (
 						<>
 							<p class="text-gray-600 text-sm p-6">
 								{$localize`This is a dummy payment for demonstration purposes only`}
