@@ -5433,6 +5433,7 @@ export const ActiveCustomerOrdersDocument = gql`
 			orders(options: $options) {
 				items {
 					id
+					orderPlacedAt
 					code
 					state
 					totalWithTax

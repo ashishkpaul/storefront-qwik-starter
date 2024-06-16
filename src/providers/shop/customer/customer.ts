@@ -36,9 +36,11 @@ export const deleteCustomerAddressMutation = async (id: string) => {
 	return shopSdk.deleteCustomerAddress({ id });
 };
 
-export const getActiveCustomerOrdersQuery = async () => {
+export const getActiveCustomerOrdersQuery = async (skip: number) => {
 	const variables: ActiveCustomerOrdersQueryVariables = {
 		options: {
+			take: 25,
+			skip: skip, // Use the skip parameter passed to the function
 			filter: {
 				active: {
 					eq: false,
@@ -143,6 +145,7 @@ gql`
 			orders(options: $options) {
 				items {
 					id
+					orderPlacedAt
 					code
 					state
 					totalWithTax
