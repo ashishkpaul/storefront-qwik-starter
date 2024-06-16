@@ -1,4 +1,4 @@
-import { $, component$, useContext, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 import CartContents from '~/components/cart-contents/CartContents';
 import CartTotals from '~/components/cart-totals/CartTotals';
@@ -29,6 +29,9 @@ export default component$(() => {
 		{ name: $localize`Confirmation`, state: 'CONFIRMATION' },
 	];
 
+	// Use useSignal to create a reference to the container div
+	const containerRef = useSignal<HTMLDivElement>();
+
 	useVisibleTask$(async () => {
 		appState.showCart = false;
 		if (appState.activeOrder?.lines?.length === 0) {
@@ -43,8 +46,16 @@ export default component$(() => {
 		navigate(`/checkout/confirmation/${activeOrder.code}`);
 	});
 
+	// Scroll to the top when the step changes to 'PAYMENT'
+	useVisibleTask$(({ track }) => {
+		track(() => state.step);
+		if (state.step === 'PAYMENT' && containerRef.value) {
+			containerRef.value.scrollIntoView({ behavior: 'smooth' });
+		}
+	});
+
 	return (
-		<div>
+		<div ref={containerRef}>
 			{appState.activeOrder?.id && (
 				<div class="bg-gray-50 pb-48">
 					<div
@@ -82,9 +93,8 @@ export default component$(() => {
 											delete shippingAddress.defaultBillingAddress;
 
 											const setOrderShippingAddress = async () => {
-												const setOrderShippingAddress = await setOrderShippingAddressMutation(
-													shippingAddress
-												);
+												const setOrderShippingAddress =
+													await setOrderShippingAddressMutation(shippingAddress);
 
 												if (setOrderShippingAddress.__typename === 'Order') {
 													if (isEnvVariableEnabled('VITE_SHOW_PAYMENT_STEP')) {
