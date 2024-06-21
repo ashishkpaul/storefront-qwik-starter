@@ -33,6 +33,7 @@ export default component$(() => {
 		facetValueIds: string[];
 		skip: number;
 		allItemsLoaded: boolean;
+		isLoading: boolean; // Add isLoading to the state
 	}>({
 		showMenu: false,
 		search: {} as SearchResponse,
@@ -40,6 +41,7 @@ export default component$(() => {
 		facetValueIds: [],
 		skip: 0,
 		allItemsLoaded: false,
+		isLoading: false, // Initialize isLoading as false
 	});
 
 	const take = 25; // Set a default value for `take`
@@ -82,6 +84,7 @@ export default component$(() => {
 	});
 
 	const loadMoreProducts = $(async () => {
+		state.isLoading = true; // Set isLoading to true when loading starts
 		const newSearch = await executeQuery(term, state.facetValueIds, take, state.skip);
 		if (newSearch.items.length === 0) {
 			state.allItemsLoaded = true;
@@ -89,6 +92,7 @@ export default component$(() => {
 			state.search.items = [...state.search.items, ...newSearch.items];
 			state.skip += take;
 		}
+		state.isLoading = false; // Set isLoading to false when loading ends
 	});
 
 	return (
@@ -142,10 +146,13 @@ export default component$(() => {
 					{state.search.items && state.search.items.length >= take && !state.allItemsLoaded && (
 						<div class="flex justify-center mt-6">
 							<button
-								class="bg-indigo-600 text-white px-4 py-2 rounded-md"
+								class={`bg-indigo-600 text-white px-4 py-2 rounded-md transition duration-300 ${
+									state.isLoading ? 'cursor-not-allowed' : 'hover:bg-indigo-700'
+								}`}
 								onClick$={loadMoreProducts}
+								disabled={state.isLoading}
 							>
-								Load More Products
+								{state.isLoading ? 'Loading...' : 'Load More Products'}
 							</button>
 						</div>
 					)}

@@ -54,6 +54,7 @@ export default component$(() => {
 		allItemsLoaded: boolean;
 		totalItemsLoaded: number;
 		totalAvailableItems: number;
+		isLoading: boolean;
 	}>({
 		showMenu: false,
 		search: searchSignal.value as SearchResponse,
@@ -63,6 +64,7 @@ export default component$(() => {
 		allItemsLoaded: false,
 		totalItemsLoaded: searchSignal.value.items.length,
 		totalAvailableItems: searchSignal.value.totalItems,
+		isLoading: false,
 	});
 
 	useTask$(async ({ track }) => {
@@ -109,6 +111,7 @@ export default component$(() => {
 	});
 
 	const loadMoreProducts = $(async () => {
+		state.isLoading = true;
 		const additionalProducts = state.facetValueIds.length
 			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take, state.skip)
 			: await searchQueryWithCollectionSlug(params.slug, take, state.skip);
@@ -117,6 +120,7 @@ export default component$(() => {
 		state.skip += take;
 		state.totalItemsLoaded += additionalProducts.items.length;
 		state.allItemsLoaded = state.totalItemsLoaded >= state.search.totalItems;
+		state.isLoading = false;
 	});
 
 	const SubCollectionSlider = {
@@ -195,9 +199,12 @@ export default component$(() => {
 						<div class="flex justify-center mt-8">
 							<button
 								onClick$={loadMoreProducts}
-								class="bg-indigo-600 text-white px-4 py-2 rounded-md"
+								class={`bg-indigo-600 text-white px-4 py-2 rounded-md transition duration-300 ${
+									state.isLoading ? 'cursor-not-allowed' : 'hover:bg-indigo-700'
+								}`}
+								disabled={state.isLoading}
 							>
-								Load more products
+								{state.isLoading ? 'Loading...' : 'Load more products'}
 							</button>
 						</div>
 					)}
