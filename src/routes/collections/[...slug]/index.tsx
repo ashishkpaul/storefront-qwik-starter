@@ -7,10 +7,9 @@ import Filters from '~/components/facet-filter-controls/Filters';
 import FiltersButton from '~/components/filters-button/FiltersButton';
 import ProductCard from '~/components/products/ProductCard';
 import { SearchResponse } from '~/generated/graphql';
-import { getCollectionBySlug, getNextPage } from '~/providers/shop/collections/collections';
+import { getCollectionBySlug } from '~/providers/shop/collections/collections';
 
 import {
-	// getProductMRP,
 	searchQueryWithCollectionSlug,
 	searchQueryWithTerm,
 } from '~/providers/shop/products/products';
@@ -30,17 +29,18 @@ export const useCollectionLoader = routeLoader$(async ({ params }) => {
 export const useSearchLoader = routeLoader$(async ({ params: p, url }) => {
 	const params = cleanUpParams(p);
 	const activeFacetValueIds: string[] = url.searchParams.get('f')?.split('-') || [];
-	const take = 25; // Set the default `take` value here
+	const take = 25;
+	const skip = 0;
 	return activeFacetValueIds.length
-		? await searchQueryWithTerm(params.slug, '', activeFacetValueIds, take)
-		: await searchQueryWithCollectionSlug(params.slug, take);
+		? await searchQueryWithTerm(params.slug, '', activeFacetValueIds, take, skip)
+		: await searchQueryWithCollectionSlug(params.slug, take, skip);
 });
 
 export default component$(() => {
 	const { params: p, url } = useLocation();
 	const params = cleanUpParams(p);
 	const activeFacetValueIds: string[] = url.searchParams.get('f')?.split('-') || [];
-	const take = 25; // Set the default `take` value here
+	const take = 25;
 
 	const collectionSignal = useCollectionLoader();
 	const searchSignal = useSearchLoader();
@@ -50,28 +50,33 @@ export default component$(() => {
 		search: SearchResponse;
 		facedValues: FacetWithValues[];
 		facetValueIds: string[];
-		currentPage: number;
-		totalCount: number;
-		isLoadingNextPage: boolean;
+		skip: number;
+		allItemsLoaded: boolean;
+		totalItemsLoaded: number;
+		totalAvailableItems: number;
 	}>({
 		showMenu: false,
 		search: searchSignal.value as SearchResponse,
 		facedValues: groupFacetValues(searchSignal.value as SearchResponse, activeFacetValueIds),
 		facetValueIds: activeFacetValueIds,
-		currentPage: 0,
-		totalCount: searchSignal.value.totalItems,
-		isLoadingNextPage: false,
+		skip: 0,
+		allItemsLoaded: false,
+		totalItemsLoaded: searchSignal.value.items.length,
+		totalAvailableItems: searchSignal.value.totalItems,
 	});
 
 	useTask$(async ({ track }) => {
 		track(() => collectionSignal.value.slug);
 		params.slug = cleanUpParams(p).slug;
 		state.facetValueIds = url.searchParams.get('f')?.split('-') || [];
+		state.skip = 0; // Reset skip when collection changes
 		state.search = state.facetValueIds.length
-			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take)
-			: await searchQueryWithCollectionSlug(params.slug, take);
+			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take, state.skip)
+			: await searchQueryWithCollectionSlug(params.slug, take, state.skip);
 		state.facedValues = groupFacetValues(state.search as SearchResponse, state.facetValueIds);
-		state.totalCount = state.search.totalItems;
+		state.skip += take;
+		state.totalItemsLoaded = state.search.items.length;
+		state.allItemsLoaded = state.totalItemsLoaded >= state.search.totalItems;
 	});
 
 	const onFilterChange = $(async (id: string) => {
@@ -85,10 +90,13 @@ export default component$(() => {
 		state.facetValueIds = facetValueIds;
 		changeUrlParamsWithoutRefresh('', facetValueIds);
 
+		state.skip = 0; // Reset skip when filters change
 		state.search = facetValueIds.length
-			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take)
-			: await searchQueryWithCollectionSlug(params.slug, take);
-		state.totalCount = state.search.totalItems;
+			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take, state.skip)
+			: await searchQueryWithCollectionSlug(params.slug, take, state.skip);
+		state.skip += take;
+		state.totalItemsLoaded = state.search.items.length;
+		state.allItemsLoaded = state.totalItemsLoaded >= state.search.totalItems;
 	});
 
 	const onOpenCloseFilter = $((id: string) => {
@@ -100,24 +108,15 @@ export default component$(() => {
 		});
 	});
 
-	const loadNextPage = $(async () => {
-		if (state.isLoadingNextPage) return;
-		state.isLoadingNextPage = true;
+	const loadMoreProducts = $(async () => {
+		const additionalProducts = state.facetValueIds.length
+			? await searchQueryWithTerm(params.slug, '', state.facetValueIds, take, state.skip)
+			: await searchQueryWithCollectionSlug(params.slug, take, state.skip);
 
-		const nextPageData = await getNextPage({
-			rangeStart: state.search.items.length, // Start from the current length of items
-			collectionSlug: params.slug,
-			facetValueIds: state.facetValueIds,
-		});
-
-		console.log('Next page data:', nextPageData);
-
-		// Append nextPageData.array to state.search.items
-		state.search.items = [...state.search.items, ...nextPageData.array];
-
-		// No need to increment currentPage in this case
-
-		state.isLoadingNextPage = false;
+		state.search.items = [...state.search.items, ...additionalProducts.items];
+		state.skip += take;
+		state.totalItemsLoaded += additionalProducts.items.length;
+		state.allItemsLoaded = state.totalItemsLoaded >= state.search.totalItems;
 	});
 
 	const SubCollectionSlider = {
@@ -180,31 +179,28 @@ export default component$(() => {
 				)}
 				<div class="sm:col-span-5 lg:col-span-4">
 					<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-						{Promise.all(
-							state.search.items.map(async (item) => (
-								<ProductCard
-									key={item.productId}
-									productAsset={item.productAsset}
-									productName={item.productName}
-									slug={item.slug}
-									priceWithTax={item.priceWithTax}
-									currencyCode={item.currencyCode}
-									customProductVariantMappings={item.customProductVariantMappings} // Add this prop
-								/>
-							))
-						)}
+						{state.search.items.map((item) => (
+							<ProductCard
+								key={item.productId}
+								productAsset={item.productAsset}
+								productName={item.productName}
+								slug={item.slug}
+								priceWithTax={item.priceWithTax}
+								currencyCode={item.currencyCode}
+								customProductVariantMappings={item.customProductVariantMappings} // Add this prop
+							/>
+						))}
 					</div>
-					<div class="flex justify-end mt-4">
-						{state.search.items.length < state.totalCount && (
+					{!state.allItemsLoaded && (
+						<div class="flex justify-center mt-8">
 							<button
-								class="px-4 py-2 bg-blue-500 text-white rounded"
-								onClick$={loadNextPage}
-								disabled={state.isLoadingNextPage}
+								onClick$={loadMoreProducts}
+								class="bg-indigo-600 text-white px-4 py-2 rounded-md"
 							>
-								{state.isLoadingNextPage ? 'Loading...' : 'Load More'}
+								Load more products
 							</button>
-						)}
-					</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

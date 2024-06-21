@@ -9,14 +9,14 @@ import { FacetWithValues } from '~/types';
 import { changeUrlParamsWithoutRefresh, enableDisableFacetValues, groupFacetValues } from '~/utils';
 
 export const executeQuery = $(
-	async (term: string, activeFacetValueIds: string[], take: 25) =>
-		await searchQueryWithTerm('', term, activeFacetValueIds, take)
+	async (term: string, activeFacetValueIds: string[], take: number, skip: number = 0) =>
+		await searchQueryWithTerm('', term, activeFacetValueIds, take, skip)
 );
 
 export const useSearchLoader = routeLoader$(async ({ query }) => {
 	const term = query.get('q') || '';
 	const activeFacetValueIds: string[] = query.get('f')?.split('-') || [];
-	const search = await executeQuery(term, activeFacetValueIds, 25);
+	const search = await executeQuery(term, activeFacetValueIds, 25, 0);
 	return { search, query };
 });
 
@@ -31,12 +31,18 @@ export default component$(() => {
 		search: SearchResponse;
 		facedValues: FacetWithValues[];
 		facetValueIds: string[];
+		skip: number;
+		allItemsLoaded: boolean;
 	}>({
 		showMenu: false,
 		search: {} as SearchResponse,
 		facedValues: [],
 		facetValueIds: [],
+		skip: 0,
+		allItemsLoaded: false,
 	});
+
+	const take = 25; // Set a default value for `take`
 
 	useTask$(async ({ track }) => {
 		track(() => searchLoader.value.query);
@@ -44,9 +50,10 @@ export default component$(() => {
 		const term = searchLoader.value.query.get('q') || '';
 		const activeFacetValueIds: string[] = searchLoader.value.query.get('f')?.split('-') || [];
 
-		state.search = await executeQuery(term, activeFacetValueIds, 25);
+		state.search = await executeQuery(term, activeFacetValueIds, take, 0);
 		state.facedValues = groupFacetValues(state.search, activeFacetValueIds);
 		state.facetValueIds = activeFacetValueIds;
+		state.skip = take;
 	});
 
 	const onFilterChange = $(async (id: string) => {
@@ -60,7 +67,9 @@ export default component$(() => {
 		state.facetValueIds = facetValueIds;
 		changeUrlParamsWithoutRefresh(term, facetValueIds);
 
-		state.search = await executeQuery(term, state.facetValueIds, 25);
+		state.search = await executeQuery(term, state.facetValueIds, take, 0);
+		state.skip = take;
+		state.allItemsLoaded = false;
 	});
 
 	const onOpenCloseFilter = $((id: string) => {
@@ -70,6 +79,16 @@ export default component$(() => {
 			}
 			return f;
 		});
+	});
+
+	const loadMoreProducts = $(async () => {
+		const newSearch = await executeQuery(term, state.facetValueIds, take, state.skip);
+		if (newSearch.items.length === 0) {
+			state.allItemsLoaded = true;
+		} else {
+			state.search.items = [...state.search.items, ...newSearch.items];
+			state.skip += take;
+		}
 	});
 
 	return (
@@ -116,10 +135,20 @@ export default component$(() => {
 								slug={item.slug}
 								priceWithTax={item.priceWithTax}
 								currencyCode={item.currencyCode}
-								customProductVariantMappings={item.customProductVariantMappings} // Add this prop
-							></ProductCard>
+								customProductVariantMappings={item.customProductVariantMappings}
+							/>
 						))}
 					</div>
+					{state.search.items && state.search.items.length >= take && !state.allItemsLoaded && (
+						<div class="flex justify-center mt-6">
+							<button
+								class="bg-indigo-600 text-white px-4 py-2 rounded-md"
+								onClick$={loadMoreProducts}
+							>
+								Load More Products
+							</button>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

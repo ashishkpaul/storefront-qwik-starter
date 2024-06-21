@@ -5,10 +5,7 @@ import CollectionCard from '~/components/collection-card/CollectionCard';
 import ProductsInCollectionCard from '~/components/products/ProductsInCollectionCard';
 import Hero from '~/components/widgets/Hero';
 import { APP_STATE } from '~/constants';
-import {
-	// getProductMRP,
-	searchQueryWithCollectionSlug,
-} from '~/providers/shop/products/products';
+import { searchQueryWithCollectionSlug } from '~/providers/shop/products/products';
 
 export default component$(() => {
 	const collections = useContext(APP_STATE).collections;
@@ -32,6 +29,7 @@ export default component$(() => {
 	};
 
 	const take = 25; // Set a default value for `take`
+	const skip = 0; // Set a default value for `skip`
 
 	return (
 		<div class="py-2 px-2 ">
@@ -44,13 +42,11 @@ export default component$(() => {
 					</h2>
 					<br />
 					<Slider {...ShopByCategoryShowCase}>
-						{/* <div class="grid justify-items-center grid-cols-2 md:grid-cols-6 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8"> */}
 						{allCollections.map((collection) =>
 							collection.featuredAsset ? (
 								<CollectionCard key={collection.id} collection={collection} />
 							) : null
 						)}
-						{/* </div> */}
 					</Slider>
 				</section>
 			</div>
@@ -69,18 +65,20 @@ export default component$(() => {
 						</div>
 						<div>
 							<Slider {...ProductsInCollectionShowCase}>
-								{(await searchQueryWithCollectionSlug(collection.slug, take)).items.map((item) => (
-									<ProductsInCollectionCard
-										key={item.productId}
-										productAsset={item.productAsset}
-										productName={item.productName}
-										slug={item.slug}
-										priceWithTax={item.priceWithTax}
-										currencyCode={item.currencyCode}
-										// Access MRP directly from customProductVariantMappings
-										MRP={item.customProductVariantMappings?.MRP}
-									/>
-								))}
+								{(await searchQueryWithCollectionSlug(collection.slug, take, skip)).items.map(
+									(item) => (
+										<ProductsInCollectionCard
+											key={item.productId}
+											productAsset={item.productAsset}
+											productName={item.productName}
+											slug={item.slug}
+											priceWithTax={item.priceWithTax}
+											currencyCode={item.currencyCode}
+											// Access MRP directly from customProductVariantMappings
+											MRP={item.customProductVariantMappings?.MRP}
+										/>
+									)
+								)}
 							</Slider>
 						</div>
 					</section>
