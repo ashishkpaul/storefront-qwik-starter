@@ -1,3 +1,8 @@
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
 union ActiveOrderResult = NoActiveOrderError | Order
 
 union AddPaymentToOrderResult =
@@ -402,6 +407,29 @@ input CreateCustomerInput {
 	lastName: String!
 	phoneNumber: String
 	title: String
+}
+
+input CreateSellerCustomFieldsInput {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerEmailID: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: Int
+	SellerVatNo: String
+	SellerWebsite: String
+}
+
+input CreateSellerInput {
+	customFields: CreateSellerCustomFieldsInput
+	emailAddress: String!
+	firstName: String!
+	lastName: String!
+	password: String!
 }
 
 """
@@ -2725,7 +2753,7 @@ type Mutation {
 	Create a new Customer Address
 	"""
 	createCustomerAddress(input: CreateAddressInput!): Address!
-	createStripePaymentIntent: String
+	createStripePaymentIntent: String!
 
 	"""
 	Delete an existing Address
@@ -2733,7 +2761,10 @@ type Mutation {
 	deleteCustomerAddress(id: ID!): Success!
 
 	"""
-	Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})`
+	Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
+
+	The `rememberMe` option applies when using cookie-based sessions, and if `true` it will set the maxAge of the session cookie
+	to 1 year.
 	"""
 	login(password: String!, rememberMe: Boolean, username: String!): NativeAuthenticationResult!
 
@@ -2764,6 +2795,7 @@ type Mutation {
 	3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
 	"""
 	registerCustomerAccount(input: RegisterCustomerInput!): RegisterCustomerAccountResult!
+	registerNewSeller(input: RegisterSellerInput!): Channel
 
 	"""
 	Remove all OrderLine from the Order
@@ -3680,6 +3712,11 @@ enum Permission {
 	Owner
 
 	"""
+	Allows Enable Or Disable
+	"""
+	PromoBannerStatus
+
+	"""
 	Public means any unauthenticated user may perform the operation
 	"""
 	Public
@@ -3743,6 +3780,11 @@ enum Permission {
 	Grants permission to read Product
 	"""
 	ReadProduct
+
+	"""
+	Allows reading promo banner fields
+	"""
+	ReadPromoBanner
 
 	"""
 	Grants permission to read Promotion
@@ -3875,6 +3917,11 @@ enum Permission {
 	UpdateProduct
 
 	"""
+	Allows updating promo banner fields
+	"""
+	UpdatePromoBanner
+
+	"""
 	Grants permission to update Promotion
 	"""
 	UpdatePromotion
@@ -3956,7 +4003,6 @@ type Product implements Node {
 	languageCode: LanguageCode!
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
-	primaryCollection: Collection
 	seo: Seo!
 	slug: String!
 	translations: [ProductTranslation!]!
@@ -3977,7 +4023,6 @@ type ProductCustomFields {
 	additionalInfo: String
 	infoUrl: String
 	popularityScore: Int
-	primaryCollection: Collection
 	relatedProducts: [Product!]
 }
 
@@ -4078,7 +4123,6 @@ input ProductSortParameter {
 	infoUrl: SortOrder
 	name: SortOrder
 	popularityScore: SortOrder
-	primaryCollection: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
 }
@@ -4415,6 +4459,11 @@ input RegisterCustomerInput {
 	password: String
 	phoneNumber: String
 	title: String
+}
+
+input RegisterSellerInput {
+	seller: CreateSellerInput!
+	shopName: String!
 }
 
 type RelationCustomFieldConfig implements CustomField {

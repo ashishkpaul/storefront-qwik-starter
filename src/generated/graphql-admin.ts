@@ -993,7 +993,6 @@ export type CreateProductCustomFieldsInput = {
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
-	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -1095,6 +1094,7 @@ export type CreateSellerCustomFieldsInput = {
 	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
+	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateSellerInput = {
@@ -1583,6 +1583,7 @@ export type CustomerOrdersArgs = {
 export type CustomerCustomFields = {
 	__typename?: 'CustomerCustomFields';
 	avatar?: Maybe<Asset>;
+	stripeCustomerId?: Maybe<Scalars['String']['output']>;
 	websiteUrl?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1596,6 +1597,7 @@ export type CustomerFilterParameter = {
 	lastName?: InputMaybe<StringOperators>;
 	phoneNumber?: InputMaybe<StringOperators>;
 	postalCode?: InputMaybe<StringOperators>;
+	stripeCustomerId?: InputMaybe<StringOperators>;
 	title?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 	websiteUrl?: InputMaybe<StringOperators>;
@@ -1677,6 +1679,7 @@ export type CustomerSortParameter = {
 	id?: InputMaybe<SortOrder>;
 	lastName?: InputMaybe<SortOrder>;
 	phoneNumber?: InputMaybe<SortOrder>;
+	stripeCustomerId?: InputMaybe<SortOrder>;
 	title?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 	websiteUrl?: InputMaybe<SortOrder>;
@@ -3088,7 +3091,12 @@ export type Mutation = {
 	duplicateEntity: DuplicateEntityResult;
 	flushBufferedJobs: Success;
 	importProducts?: Maybe<ImportInfo>;
-	/** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
+	/**
+	 * Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
+	 *
+	 * The `rememberMe` option applies when using cookie-based sessions, and if `true` it will set the maxAge of the session cookie
+	 * to 1 year.
+	 */
 	login: NativeAuthenticationResult;
 	logout: Success;
 	/**
@@ -4542,6 +4550,8 @@ export const Permission = {
 	DeleteZone: 'DeleteZone',
 	/** Owner means the user owns this entity, e.g. a Customer's own Order */
 	Owner: 'Owner',
+	/** Allows Enable Or Disable */
+	PromoBannerStatus: 'PromoBannerStatus',
 	/** Public means any unauthenticated user may perform the operation */
 	Public: 'Public',
 	/** Grants permission to read Administrator */
@@ -4568,6 +4578,8 @@ export const Permission = {
 	ReadPaymentMethod: 'ReadPaymentMethod',
 	/** Grants permission to read Product */
 	ReadProduct: 'ReadProduct',
+	/** Allows reading promo banner fields */
+	ReadPromoBanner: 'ReadPromoBanner',
 	/** Grants permission to read Promotion */
 	ReadPromotion: 'ReadPromotion',
 	/** Grants permission to read Seller */
@@ -4620,6 +4632,8 @@ export const Permission = {
 	UpdatePaymentMethod: 'UpdatePaymentMethod',
 	/** Grants permission to update Product */
 	UpdateProduct: 'UpdateProduct',
+	/** Allows updating promo banner fields */
+	UpdatePromoBanner: 'UpdatePromoBanner',
 	/** Grants permission to update Promotion */
 	UpdatePromotion: 'UpdatePromotion',
 	/** Grants permission to update Seller */
@@ -4708,7 +4722,6 @@ export type ProductCustomFields = {
 	facebookImage?: Maybe<Asset>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
-	primaryCollection?: Maybe<Collection>;
 	relatedProducts?: Maybe<Array<Product>>;
 	seoDescription?: Maybe<Scalars['String']['output']>;
 	seoTitle?: Maybe<Scalars['String']['output']>;
@@ -4830,7 +4843,6 @@ export type ProductSortParameter = {
 	infoUrl?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
-	primaryCollection?: InputMaybe<SortOrder>;
 	seoDescription?: InputMaybe<SortOrder>;
 	seoTitle?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
@@ -5877,6 +5889,7 @@ export type SellerCustomFields = {
 	SellerPhoneNo?: Maybe<Scalars['Int']['output']>;
 	SellerVatNo?: Maybe<Scalars['String']['output']>;
 	SellerWebsite?: Maybe<Scalars['String']['output']>;
+	connectedAccountId?: Maybe<Scalars['String']['output']>;
 };
 
 export type SellerFilterParameter = {
@@ -5894,6 +5907,7 @@ export type SellerFilterParameter = {
 	SellerWebsite?: InputMaybe<StringOperators>;
 	_and?: InputMaybe<Array<SellerFilterParameter>>;
 	_or?: InputMaybe<Array<SellerFilterParameter>>;
+	connectedAccountId?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	id?: InputMaybe<IdOperators>;
 	name?: InputMaybe<StringOperators>;
@@ -5932,6 +5946,7 @@ export type SellerSortParameter = {
 	SellerPhoneNo?: InputMaybe<SortOrder>;
 	SellerVatNo?: InputMaybe<SortOrder>;
 	SellerWebsite?: InputMaybe<SortOrder>;
+	connectedAccountId?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
@@ -6717,7 +6732,6 @@ export type UpdateProductCustomFieldsInput = {
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
-	primaryCollectionId?: InputMaybe<Scalars['ID']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -6821,6 +6835,7 @@ export type UpdateSellerCustomFieldsInput = {
 	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
+	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateSellerInput = {

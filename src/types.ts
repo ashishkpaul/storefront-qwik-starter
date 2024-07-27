@@ -231,6 +231,7 @@ export type EligibleShippingMethods = {
 	name: string;
 	price: number;
 	priceWithTax: number;
+	code: string;
 };
 
 export type EligiblePaymentMethods = {

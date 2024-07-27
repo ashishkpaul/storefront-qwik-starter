@@ -3531,6 +3531,7 @@ export type EligibleShippingMethodsQuery = {
 		metadata?: any | null;
 		price: any;
 		priceWithTax: any;
+		code: string;
 	}>;
 };
 

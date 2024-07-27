@@ -10,6 +10,7 @@ import {
 	Order,
 	PaymentInput,
 	PaymentMethodQuote,
+	SetOrderShippingMethodMutation,
 	ShippingMethodQuote,
 } from '~/generated/graphql';
 import { shopSdk } from '~/graphql-wrapper';
@@ -21,7 +22,7 @@ export const getAvailableCountriesQuery = async () => {
 };
 
 export const addPaymentToOrderMutation = async (
-	input: PaymentInput = { method: 'standard-payment', metadata: {} }
+	input: PaymentInput = { method: 'connected-payment-method', metadata: {} }
 ) => {
 	return shopSdk
 		.addPaymentToOrder({ input })
@@ -61,6 +62,18 @@ export const generateBraintreeClientTokenQuery = async (
 		.then((res: GenerateBraintreeClientTokenQuery) => res.generateBraintreeClientToken);
 };
 
+export const setOrderShippingMethodMutation = async (shippingMethodIds: string[]) => {
+	return shopSdk
+		.setOrderShippingMethod({ shippingMethodId: shippingMethodIds })
+		.then((res: SetOrderShippingMethodMutation) => {
+			if (res.setOrderShippingMethod.__typename === 'Order') {
+				return res.setOrderShippingMethod as Order;
+			} else {
+				throw new Error(res.setOrderShippingMethod.message);
+			}
+		});
+};
+
 gql`
 	query availableCountries {
 		availableCountries {
@@ -80,6 +93,7 @@ gql`
 			metadata
 			price
 			priceWithTax
+			code
 		}
 	}
 `;
@@ -130,5 +144,17 @@ gql`
 gql`
 	query generateBraintreeClientToken($orderId: ID!, $includeCustomerId: Boolean!) {
 		generateBraintreeClientToken(orderId: $orderId, includeCustomerId: $includeCustomerId)
+	}
+`;
+
+gql`
+	mutation setOrderShippingMethod($shippingMethodId: [ID!]!) {
+		setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
+			...OrderDetail
+			... on ErrorResult {
+				errorCode
+				message
+			}
+		}
 	}
 `;

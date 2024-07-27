@@ -431,6 +431,29 @@ export type CreateCustomerInput = {
 	title?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateSellerCustomFieldsInput = {
+	SellerBillingAddress?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCity?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCountry?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
+	SellerEmailID?: InputMaybe<Scalars['String']['input']>;
+	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
+	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
+	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
+	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateSellerInput = {
+	customFields?: InputMaybe<CreateSellerCustomFieldsInput>;
+	emailAddress: Scalars['String']['input'];
+	firstName: Scalars['String']['input'];
+	lastName: Scalars['String']['input'];
+	password: Scalars['String']['input'];
+};
+
 /**
  * @description
  * ISO 4217 currency code
@@ -1751,10 +1774,15 @@ export type Mutation = {
 	authenticate: AuthenticationResult;
 	/** Create a new Customer Address */
 	createCustomerAddress: Address;
-	createStripePaymentIntent?: Maybe<Scalars['String']['output']>;
+	createStripePaymentIntent: Scalars['String']['output'];
 	/** Delete an existing Address */
 	deleteCustomerAddress: Success;
-	/** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
+	/**
+	 * Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
+	 *
+	 * The `rememberMe` option applies when using cookie-based sessions, and if `true` it will set the maxAge of the session cookie
+	 * to 1 year.
+	 */
 	login: NativeAuthenticationResult;
 	/** End the current authenticated session */
 	logout: Success;
@@ -1777,6 +1805,7 @@ export type Mutation = {
 	 * 3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
 	 */
 	registerCustomerAccount: RegisterCustomerAccountResult;
+	registerNewSeller?: Maybe<Channel>;
 	/** Remove all OrderLine from the Order */
 	removeAllOrderLines: RemoveOrderItemsResult;
 	/** Removes the given coupon code from the active Order */
@@ -1874,6 +1903,10 @@ export type MutationRefreshCustomerVerificationArgs = {
 
 export type MutationRegisterCustomerAccountArgs = {
 	input: RegisterCustomerInput;
+};
+
+export type MutationRegisterNewSellerArgs = {
+	input: RegisterSellerInput;
 };
 
 export type MutationRemoveCouponCodeArgs = {
@@ -2522,6 +2555,8 @@ export const Permission = {
 	DeleteZone: 'DeleteZone',
 	/** Owner means the user owns this entity, e.g. a Customer's own Order */
 	Owner: 'Owner',
+	/** Allows Enable Or Disable */
+	PromoBannerStatus: 'PromoBannerStatus',
 	/** Public means any unauthenticated user may perform the operation */
 	Public: 'Public',
 	/** Grants permission to read Administrator */
@@ -2548,6 +2583,8 @@ export const Permission = {
 	ReadPaymentMethod: 'ReadPaymentMethod',
 	/** Grants permission to read Product */
 	ReadProduct: 'ReadProduct',
+	/** Allows reading promo banner fields */
+	ReadPromoBanner: 'ReadPromoBanner',
 	/** Grants permission to read Promotion */
 	ReadPromotion: 'ReadPromotion',
 	/** Grants permission to read Seller */
@@ -2600,6 +2637,8 @@ export const Permission = {
 	UpdatePaymentMethod: 'UpdatePaymentMethod',
 	/** Grants permission to update Product */
 	UpdateProduct: 'UpdateProduct',
+	/** Allows updating promo banner fields */
+	UpdatePromoBanner: 'UpdatePromoBanner',
 	/** Grants permission to update Promotion */
 	UpdatePromotion: 'UpdatePromotion',
 	/** Grants permission to update Seller */
@@ -2655,7 +2694,6 @@ export type Product = Node & {
 	languageCode: LanguageCode;
 	name: Scalars['String']['output'];
 	optionGroups: Array<ProductOptionGroup>;
-	primaryCollection?: Maybe<Collection>;
 	seo: Seo;
 	slug: Scalars['String']['output'];
 	translations: Array<ProductTranslation>;
@@ -2675,7 +2713,6 @@ export type ProductCustomFields = {
 	additionalInfo?: Maybe<Scalars['String']['output']>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
-	primaryCollection?: Maybe<Collection>;
 	relatedProducts?: Maybe<Array<Product>>;
 };
 
@@ -2767,7 +2804,6 @@ export type ProductSortParameter = {
 	infoUrl?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
-	primaryCollection?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
@@ -3104,6 +3140,11 @@ export type RegisterCustomerInput = {
 	password?: InputMaybe<Scalars['String']['input']>;
 	phoneNumber?: InputMaybe<Scalars['String']['input']>;
 	title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RegisterSellerInput = {
+	seller: CreateSellerInput;
+	shopName: Scalars['String']['input'];
 };
 
 export type RelationCustomFieldConfig = CustomField & {
@@ -3725,6 +3766,7 @@ export type EligibleShippingMethodsQuery = {
 		metadata?: any | null;
 		price: any;
 		priceWithTax: any;
+		code: string;
 	}>;
 };
 
@@ -3891,7 +3933,7 @@ export type CreateStripePaymentIntentMutationVariables = Exact<{ [key: string]: 
 
 export type CreateStripePaymentIntentMutation = {
 	__typename?: 'Mutation';
-	createStripePaymentIntent?: string | null;
+	createStripePaymentIntent: string;
 };
 
 export type GenerateBraintreeClientTokenQueryVariables = Exact<{
@@ -3902,6 +3944,77 @@ export type GenerateBraintreeClientTokenQueryVariables = Exact<{
 export type GenerateBraintreeClientTokenQuery = {
 	__typename?: 'Query';
 	generateBraintreeClientToken?: string | null;
+};
+
+export type SetOrderShippingMethodMutationVariables = Exact<{
+	shippingMethodId: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+export type SetOrderShippingMethodMutation = {
+	__typename?: 'Mutation';
+	setOrderShippingMethod:
+		| { __typename?: 'IneligibleShippingMethodError'; errorCode: ErrorCode; message: string }
+		| { __typename?: 'NoActiveOrderError'; errorCode: ErrorCode; message: string }
+		| {
+				__typename: 'Order';
+				id: string;
+				code: string;
+				active: boolean;
+				createdAt: any;
+				state: string;
+				currencyCode: CurrencyCode;
+				totalQuantity: number;
+				subTotal: any;
+				subTotalWithTax: any;
+				shippingWithTax: any;
+				totalWithTax: any;
+				taxSummary: Array<{
+					__typename?: 'OrderTaxSummary';
+					description: string;
+					taxRate: number;
+					taxTotal: any;
+				}>;
+				customer?: {
+					__typename?: 'Customer';
+					id: string;
+					firstName: string;
+					lastName: string;
+					emailAddress: string;
+				} | null;
+				shippingAddress?: {
+					__typename?: 'OrderAddress';
+					fullName?: string | null;
+					streetLine1?: string | null;
+					streetLine2?: string | null;
+					company?: string | null;
+					city?: string | null;
+					province?: string | null;
+					postalCode?: string | null;
+					countryCode?: string | null;
+					phoneNumber?: string | null;
+				} | null;
+				shippingLines: Array<{
+					__typename?: 'ShippingLine';
+					priceWithTax: any;
+					shippingMethod: { __typename?: 'ShippingMethod'; id: string; name: string };
+				}>;
+				lines: Array<{
+					__typename?: 'OrderLine';
+					id: string;
+					unitPriceWithTax: any;
+					linePriceWithTax: any;
+					quantity: number;
+					featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
+					productVariant: {
+						__typename?: 'ProductVariant';
+						id: string;
+						name: string;
+						price: any;
+						product: { __typename?: 'Product'; id: string; slug: string };
+					};
+				}>;
+		  }
+		| { __typename?: 'OrderModificationError'; errorCode: ErrorCode; message: string };
 };
 
 export type CollectionsQueryVariables = Exact<{
@@ -4554,77 +4667,6 @@ export type AddItemToOrderMutation = {
 				}>;
 		  }
 		| { __typename?: 'OrderLimitError'; errorCode: ErrorCode; message: string }
-		| { __typename?: 'OrderModificationError'; errorCode: ErrorCode; message: string };
-};
-
-export type SetOrderShippingMethodMutationVariables = Exact<{
-	shippingMethodId: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
-}>;
-
-export type SetOrderShippingMethodMutation = {
-	__typename?: 'Mutation';
-	setOrderShippingMethod:
-		| { __typename?: 'IneligibleShippingMethodError'; errorCode: ErrorCode; message: string }
-		| { __typename?: 'NoActiveOrderError'; errorCode: ErrorCode; message: string }
-		| {
-				__typename: 'Order';
-				id: string;
-				code: string;
-				active: boolean;
-				createdAt: any;
-				state: string;
-				currencyCode: CurrencyCode;
-				totalQuantity: number;
-				subTotal: any;
-				subTotalWithTax: any;
-				shippingWithTax: any;
-				totalWithTax: any;
-				taxSummary: Array<{
-					__typename?: 'OrderTaxSummary';
-					description: string;
-					taxRate: number;
-					taxTotal: any;
-				}>;
-				customer?: {
-					__typename?: 'Customer';
-					id: string;
-					firstName: string;
-					lastName: string;
-					emailAddress: string;
-				} | null;
-				shippingAddress?: {
-					__typename?: 'OrderAddress';
-					fullName?: string | null;
-					streetLine1?: string | null;
-					streetLine2?: string | null;
-					company?: string | null;
-					city?: string | null;
-					province?: string | null;
-					postalCode?: string | null;
-					countryCode?: string | null;
-					phoneNumber?: string | null;
-				} | null;
-				shippingLines: Array<{
-					__typename?: 'ShippingLine';
-					priceWithTax: any;
-					shippingMethod: { __typename?: 'ShippingMethod'; id: string; name: string };
-				}>;
-				lines: Array<{
-					__typename?: 'OrderLine';
-					id: string;
-					unitPriceWithTax: any;
-					linePriceWithTax: any;
-					quantity: number;
-					featuredAsset?: { __typename?: 'Asset'; id: string; preview: string } | null;
-					productVariant: {
-						__typename?: 'ProductVariant';
-						id: string;
-						name: string;
-						price: any;
-						product: { __typename?: 'Product'; id: string; slug: string };
-					};
-				}>;
-		  }
 		| { __typename?: 'OrderModificationError'; errorCode: ErrorCode; message: string };
 };
 
@@ -5508,6 +5550,7 @@ export const EligibleShippingMethodsDocument = gql`
 			metadata
 			price
 			priceWithTax
+			code
 		}
 	}
 `;
@@ -5556,6 +5599,18 @@ export const GenerateBraintreeClientTokenDocument = gql`
 	query generateBraintreeClientToken($orderId: ID!, $includeCustomerId: Boolean!) {
 		generateBraintreeClientToken(orderId: $orderId, includeCustomerId: $includeCustomerId)
 	}
+`;
+export const SetOrderShippingMethodDocument = gql`
+	mutation setOrderShippingMethod($shippingMethodId: [ID!]!) {
+		setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
+			...OrderDetail
+			... on ErrorResult {
+				errorCode
+				message
+			}
+		}
+	}
+	${OrderDetailFragmentDoc}
 `;
 export const CollectionsDocument = gql`
 	query collections($take: Int, $skip: Int) {
@@ -5744,18 +5799,6 @@ export const SetCustomerForOrderDocument = gql`
 export const AddItemToOrderDocument = gql`
 	mutation addItemToOrder($productVariantId: ID!, $quantity: Int!) {
 		addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
-			...OrderDetail
-			... on ErrorResult {
-				errorCode
-				message
-			}
-		}
-	}
-	${OrderDetailFragmentDoc}
-`;
-export const SetOrderShippingMethodDocument = gql`
-	mutation setOrderShippingMethod($shippingMethodId: [ID!]!) {
-		setOrderShippingMethod(shippingMethodId: $shippingMethodId) {
 			...OrderDetail
 			... on ErrorResult {
 				errorCode
@@ -6008,6 +6051,16 @@ export function getSdk<C>(requester: Requester<C>) {
 				options
 			) as Promise<GenerateBraintreeClientTokenQuery>;
 		},
+		setOrderShippingMethod(
+			variables: SetOrderShippingMethodMutationVariables,
+			options?: C
+		): Promise<SetOrderShippingMethodMutation> {
+			return requester<SetOrderShippingMethodMutation, SetOrderShippingMethodMutationVariables>(
+				SetOrderShippingMethodDocument,
+				variables,
+				options
+			) as Promise<SetOrderShippingMethodMutation>;
+		},
 		collections(variables?: CollectionsQueryVariables, options?: C): Promise<CollectionsQuery> {
 			return requester<CollectionsQuery, CollectionsQueryVariables>(
 				CollectionsDocument,
@@ -6140,16 +6193,6 @@ export function getSdk<C>(requester: Requester<C>) {
 				variables,
 				options
 			) as Promise<AddItemToOrderMutation>;
-		},
-		setOrderShippingMethod(
-			variables: SetOrderShippingMethodMutationVariables,
-			options?: C
-		): Promise<SetOrderShippingMethodMutation> {
-			return requester<SetOrderShippingMethodMutation, SetOrderShippingMethodMutationVariables>(
-				SetOrderShippingMethodDocument,
-				variables,
-				options
-			) as Promise<SetOrderShippingMethodMutation>;
 		},
 		adjustOrderLine(
 			variables: AdjustOrderLineMutationVariables,
