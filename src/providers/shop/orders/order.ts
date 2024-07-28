@@ -46,10 +46,22 @@ export const setOrderShippingAddressMutation = async (input: CreateAddressInput)
 		.then((res: SetOrderShippingAddressMutation) => res.setOrderShippingAddress);
 };
 
-export const setOrderShippingMethodMutation = async (shippingMethodId: string[]) => {
+export const setOrderShippingMethodMutation = async (shippingMethodIds: string[]) => {
+	console.log('Setting shipping method IDs:', shippingMethodIds);
 	return shopSdk
-		.setOrderShippingMethod({ shippingMethodId })
-		.then((res: SetOrderShippingMethodMutation) => res.setOrderShippingMethod as Order);
+		.setOrderShippingMethod({ shippingMethodId: shippingMethodIds })
+		.then((res: SetOrderShippingMethodMutation) => {
+			console.log('Response from setOrderShippingMethod:', res);
+			if (res.setOrderShippingMethod.__typename === 'Order') {
+				return res.setOrderShippingMethod as Order;
+			} else {
+				throw new Error(res.setOrderShippingMethod.message);
+			}
+		})
+		.catch((error) => {
+			console.error('Error setting shipping method:', error);
+			throw error;
+		});
 };
 
 export const setCustomerForOrderMutation = async (input: CreateCustomerInput) => {
