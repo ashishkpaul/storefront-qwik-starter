@@ -24,9 +24,8 @@ export default component$<Props>(({ appState }) => {
 	});
 
 	// Fetch eligible shipping methods
-	useTask$(async () => {
+	const fetchShippingMethods = $(async () => {
 		const methods = await getEligibleShippingMethodsQuery();
-		console.log('Fetched shipping methods:', methods);
 		state.selfPickingMethod = methods.find((method) => method.id === '1') || null;
 		state.multiVendorMethods = methods.filter((method) => method.id !== '1');
 
@@ -73,6 +72,32 @@ export default component$<Props>(({ appState }) => {
 		} else {
 			console.log('No shipping methods selected yet');
 		}
+	});
+
+	// Refresh shipping methods on cart update
+	useTask$(() => {
+		const refreshShippingMethods = async () => {
+			await fetchShippingMethods();
+		};
+
+		// Mock function to simulate listening to cart updates
+		const listenToCartUpdates = (callback: () => void) => {
+			// Replace with your actual cart update logic
+			// For example, this could be an event emitter or a subscription
+			const interval = setInterval(() => {
+				callback();
+			}, 2000); // Refresh every 2 seconds for demo purposes
+
+			return () => clearInterval(interval);
+		};
+
+		const unsubscribeCartUpdate = listenToCartUpdates(() => {
+			console.log('Cart updated, refreshing shipping methods');
+			refreshShippingMethods();
+		});
+
+		// Cleanup function to remove listener on component unmount
+		return () => unsubscribeCartUpdate();
 	});
 
 	return (
