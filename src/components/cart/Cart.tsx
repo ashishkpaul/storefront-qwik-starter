@@ -1,6 +1,7 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext, useTask$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { APP_STATE } from '~/constants';
+import { getEligibleShippingMethodsQuery } from '~/providers/shop/checkout/checkout';
 import { isCheckoutPage } from '~/utils';
 import CartContents from '../cart-contents/CartContents';
 import CartPrice from '../cart-totals/CartPrice';
@@ -10,6 +11,18 @@ export default component$(() => {
 	const location = useLocation();
 	const appState = useContext(APP_STATE);
 	const isInEditableUrl = !isCheckoutPage(location.url.toString());
+
+	useTask$(async ({ track }) => {
+		track(() => appState.activeOrder?.totalQuantity);
+		if (appState.activeOrder?.totalQuantity) {
+			try {
+				const eligibleShippingMethods = await getEligibleShippingMethodsQuery();
+				appState.eligibleShippingMethods = eligibleShippingMethods;
+			} catch (error) {
+				console.error('Error updating shipping methods:', error);
+			}
+		}
+	});
 
 	return (
 		<div>

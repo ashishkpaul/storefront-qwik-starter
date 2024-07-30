@@ -13,6 +13,7 @@ import {
 	SetOrderShippingMethodMutation,
 } from '~/generated/graphql';
 import { shopSdk } from '~/graphql-wrapper';
+import { AppState } from '~/types';
 
 export const getActiveOrderQuery = async () => {
 	return shopSdk.activeOrder(undefined).then((res: ActiveOrderQuery) => res.activeOrder as Order);
@@ -28,10 +29,14 @@ export const addItemToOrderMutation = async (productVariantId: string, quantity:
 		.then((res: AddItemToOrderMutation) => res.addItemToOrder);
 };
 
-export const removeOrderLineMutation = async (lineId: string) => {
+export const removeOrderLineMutation = async (lineId: string, appState: AppState) => {
 	return shopSdk
 		.removeOrderLine({ orderLineId: lineId })
-		.then((res: RemoveOrderLineMutation) => res.removeOrderLine as Order);
+		.then(async (res: RemoveOrderLineMutation) => {
+			const updatedOrder = res.removeOrderLine as Order;
+			appState.activeOrder = await getActiveOrderQuery();
+			return updatedOrder;
+		});
 };
 
 export const adjustOrderLineMutation = async (lineId: string, quantity: number) => {

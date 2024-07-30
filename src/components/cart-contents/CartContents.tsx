@@ -108,7 +108,7 @@ export default component$<{
 												value={line.id}
 												class="font-medium text-primary-600 hover:text-primary-500"
 												onClick$={async () => {
-													appState.activeOrder = await removeOrderLineMutation(line.id);
+													appState.activeOrder = await removeOrderLineMutation(line.id, appState);
 													if (
 														appState.activeOrder?.lines?.length === 0 &&
 														isCheckoutPage(location.url.toString())

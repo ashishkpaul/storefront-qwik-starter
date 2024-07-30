@@ -13,6 +13,7 @@ export type AppState = {
 	shippingAddress: ShippingAddress;
 	availableCountries: Country[];
 	addressBook: ShippingAddress[];
+	eligibleShippingMethods?: any[];
 };
 
 export type Product = {
