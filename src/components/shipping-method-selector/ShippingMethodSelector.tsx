@@ -1,4 +1,5 @@
 import { $, component$, useStore, useTask$ } from '@builder.io/qwik';
+import { OrderLine } from '~/generated/graphql';
 import {
 	getEligibleShippingMethodsQuery,
 	setOrderShippingMethodMutation,
@@ -19,6 +20,7 @@ export default component$<Props>(({ appState }) => {
 		selectedMethodIds: [] as string[],
 		selfPickingMethod: null as EligibleShippingMethods | null,
 		multiVendorMethods: [] as EligibleShippingMethods[],
+		orderLines: [] as OrderLine[], // Track order lines
 	});
 
 	const fetchShippingMethods = $(async () => {
@@ -38,6 +40,25 @@ export default component$<Props>(({ appState }) => {
 			}
 		} catch (error) {
 			console.error('Error fetching shipping methods:', error);
+		}
+	});
+
+	const detectOrderChanges = $(async () => {
+		const activeOrder = await getActiveOrderQuery();
+		const newOrderLines = activeOrder.lines;
+
+		// Compare new order lines with the existing ones
+		const orderChanged =
+			newOrderLines.length !== state.orderLines.length ||
+			newOrderLines.some(
+				(line, index) =>
+					line.id !== state.orderLines[index]?.id ||
+					line.quantity !== state.orderLines[index]?.quantity
+			);
+
+		if (orderChanged) {
+			state.orderLines = newOrderLines; // Update the store with the new order lines
+			await fetchShippingMethods(); // Fetch shipping methods if order has changed
 		}
 	});
 
@@ -64,18 +85,9 @@ export default component$<Props>(({ appState }) => {
 	});
 
 	useTask$(() => {
-		const refreshShippingMethods = async () => {
-			await fetchShippingMethods();
-		};
+		const intervalId = setInterval(detectOrderChanges, 2000); // Poll for order changes every 2 seconds
 
-		const listenToCartUpdates = (callback: () => void) => {
-			const interval = setInterval(callback, 2000);
-			return () => clearInterval(interval);
-		};
-
-		const unsubscribeCartUpdate = listenToCartUpdates(refreshShippingMethods);
-
-		return () => unsubscribeCartUpdate();
+		return () => clearInterval(intervalId); // Cleanup interval on component unmount
 	});
 
 	return (
