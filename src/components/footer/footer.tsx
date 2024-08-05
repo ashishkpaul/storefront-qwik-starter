@@ -26,7 +26,7 @@ export default component$(() => {
 
 	return (
 		<footer class="pt-6 border-t bg-gray-50">
-			<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 ">
+			<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
 				<div class="xl:grid xl:grid-cols-3 xl:gap-8">
 					<div class="grid grid-cols-2 gap-8 xl:col-span-2">
 						<div class="md:grid md:grid-cols-2 md:gap-8">
@@ -106,12 +106,18 @@ export default component$(() => {
 					</div>
 				</div>
 				<div class="mt-8 border-t pt-8">
-					<div class="flex items-center space-x-4 font-medium text-gray-500 hover:text-gray-700">
-						{/* Replace the GitHub link with the CopyrightIcon and website link */}
-						{/* <CopyrightIcon /> */}
-						<a target="_blank" href="https://www.saa9vi.com">
-							<p>&copy; {year} DingPack, All rights reserved.</p>
-						</a>
+					<div class="flex items-center justify-between text-gray-500 text-sm">
+						<p>&copy; {year} Buylits, All rights reserved.</p>
+						<p>
+							Served by{' '}
+							<a
+								href="https://www.saa9vi.com"
+								target="_blank"
+								class="text-gray-500 hover:text-gray-700"
+							>
+								Saa9vi Online Services
+							</a>
+						</p>
 					</div>
 				</div>
 			</div>
