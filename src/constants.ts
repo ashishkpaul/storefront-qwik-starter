@@ -7,10 +7,10 @@ export const CUSTOMER_NOT_DEFINED_ID = 'CUSTOMER_NOT_DEFINED_ID';
 export const HEADER_AUTH_TOKEN_KEY = 'vendure-auth-token';
 export const IMAGE_RESOLUTIONS = [1000, 800, 600, 400];
 export const HOMEPAGE_IMAGE = '/homepage.webp';
-export const DEFAULT_METADATA_URL = 'https://demo.dingpack.store';
-export const DEFAULT_METADATA_TITLE = 'Dingpack Online Store';
+export const DEFAULT_METADATA_URL = 'https://seller.buylits.com';
+export const DEFAULT_METADATA_TITLE = 'Buylits Local City Online Store';
 export const DEFAULT_METADATA_DESCRIPTION =
-	'Dingpack: Control, Connect And Grow Your E-commerce Empire';
+	'Buylits: Control, Connect And Grow Your E-commerce Empire';
 export const DEFAULT_METADATA_IMAGE =
 	'https://demo.dingpack.store/assets/preview/4b/dingpack_social_share__preview.jpg?preset=large';
 export const DEFAULT_LOCALE = 'en';

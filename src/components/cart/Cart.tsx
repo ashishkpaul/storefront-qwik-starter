@@ -1,4 +1,4 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { APP_STATE } from '~/constants';
 import { isCheckoutPage } from '~/utils';
@@ -10,6 +10,14 @@ export default component$(() => {
 	const location = useLocation();
 	const appState = useContext(APP_STATE);
 	const isInEditableUrl = !isCheckoutPage(location.url.toString());
+
+	useVisibleTask$(() => {
+		// This task runs when the component becomes visible
+		if (appState.activeOrder?.state === 'PaymentSettled') {
+			// Reset the cart quantity to 0
+			appState.activeOrder.totalQuantity = 0;
+		}
+	});
 
 	return (
 		<div>
