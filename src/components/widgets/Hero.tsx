@@ -32,7 +32,7 @@ export default component$(() => {
 						<div class="max-w-3xl mx-auto lg:max-w-none">
 							<p class="text-xl text-muted mb-6 dark:text-slate-600">
 								<span class="font-semibold underline decoration-wavy decoration-1 decoration-secondary-600 underline-offset-2">
-									Dingpack
+									Buylits
 								</span>{' '}
 								Unlock your entrepreneurial potential! Join our vibrant <em>Marketplace </em> and{' '}
 								<em>kickstart</em> your online selling journey today.{' '}
