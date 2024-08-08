@@ -34,8 +34,7 @@ export default component$(() => {
 					phoneNumber: address.phoneNumber,
 					defaultShippingAddress: address.defaultShippingAddress,
 					defaultBillingAddress: address.defaultBillingAddress,
-					country: address.country.code,
-				} as ShippingAddress)
+				}) as ShippingAddress
 		);
 		activeCustomerAddresses.value = { id, addresses: shippingAddresses };
 
