@@ -31,9 +31,14 @@ export const Head = component$(() => {
 				<link key={key} {...l} />
 			))}
 
-			{head.styles.map((s, key) => (
-				<style key={key} {...s.props} dangerouslySetInnerHTML={s.style} />
-			))}
+			{head.styles.map((s, key) => {
+				const restProps = { ...s.props };
+				const dangerouslySetInnerHTML = s.props?.dangerouslySetInnerHTML;
+				if (dangerouslySetInnerHTML) {
+					restProps.dangerouslySetInnerHTML = dangerouslySetInnerHTML;
+				}
+				return <style key={key} {...restProps} />;
+			})}
 
 			<meta name="description" content="Dingpack Online Store" />
 

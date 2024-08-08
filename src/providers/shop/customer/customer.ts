@@ -45,6 +45,9 @@ export const getActiveCustomerOrdersQuery = async (skip: number) => {
 				active: {
 					eq: false,
 				},
+				type: {
+					notEq: 'Seller',
+				},
 			},
 			sort: {
 				createdAt: 'DESC',
