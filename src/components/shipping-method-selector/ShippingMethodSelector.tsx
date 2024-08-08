@@ -25,10 +25,7 @@ export default component$<Props>(({ appState }) => {
 
 	const fetchShippingMethods = $(async () => {
 		try {
-			// Fetch the updated active order to ensure you have the latest data
-			const activeOrder = await getActiveOrderQuery();
 			const methods = await getEligibleShippingMethodsQuery();
-
 			state.selfPickingMethod = methods.find((method) => method.id === '1') || null;
 			state.multiVendorMethods = methods.filter((method) => method.id !== '1');
 
@@ -39,36 +36,40 @@ export default component$<Props>(({ appState }) => {
 
 			if (state.selectedMethodIds.length > 0) {
 				await setOrderShippingMethodMutation(state.selectedMethodIds);
-				appState.activeOrder = activeOrder; // Update the active order in the app state
+				appState.activeOrder = await getActiveOrderQuery();
 			}
 		} catch (error) {
 			console.error('Error fetching shipping methods:', error);
+			// Provide user feedback or retry logic
 		}
 	});
 
 	const detectOrderChanges = $(async () => {
-		const activeOrder = await getActiveOrderQuery();
-		const newOrderLines = activeOrder.lines;
+		try {
+			const activeOrder = await getActiveOrderQuery();
+			const newOrderLines = activeOrder.lines;
 
-		// Compare new order lines with the existing ones
-		const orderChanged =
-			newOrderLines.length !== state.orderLines.length ||
-			newOrderLines.some(
-				(line, index) =>
-					line.id !== state.orderLines[index]?.id ||
-					line.quantity !== state.orderLines[index]?.quantity
-			);
+			const orderChanged =
+				newOrderLines.length !== state.orderLines.length ||
+				newOrderLines.some(
+					(line, index) =>
+						line.id !== state.orderLines[index]?.id ||
+						line.quantity !== state.orderLines[index]?.quantity
+				);
 
-		if (orderChanged) {
-			state.orderLines = newOrderLines; // Update the store with the new order lines
-			await fetchShippingMethods(); // Fetch shipping methods if order has changed
+			if (orderChanged) {
+				state.orderLines = newOrderLines; // Update the store with the new order lines
+				await fetchShippingMethods(); // Fetch shipping methods if order has changed
+			}
+		} catch (error) {
+			console.error('Error detecting order changes:', error);
+			// Provide user feedback or retry logic
 		}
 	});
 
 	const handleGroupChange = $(async (group: string) => {
 		state.selectedGroup = group;
 
-		// Determine selected methods based on the group
 		state.selectedMethodIds =
 			group === 'self-picking' && state.selfPickingMethod
 				? [state.selfPickingMethod.id]
@@ -76,7 +77,6 @@ export default component$<Props>(({ appState }) => {
 
 		console.log('Selected method IDs:', state.selectedMethodIds);
 
-		// Fetch and update the shipping methods
 		await fetchShippingMethods();
 
 		if (state.selectedMethodIds.length > 0) {
@@ -85,6 +85,7 @@ export default component$<Props>(({ appState }) => {
 				appState.activeOrder = await getActiveOrderQuery();
 			} catch (error) {
 				console.error('Error setting order shipping method:', error);
+				// Provide user feedback or retry logic
 			}
 		} else {
 			console.log('No shipping methods selected yet');
@@ -92,7 +93,7 @@ export default component$<Props>(({ appState }) => {
 	});
 
 	useTask$(() => {
-		const intervalId = setInterval(detectOrderChanges, 2000); // Poll for order changes every 2 seconds
+		const intervalId = setInterval(detectOrderChanges, 2000); // Adjust polling interval if needed
 
 		return () => clearInterval(intervalId); // Cleanup interval on component unmount
 	});
