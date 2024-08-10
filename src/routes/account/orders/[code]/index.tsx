@@ -76,10 +76,19 @@ export default component$(() => {
 				</div>
 				<div class="flex items-center justify-between">
 					<dt class="text-sm">
-						Shipping{' '}
-						<span class="text-gray-600">
-							(<span>Standard Shipping</span>)
-						</span>
+						Shipping
+						{store.order?.shippingLines?.length > 0 && (
+							<span class="text-gray-600">
+								(
+								{store.order?.shippingLines?.map((line, index) => (
+									<span key={index}>
+										{line.shippingMethod?.name}
+										{index < (store.order?.shippingLines?.length ?? 0) - 1 && ', '}
+									</span>
+								))}
+								)
+							</span>
+						)}
 					</dt>
 					<dd class="text-sm font-medium">
 						{formatPrice(store.order?.shippingWithTax, store.order?.currencyCode || 'USD')}
