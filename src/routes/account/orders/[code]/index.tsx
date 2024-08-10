@@ -44,13 +44,21 @@ export default component$(() => {
 										<div class="flex justify-between text-base font-medium">
 											<h3>{line.productVariant.name}</h3>
 											<p class="ml-4">
-												{formatPrice(line.linePriceWithTax, store.order?.currencyCode || 'USD')}
+												{formatPrice(line.unitPriceWithTax, store.order?.currencyCode || 'USD')}
 											</p>
 										</div>
 									</div>
 									<div class="flex-1 flex items-center justify-between text-sm text-gray-600">
 										<div class="flex space-x-4">
-											<div>Quantity: {line.quantity}</div>
+											<div class="qty">Quantity: {line.quantity}</div>
+										</div>
+										<div class="total">
+											<div>
+												{formatPrice(
+													line.unitPriceWithTax * line.quantity,
+													store.order?.currencyCode || 'USD'
+												)}
+											</div>
 										</div>
 									</div>
 								</div>
@@ -60,12 +68,12 @@ export default component$(() => {
 				</ul>
 			</div>
 			<dl class="border-t mt-6 border-gray-200 py-6 space-y-6">
-				{/* <div class="flex items-center justify-between">
+				<div class="flex items-center justify-between">
 					<dt class="text-sm">Subtotal</dt>
 					<dd class="text-sm font-medium">
-						{formatPrice(store.order?.subTotal, store.order?.currencyCode || 'USD')}
+						{formatPrice(store.order?.subTotalWithTax, store.order?.currencyCode || 'USD')}
 					</dd>
-				</div> */}
+				</div>
 				<div class="flex items-center justify-between">
 					<dt class="text-sm">
 						Shipping
