@@ -44,7 +44,7 @@ export default component$(() => {
 										<div class="flex justify-between text-base font-medium">
 											<h3>{line.productVariant.name}</h3>
 											<p class="ml-4">
-												{formatPrice(line.unitPriceWithTax, store.order?.currencyCode || 'USD')}
+												{formatPrice(line.proratedUnitPrice, store.order?.currencyCode || 'USD')}
 											</p>
 										</div>
 									</div>
@@ -55,7 +55,7 @@ export default component$(() => {
 										<div class="total">
 											<div>
 												{formatPrice(
-													line.unitPriceWithTax * line.quantity,
+													line.proratedUnitPrice * line.quantity,
 													store.order?.currencyCode || 'USD'
 												)}
 											</div>
