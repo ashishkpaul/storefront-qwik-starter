@@ -44,21 +44,13 @@ export default component$(() => {
 										<div class="flex justify-between text-base font-medium">
 											<h3>{line.productVariant.name}</h3>
 											<p class="ml-4">
-												{formatPrice(line.productVariant.price, store.order?.currencyCode || 'USD')}
+												{formatPrice(line.linePriceWithTax, store.order?.currencyCode || 'USD')}
 											</p>
 										</div>
 									</div>
 									<div class="flex-1 flex items-center justify-between text-sm text-gray-600">
 										<div class="flex space-x-4">
-											<div class="qty">1</div>
-										</div>
-										<div class="total">
-											<div>
-												{formatPrice(
-													line.productVariant.price * line.quantity,
-													store.order?.currencyCode || 'USD'
-												)}
-											</div>
+											<div>Quantity: {line.quantity}</div>
 										</div>
 									</div>
 								</div>
@@ -68,12 +60,12 @@ export default component$(() => {
 				</ul>
 			</div>
 			<dl class="border-t mt-6 border-gray-200 py-6 space-y-6">
-				<div class="flex items-center justify-between">
+				{/* <div class="flex items-center justify-between">
 					<dt class="text-sm">Subtotal</dt>
 					<dd class="text-sm font-medium">
 						{formatPrice(store.order?.subTotal, store.order?.currencyCode || 'USD')}
 					</dd>
-				</div>
+				</div> */}
 				<div class="flex items-center justify-between">
 					<dt class="text-sm">
 						Shipping
@@ -94,14 +86,14 @@ export default component$(() => {
 						{formatPrice(store.order?.shippingWithTax, store.order?.currencyCode || 'USD')}
 					</dd>
 				</div>
-				<div class="flex items-center justify-between">
+				{/* <div class="flex items-center justify-between">
 					<dt class="text-sm">Tax</dt>
 					<dd class="text-sm font-medium">
 						{formatPrice(store.order?.taxSummary[0].taxTotal, store.order?.currencyCode || 'USD')}
 					</dd>
-				</div>
+				</div> */}
 				<div class="flex items-center justify-between border-t border-gray-200 pt-6">
-					<dt class="text-base font-medium">Total</dt>
+					<dt class="text-base font-medium">Total (Inclusive of all taxes)</dt>
 					<dd class="text-base font-medium">
 						{formatPrice(store.order?.totalWithTax, store.order?.currencyCode || 'USD')}
 					</dd>

@@ -46,7 +46,7 @@ export const getActiveCustomerOrdersQuery = async (skip: number) => {
 					eq: false,
 				},
 				type: {
-					notEq: 'Seller',
+					eq: 'Aggregate',
 				},
 			},
 			sort: {
