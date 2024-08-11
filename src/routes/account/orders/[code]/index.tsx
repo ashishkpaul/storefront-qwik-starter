@@ -12,7 +12,9 @@ export default component$(() => {
 	const store = useStore<{ order?: Order }>({});
 
 	useVisibleTask$(async () => {
-		store.order = await getOrderByCodeQuery(code);
+		const response = await getOrderByCodeQuery(code);
+		console.log('Order Response:', response);
+		store.order = response;
 	});
 
 	return store.order ? (
@@ -44,7 +46,7 @@ export default component$(() => {
 										<div class="flex justify-between text-base font-medium">
 											<h3>{line.productVariant.name}</h3>
 											<p class="ml-4">
-												{formatPrice(line.proratedUnitPrice, store.order?.currencyCode || 'USD')}
+												{formatPrice(line.unitPriceWithTax, store.order?.currencyCode || 'USD')}
 											</p>
 										</div>
 									</div>
@@ -55,7 +57,7 @@ export default component$(() => {
 										<div class="total">
 											<div>
 												{formatPrice(
-													line.proratedUnitPrice * line.quantity,
+													line.unitPriceWithTax * line.quantity,
 													store.order?.currencyCode || 'USD'
 												)}
 											</div>
@@ -78,28 +80,21 @@ export default component$(() => {
 					<dt class="text-sm">
 						Shipping
 						{store.order?.shippingLines?.length > 0 && (
-							<span class="text-gray-600">
-								(
-								{store.order?.shippingLines?.map((line, index) => (
-									<span key={index}>
-										{line.shippingMethod?.name}
-										{index < (store.order?.shippingLines?.length ?? 0) - 1 && ', '}
-									</span>
+							<div class="space-y-4">
+								{store.order.shippingLines.map((line, index) => (
+									<div key={index} class="bg-gray-50 p-4 rounded-md">
+										<h4 class="text-sm font-semibold">{line.shippingMethod?.name}</h4>
+										<div dangerouslySetInnerHTML={line.shippingMethod?.description || ''} />
+									</div>
 								))}
-								)
-							</span>
+							</div>
 						)}
 					</dt>
 					<dd class="text-sm font-medium">
 						{formatPrice(store.order?.shippingWithTax, store.order?.currencyCode || 'USD')}
 					</dd>
 				</div>
-				{/* <div class="flex items-center justify-between">
-					<dt class="text-sm">Tax</dt>
-					<dd class="text-sm font-medium">
-						{formatPrice(store.order?.taxSummary[0].taxTotal, store.order?.currencyCode || 'USD')}
-					</dd>
-				</div> */}
+
 				<div class="flex items-center justify-between border-t border-gray-200 pt-6">
 					<dt class="text-base font-medium">Total (Inclusive of all taxes)</dt>
 					<dd class="text-base font-medium">

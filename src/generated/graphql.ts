@@ -5025,6 +5025,8 @@ export const OrderDetailFragmentDoc = gql`
 			shippingMethod {
 				id
 				name
+				code
+				description
 			}
 			priceWithTax
 		}

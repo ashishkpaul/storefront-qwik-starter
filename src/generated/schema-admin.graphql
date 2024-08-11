@@ -1,3 +1,8 @@
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
 union AddFulfillmentToOrderResult =
 	| CreateFulfillmentError
 	| EmptyOrderLineSelectionError
@@ -1036,7 +1041,6 @@ input CreateProductCustomFieldsInput {
 	facebookImageId: ID
 	infoUrl: String
 	popularityScore: Int
-	primaryCollectionId: ID
 	relatedProductsIds: [ID!]
 	twitterImageId: ID
 }
@@ -1138,6 +1142,7 @@ input CreateSellerCustomFieldsInput {
 	SellerPhoneNo: Int
 	SellerVatNo: String
 	SellerWebsite: String
+	connectedAccountId: String
 }
 
 input CreateSellerInput {
@@ -2081,6 +2086,7 @@ type Customer implements Node {
 
 type CustomerCustomFields {
 	avatar: Asset
+	stripeCustomerId: String
 	websiteUrl: String
 }
 
@@ -2094,6 +2100,7 @@ input CustomerFilterParameter {
 	lastName: StringOperators
 	phoneNumber: StringOperators
 	postalCode: StringOperators
+	stripeCustomerId: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
 	websiteUrl: StringOperators
@@ -2196,6 +2203,7 @@ input CustomerSortParameter {
 	id: SortOrder
 	lastName: SortOrder
 	phoneNumber: SortOrder
+	stripeCustomerId: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
 	websiteUrl: SortOrder
@@ -4375,7 +4383,10 @@ type Mutation {
 	importProducts(csvFile: Upload!): ImportInfo
 
 	"""
-	Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})`
+	Authenticates the user using the native authentication strategy. This mutation is an alias for authenticate({ native: { ... }})
+
+	The `rememberMe` option applies when using cookie-based sessions, and if `true` it will set the maxAge of the session cookie
+	to 1 year.
 	"""
 	login(password: String!, rememberMe: Boolean, username: String!): NativeAuthenticationResult!
 	logout: Success!
@@ -5529,6 +5540,11 @@ enum Permission {
 	Owner
 
 	"""
+	Allows Enable Or Disable
+	"""
+	PromoBannerStatus
+
+	"""
 	Public means any unauthenticated user may perform the operation
 	"""
 	Public
@@ -5592,6 +5608,11 @@ enum Permission {
 	Grants permission to read Product
 	"""
 	ReadProduct
+
+	"""
+	Allows reading promo banner fields
+	"""
+	ReadPromoBanner
 
 	"""
 	Grants permission to read Promotion
@@ -5724,6 +5745,11 @@ enum Permission {
 	UpdateProduct
 
 	"""
+	Allows updating promo banner fields
+	"""
+	UpdatePromoBanner
+
+	"""
 	Grants permission to update Promotion
 	"""
 	UpdatePromotion
@@ -5838,7 +5864,6 @@ type ProductCustomFields {
 	facebookImage: Asset
 	infoUrl: String
 	popularityScore: Int
-	primaryCollection: Collection
 	relatedProducts: [Product!]
 	seoDescription: String
 	seoTitle: String
@@ -5968,7 +5993,6 @@ input ProductSortParameter {
 	infoUrl: SortOrder
 	name: SortOrder
 	popularityScore: SortOrder
-	primaryCollection: SortOrder
 	seoDescription: SortOrder
 	seoTitle: SortOrder
 	slug: SortOrder
@@ -6849,6 +6873,7 @@ type SellerCustomFields {
 	SellerPhoneNo: Int
 	SellerVatNo: String
 	SellerWebsite: String
+	connectedAccountId: String
 }
 
 input SellerFilterParameter {
@@ -6866,6 +6891,7 @@ input SellerFilterParameter {
 	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
 	_or: [SellerFilterParameter!]
+	connectedAccountId: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
 	name: StringOperators
@@ -6917,6 +6943,7 @@ input SellerSortParameter {
 	SellerPhoneNo: SortOrder
 	SellerVatNo: SortOrder
 	SellerWebsite: SortOrder
+	connectedAccountId: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	name: SortOrder
@@ -7748,7 +7775,6 @@ input UpdateProductCustomFieldsInput {
 	facebookImageId: ID
 	infoUrl: String
 	popularityScore: Int
-	primaryCollectionId: ID
 	relatedProductsIds: [ID!]
 	twitterImageId: ID
 }
@@ -7858,6 +7884,7 @@ input UpdateSellerCustomFieldsInput {
 	SellerPhoneNo: Int
 	SellerVatNo: String
 	SellerWebsite: String
+	connectedAccountId: String
 }
 
 input UpdateSellerInput {

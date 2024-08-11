@@ -145,7 +145,7 @@ export type OrderPriceFields = keyof Pick<
 
 type ShippingLine = {
 	priceWithTax: 1000;
-	shippingMethod: { id: string; name: string };
+	shippingMethod: { id: string; name: string; description: string };
 };
 
 // search

@@ -50,6 +50,7 @@ gql`
 				id
 				name
 				code
+				description
 			}
 			priceWithTax
 		}
