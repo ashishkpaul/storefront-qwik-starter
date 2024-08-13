@@ -7028,6 +7028,7 @@ export type OrderDetailFragment = {
 			__typename?: 'ProductVariant';
 			id: string;
 			name: string;
+			sku: string;
 			price: any;
 			product: { __typename?: 'Product'; id: string; slug: string };
 		};
@@ -7102,6 +7103,7 @@ export type OrdersQuery = {
 					__typename?: 'ProductVariant';
 					id: string;
 					name: string;
+					sku: string;
 					price: any;
 					product: { __typename?: 'Product'; id: string; slug: string };
 				};
@@ -7167,6 +7169,7 @@ export const OrderDetailFragmentDoc = gql`
 			productVariant {
 				id
 				name
+				sku
 				price
 				product {
 					id
