@@ -3839,6 +3839,7 @@ export type AddPaymentToOrderMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -3917,6 +3918,7 @@ export type TransitionOrderToStateMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4027,6 +4029,7 @@ export type SetOrderShippingMethodMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4542,6 +4545,7 @@ export type SetOrderShippingAddressMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4620,6 +4624,7 @@ export type SetCustomerForOrderMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4697,6 +4702,7 @@ export type AddItemToOrderMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4766,6 +4772,7 @@ export type OrderDetailFragment = {
 			__typename?: 'ProductVariant';
 			id: string;
 			name: string;
+			sku: string;
 			price: any;
 			product: { __typename?: 'Product'; id: string; slug: string };
 		};
@@ -4842,6 +4849,7 @@ export type AdjustOrderLineMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4918,6 +4926,7 @@ export type RemoveOrderLineMutation = {
 						__typename?: 'ProductVariant';
 						id: string;
 						name: string;
+						sku: string;
 						price: any;
 						product: { __typename?: 'Product'; id: string; slug: string };
 					};
@@ -4990,6 +4999,7 @@ export type ActiveOrderQuery = {
 				__typename?: 'ProductVariant';
 				id: string;
 				name: string;
+				sku: string;
 				price: any;
 				product: { __typename?: 'Product'; id: string; slug: string };
 			};
@@ -5063,6 +5073,7 @@ export type OrderByCodeQuery = {
 				__typename?: 'ProductVariant';
 				id: string;
 				name: string;
+				sku: string;
 				price: any;
 				product: { __typename?: 'Product'; id: string; slug: string };
 			};
@@ -5363,6 +5374,7 @@ export const OrderDetailFragmentDoc = gql`
 			productVariant {
 				id
 				name
+				sku
 				price
 				product {
 					id

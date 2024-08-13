@@ -49,10 +49,11 @@ export default component$(() => {
 												{formatPrice(line.unitPriceWithTax, store.order?.currencyCode || 'USD')}
 											</p>
 										</div>
+										<p class="text-sm text-gray-500">{line.productVariant?.sku}</p>
 									</div>
 									<div class="flex-1 flex items-center justify-between text-sm text-gray-600">
 										<div class="flex space-x-4">
-											<div class="qty">Quantity: {line.quantity}</div>
+											<div class="text-sm text-gray-500">Quantity: {line.quantity}</div>
 										</div>
 										<div class="total">
 											<div>
@@ -71,30 +72,32 @@ export default component$(() => {
 			</div>
 			<dl class="border-t mt-6 border-gray-200 py-6 space-y-6">
 				<div class="flex items-center justify-between">
-					<dt class="text-sm">Subtotal</dt>
-					<dd class="text-sm font-medium">
-						{formatPrice(store.order?.subTotalWithTax, store.order?.currencyCode || 'USD')}
-					</dd>
-				</div>
-				<div class="flex items-center justify-between">
-					<dt class="text-sm">
+					<dt class="text-sm flex items-center">
 						Shipping
 						{store.order?.shippingLines?.length > 0 && (
-							<div class="space-y-4">
-								{store.order.shippingLines.map((line, index) => (
-									<div key={index} class="bg-gray-50 p-4 rounded-md">
-										<h4 class="text-sm font-semibold">{line.shippingMethod?.name}</h4>
-										<div dangerouslySetInnerHTML={line.shippingMethod?.description || ''} />
-									</div>
+							<span class="text-gray-600">
+								(
+								{store.order?.shippingLines?.map((line, index) => (
+									<span key={index}>
+										{line.shippingMethod?.name}
+										{index < (store.order?.shippingLines?.length ?? 0) - 1 && ', '}
+									</span>
 								))}
-							</div>
+								)
+							</span>
 						)}
 					</dt>
 					<dd class="text-sm font-medium">
 						{formatPrice(store.order?.shippingWithTax, store.order?.currencyCode || 'USD')}
 					</dd>
 				</div>
-
+				<div class="space-y-4 mt-2">
+					{store.order?.shippingLines?.map((line, index) => (
+						<div key={index} class="bg-gray-50 p-4 rounded-md text-sm text-gray-700">
+							<div dangerouslySetInnerHTML={line.shippingMethod?.description || ''} />
+						</div>
+					))}
+				</div>
 				<div class="flex items-center justify-between border-t border-gray-200 pt-6">
 					<dt class="text-base font-medium">Total (Inclusive of all taxes)</dt>
 					<dd class="text-base font-medium">

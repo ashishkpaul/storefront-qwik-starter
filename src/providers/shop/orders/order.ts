@@ -163,6 +163,7 @@ gql`
 			productVariant {
 				id
 				name
+				sku
 				price
 				product {
 					id
