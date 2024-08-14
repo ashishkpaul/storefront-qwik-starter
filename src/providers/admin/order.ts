@@ -1,12 +1,27 @@
 import gql from 'graphql-tag';
-import type { OrderList, OrdersQuery } from '~/generated/graphql-admin';
+import type { Order } from '~/generated/graphql-admin';
 import type { Options } from '~/graphql-wrapper';
 import { adminSdk } from '~/graphql-wrapper';
 
-export const getOrdersQuery = async (options?: Options) => {
-	return adminSdk.orders({ options: { sort: options?.sort } }, options).then((res: OrdersQuery) => {
-		return res?.orders as OrderList;
-	});
+export const getOrderByCode = async (code: string, options?: Options) => {
+	try {
+		const response = await adminSdk.orders(
+			{
+				options: {
+					filter: { code: { eq: code } },
+					sort: options?.sort,
+				},
+			},
+			options
+		);
+
+		console.log('GraphQL Response:', response); // Log the entire response
+
+		return (response?.orders?.items?.[0] as Order) || null; // Handle potential empty response
+	} catch (error) {
+		console.error('Error in getOrderByCode:', error); // Log the error
+		throw new Error('Failed to fetch order details.');
+	}
 };
 
 gql`
@@ -16,6 +31,7 @@ gql`
 		code
 		active
 		createdAt
+		updatedAt
 		state
 		currencyCode
 		totalQuantity
@@ -71,6 +87,18 @@ gql`
 				product {
 					id
 					slug
+				}
+				channels {
+					id
+					code
+					token
+					seller {
+						name
+						customFields {
+							SellerEmailID
+							SellerPhoneNo
+						}
+					}
 				}
 			}
 		}

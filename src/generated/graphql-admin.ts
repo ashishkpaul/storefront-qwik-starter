@@ -6974,6 +6974,7 @@ export type OrderDetailFragment = {
 	code: string;
 	active: boolean;
 	createdAt: any;
+	updatedAt: any;
 	state: string;
 	currencyCode: CurrencyCode;
 	totalQuantity: number;
@@ -7031,6 +7032,21 @@ export type OrderDetailFragment = {
 			sku: string;
 			price: any;
 			product: { __typename?: 'Product'; id: string; slug: string };
+			channels: Array<{
+				__typename?: 'Channel';
+				id: string;
+				code: string;
+				token: string;
+				seller?: {
+					__typename?: 'Seller';
+					name: string;
+					customFields?: {
+						__typename?: 'SellerCustomFields';
+						SellerEmailID?: string | null;
+						SellerPhoneNo?: number | null;
+					} | null;
+				} | null;
+			}>;
 		};
 	}>;
 };
@@ -7049,6 +7065,7 @@ export type OrdersQuery = {
 			code: string;
 			active: boolean;
 			createdAt: any;
+			updatedAt: any;
 			state: string;
 			currencyCode: CurrencyCode;
 			totalQuantity: number;
@@ -7106,6 +7123,21 @@ export type OrdersQuery = {
 					sku: string;
 					price: any;
 					product: { __typename?: 'Product'; id: string; slug: string };
+					channels: Array<{
+						__typename?: 'Channel';
+						id: string;
+						code: string;
+						token: string;
+						seller?: {
+							__typename?: 'Seller';
+							name: string;
+							customFields?: {
+								__typename?: 'SellerCustomFields';
+								SellerEmailID?: string | null;
+								SellerPhoneNo?: number | null;
+							} | null;
+						} | null;
+					}>;
 				};
 			}>;
 		}>;
@@ -7119,6 +7151,7 @@ export const OrderDetailFragmentDoc = gql`
 		code
 		active
 		createdAt
+		updatedAt
 		state
 		currencyCode
 		totalQuantity
@@ -7175,6 +7208,18 @@ export const OrderDetailFragmentDoc = gql`
 					id
 					slug
 				}
+				channels {
+					id
+					code
+					token
+					seller {
+						name
+						customFields {
+							SellerEmailID
+							SellerPhoneNo
+						}
+					}
+				}
 			}
 		}
 	}
@@ -7196,13 +7241,26 @@ export type Requester<C = {}> = <R, V>(
 ) => Promise<R> | AsyncIterable<R>;
 export function getSdk<C>(requester: Requester<C>) {
 	return {
-		orders(variables?: OrdersQueryVariables, options?: C): Promise<OrdersQuery> {
-			return requester<OrdersQuery, OrdersQueryVariables>(
-				OrdersDocument,
-				variables,
-				options
-			) as Promise<OrdersQuery>;
+		async orders(variables?: OrdersQueryVariables, options?: C): Promise<OrdersQuery> {
+			try {
+				const result = requester<OrdersQuery, OrdersQueryVariables>(
+					OrdersDocument,
+					variables,
+					options
+				);
+
+				// Ensure result is always a Promise
+				if (result instanceof Promise) {
+					return await result;
+				} else {
+					throw new Error('Requester did not return a Promise');
+				}
+			} catch (error) {
+				console.error('Failed to fetch orders:', error);
+				throw new Error('Failed to fetch order details.');
+			}
 		},
 	};
 }
+
 export type Sdk = ReturnType<typeof getSdk>;
