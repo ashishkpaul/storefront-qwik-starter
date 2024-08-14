@@ -1,44 +1,21 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { useLocation } from '@builder.io/qwik-city';
 import { Image } from 'qwik-image';
-import { Order } from '~/generated/graphql-admin'; // Adjust this import based on your generated types
-import { getOrderByCode } from '~/providers/admin/order';
+import { Order } from '~/generated/graphql';
+import { getOrderByCodeQuery } from '~/providers/shop/orders/order';
 import { formatDateTime, formatPrice } from '~/utils';
 
 export default component$(() => {
 	const {
 		params: { code },
 	} = useLocation();
-	const store = useStore<{ order?: Order; loading: boolean; error?: string }>({
-		loading: true,
-		error: '',
-	});
+	const store = useStore<{ order?: Order }>({});
 
 	useVisibleTask$(async () => {
-		try {
-			console.log('Fetching order with code:', code);
-			const response = await getOrderByCode(code);
-			console.log('Order Response:', response);
-			store.order = response as Order;
-			console.log('Order stored:', store.order);
-		} catch (err) {
-			store.error = 'Failed to fetch order details.';
-			console.error('Error fetching order:', err);
-		} finally {
-			store.loading = false;
-			console.log('Loading state:', store.loading);
-		}
+		const response = await getOrderByCodeQuery(code);
+		console.log('Order Response:', response);
+		store.order = response;
 	});
-
-	if (store.loading) {
-		return <div class="h-[100vh] flex items-center justify-center">Loading...</div>;
-	}
-
-	if (store.error) {
-		return <div class="h-[100vh] flex items-center justify-center text-red-500">{store.error}</div>;
-	}
-
-	console.log('Rendering order details:', store.order);
 
 	return store.order ? (
 		<div class="max-w-6xl m-auto rounded-lg p-4 space-y-4 text-gray-900">
@@ -52,7 +29,6 @@ export default component$(() => {
 				</p>
 				<ul class="divide-y divide-gray-200">
 					{store.order?.lines.map((line, key) => {
-						console.log('Order line:', line);
 						return (
 							<li key={key} class="py-6 flex">
 								<div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
@@ -101,15 +77,12 @@ export default component$(() => {
 						{store.order?.shippingLines?.length > 0 && (
 							<span class="text-gray-600">
 								(
-								{store.order?.shippingLines?.map((line, index) => {
-									console.log('Shipping line:', line);
-									return (
-										<span key={index}>
-											{line.shippingMethod?.name}
-											{index < (store.order?.shippingLines?.length ?? 0) - 1 && ', '}
-										</span>
-									);
-								})}
+								{store.order?.shippingLines?.map((line, index) => (
+									<span key={index}>
+										{line.shippingMethod?.name}
+										{index < (store.order?.shippingLines?.length ?? 0) - 1 && ', '}
+									</span>
+								))}
 								)
 							</span>
 						)}
@@ -119,14 +92,11 @@ export default component$(() => {
 					</dd>
 				</div>
 				<div class="space-y-4 mt-2">
-					{/* {store.order?.shippingLines?.map((line, index) => {
-						console.log('Shipping method description:', line.shippingMethod?.description);
-						return (
-							<div key={index} class="bg-gray-50 p-4 rounded-md text-sm text-gray-700">
-								<div dangerouslySetInnerHTML={{ line.shippingMethod?.description || '' }} />
-							</div>
-						);
-					})} */}
+					{store.order?.shippingLines?.map((line, index) => (
+						<div key={index} class="bg-gray-50 p-4 rounded-md text-sm text-gray-700">
+							<div dangerouslySetInnerHTML={line.shippingMethod?.description || ''} />
+						</div>
+					))}
 				</div>
 				<div class="flex items-center justify-between border-t border-gray-200 pt-6">
 					<dt class="text-base font-medium">Total (Inclusive of all taxes)</dt>
@@ -144,6 +114,6 @@ export default component$(() => {
 			</div>
 		</div>
 	) : (
-		<div class="h-[100vh] flex items-center justify-center">Order not found</div>
+		<div class="h-[100vh]" />
 	);
 });
