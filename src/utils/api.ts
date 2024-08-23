@@ -11,7 +11,7 @@ type ExecuteProps<V> = { query: string; variables?: V };
 type Options = { method: string; headers: Record<string, string>; body: string };
 
 const baseUrl = import.meta.env.DEV ? DEV_API : PROD_API;
-const shopApi = `${baseUrl}/shop-api`;
+const shopApi = `${baseUrl}/shop-api-fj6BhSAyXUSBUQ1J`;
 
 export const requester = async <R, V>(
 	doc: DocumentNode,

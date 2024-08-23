@@ -1040,6 +1040,8 @@ input CreateProductCustomFieldsInput {
 	additionalInfo: String
 	facebookImageId: ID
 	infoUrl: String
+	maxPerOrder: [String!]
+	onlyAllowPer: [String!]
 	popularityScore: Int
 	relatedProductsIds: [ID!]
 	twitterImageId: ID
@@ -1071,8 +1073,6 @@ input CreateProductOptionInput {
 input CreateProductVariantCustomFieldsInput {
 	MRP: Int
 	gtin: String
-	maxPerOrder: Int
-	onlyAllowPer: [String!]
 	releaseDate: DateTime
 }
 
@@ -1139,7 +1139,7 @@ input CreateSellerCustomFieldsInput {
 	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
-	SellerPhoneNo: Int
+	SellerPhoneNo: String
 	SellerVatNo: String
 	SellerWebsite: String
 	connectedAccountId: String
@@ -4486,6 +4486,7 @@ type Mutation {
 	removeStockLocationsFromChannel(input: RemoveStockLocationsFromChannelInput!): [StockLocation!]!
 	runPendingSearchIndexUpdates: Success!
 	sendToSendCloud(orderId: ID!): Boolean!
+	setBulkSellerVerificationStatus(input: SetBulkSellerVerificationStatusInput!): Success
 	setCustomerForDraftOrder(
 		customerId: ID
 		input: CreateCustomerInput
@@ -4517,6 +4518,7 @@ type Mutation {
 	Allows a different Customer to be assigned to an Order. Added in v2.2.0.
 	"""
 	setOrderCustomer(input: SetOrderCustomerInput!): Order
+	setSellerVerificationStatus(input: SetSellerVerificationStatusInput!): Seller
 
 	"""
 	Set all webhooks for the current channel. This will overwrite any existing webhooks.
@@ -5535,6 +5537,11 @@ enum Permission {
 	DeleteZone
 
 	"""
+	Allows administrator to export orders
+	"""
+	ExportOrders
+
+	"""
 	Owner means the user owns this entity, e.g. a Customer's own Order
 	"""
 	Owner
@@ -5863,6 +5870,8 @@ type ProductCustomFields {
 	additionalInfo: String
 	facebookImage: Asset
 	infoUrl: String
+	maxPerOrder: [String!]
+	onlyAllowPer: [String!]
 	popularityScore: Int
 	relatedProducts: [Product!]
 	seoDescription: String
@@ -5881,7 +5890,9 @@ input ProductFilterParameter {
 	id: IDOperators
 	infoUrl: StringOperators
 	languageCode: StringOperators
+	maxPerOrder: StringListOperators
 	name: StringOperators
+	onlyAllowPer: StringListOperators
 	popularityScore: NumberOperators
 	seoDescription: StringOperators
 	seoTitle: StringOperators
@@ -6066,8 +6077,6 @@ type ProductVariant implements Node {
 type ProductVariantCustomFields {
 	MRP: Int
 	gtin: String
-	maxPerOrder: Int
-	onlyAllowPer: [String!]
 	releaseDate: DateTime
 }
 
@@ -6082,9 +6091,7 @@ input ProductVariantFilterParameter {
 	gtin: StringOperators
 	id: IDOperators
 	languageCode: StringOperators
-	maxPerOrder: NumberOperators
 	name: StringOperators
-	onlyAllowPer: StringListOperators
 	outOfStockThreshold: NumberOperators
 	price: NumberOperators
 	priceWithTax: NumberOperators
@@ -6152,7 +6159,6 @@ input ProductVariantSortParameter {
 	createdAt: SortOrder
 	gtin: SortOrder
 	id: SortOrder
-	maxPerOrder: SortOrder
 	name: SortOrder
 	outOfStockThreshold: SortOrder
 	price: SortOrder
@@ -6380,6 +6386,7 @@ type Query {
 	Get a list of Assets
 	"""
 	assets(options: AssetListOptions): AssetList!
+	availableOrderExportStrategies: [String!]!
 
 	"""
 	Get all available Vendure events that can be used to trigger webhooks
@@ -6870,10 +6877,11 @@ type SellerCustomFields {
 	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
-	SellerPhoneNo: Int
+	SellerPhoneNo: String
 	SellerVatNo: String
 	SellerWebsite: String
 	connectedAccountId: String
+	isVerified: Boolean
 }
 
 input SellerFilterParameter {
@@ -6886,7 +6894,7 @@ input SellerFilterParameter {
 	SellerEmailID: StringOperators
 	SellerIndustry: StringOperators
 	SellerOthersNote: StringOperators
-	SellerPhoneNo: NumberOperators
+	SellerPhoneNo: StringOperators
 	SellerVatNo: StringOperators
 	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
@@ -6894,6 +6902,7 @@ input SellerFilterParameter {
 	connectedAccountId: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
+	isVerified: BooleanOperators
 	name: StringOperators
 	updatedAt: DateOperators
 }
@@ -6946,6 +6955,7 @@ input SellerSortParameter {
 	connectedAccountId: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
+	isVerified: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
 }
@@ -6976,6 +6986,11 @@ type ServerConfig {
 	permittedAssetTypes: [String!]!
 }
 
+input SetBulkSellerVerificationStatusInput {
+	areVerified: Boolean!
+	sellerIds: [ID!]!
+}
+
 union SetCustomerForDraftOrderResult = EmailAddressConflictError | Order
 
 input SetOrderCustomerInput {
@@ -6989,6 +7004,11 @@ union SetOrderShippingMethodResult =
 	| NoActiveOrderError
 	| Order
 	| OrderModificationError
+
+input SetSellerVerificationStatusInput {
+	isVerified: Boolean!
+	sellerId: ID!
+}
 
 """
 Returned if the Payment settlement fails
@@ -7774,6 +7794,8 @@ input UpdateProductCustomFieldsInput {
 	additionalInfo: String
 	facebookImageId: ID
 	infoUrl: String
+	maxPerOrder: [String!]
+	onlyAllowPer: [String!]
 	popularityScore: Int
 	relatedProductsIds: [ID!]
 	twitterImageId: ID
@@ -7806,8 +7828,6 @@ input UpdateProductOptionInput {
 input UpdateProductVariantCustomFieldsInput {
 	MRP: Int
 	gtin: String
-	maxPerOrder: Int
-	onlyAllowPer: [String!]
 	releaseDate: DateTime
 }
 
@@ -7881,7 +7901,7 @@ input UpdateSellerCustomFieldsInput {
 	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
-	SellerPhoneNo: Int
+	SellerPhoneNo: String
 	SellerVatNo: String
 	SellerWebsite: String
 	connectedAccountId: String

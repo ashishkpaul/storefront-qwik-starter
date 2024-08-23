@@ -441,7 +441,7 @@ export type CreateSellerCustomFieldsInput = {
 	SellerEmailID?: InputMaybe<Scalars['String']['input']>;
 	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
 	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
-	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2553,6 +2553,8 @@ export const Permission = {
 	DeleteTaxRate: 'DeleteTaxRate',
 	/** Grants permission to delete Zone */
 	DeleteZone: 'DeleteZone',
+	/** Allows administrator to export orders */
+	ExportOrders: 'ExportOrders',
 	/** Owner means the user owns this entity, e.g. a Customer's own Order */
 	Owner: 'Owner',
 	/** Allows Enable Or Disable */
@@ -2692,6 +2694,8 @@ export type Product = Node & {
 	featuredAsset?: Maybe<Asset>;
 	id: Scalars['ID']['output'];
 	languageCode: LanguageCode;
+	limitPurchasePerMultipleOf?: Maybe<Scalars['Int']['output']>;
+	maxQuantityPerOrder?: Maybe<Scalars['Int']['output']>;
 	name: Scalars['String']['output'];
 	optionGroups: Array<ProductOptionGroup>;
 	seo: Seo;
@@ -2726,6 +2730,8 @@ export type ProductFilterParameter = {
 	id?: InputMaybe<IdOperators>;
 	infoUrl?: InputMaybe<StringOperators>;
 	languageCode?: InputMaybe<StringOperators>;
+	limitPurchasePerMultipleOf?: InputMaybe<NumberOperators>;
+	maxQuantityPerOrder?: InputMaybe<NumberOperators>;
 	name?: InputMaybe<StringOperators>;
 	popularityScore?: InputMaybe<NumberOperators>;
 	slug?: InputMaybe<StringOperators>;
@@ -2802,6 +2808,8 @@ export type ProductSortParameter = {
 	description?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	infoUrl?: InputMaybe<SortOrder>;
+	limitPurchasePerMultipleOf?: InputMaybe<SortOrder>;
+	maxQuantityPerOrder?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
@@ -2847,8 +2855,6 @@ export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
 	MRP?: Maybe<Scalars['Int']['output']>;
 	gtin?: Maybe<Scalars['String']['output']>;
-	maxPerOrder?: Maybe<Scalars['Int']['output']>;
-	onlyAllowPer?: Maybe<Array<Scalars['String']['output']>>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -2861,9 +2867,7 @@ export type ProductVariantFilterParameter = {
 	gtin?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
 	languageCode?: InputMaybe<StringOperators>;
-	maxPerOrder?: InputMaybe<NumberOperators>;
 	name?: InputMaybe<StringOperators>;
-	onlyAllowPer?: InputMaybe<StringListOperators>;
 	price?: InputMaybe<NumberOperators>;
 	priceWithTax?: InputMaybe<NumberOperators>;
 	productId?: InputMaybe<IdOperators>;
@@ -2897,7 +2901,6 @@ export type ProductVariantSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	gtin?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
-	maxPerOrder?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	price?: InputMaybe<SortOrder>;
 	priceWithTax?: InputMaybe<SortOrder>;
@@ -3295,9 +3298,10 @@ export type SellerCustomFields = {
 	SellerEmailID?: Maybe<Scalars['String']['output']>;
 	SellerIndustry?: Maybe<Scalars['String']['output']>;
 	SellerOthersNote?: Maybe<Scalars['String']['output']>;
-	SellerPhoneNo?: Maybe<Scalars['Int']['output']>;
+	SellerPhoneNo?: Maybe<Scalars['String']['output']>;
 	SellerVatNo?: Maybe<Scalars['String']['output']>;
 	SellerWebsite?: Maybe<Scalars['String']['output']>;
+	isVerified?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type Seo = {

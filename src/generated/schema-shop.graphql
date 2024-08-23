@@ -419,7 +419,7 @@ input CreateSellerCustomFieldsInput {
 	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
-	SellerPhoneNo: Int
+	SellerPhoneNo: String
 	SellerVatNo: String
 	SellerWebsite: String
 }
@@ -3707,6 +3707,11 @@ enum Permission {
 	DeleteZone
 
 	"""
+	Allows administrator to export orders
+	"""
+	ExportOrders
+
+	"""
 	Owner means the user owns this entity, e.g. a Customer's own Order
 	"""
 	Owner
@@ -4001,6 +4006,8 @@ type Product implements Node {
 	featuredAsset: Asset
 	id: ID!
 	languageCode: LanguageCode!
+	limitPurchasePerMultipleOf: Int
+	maxQuantityPerOrder: Int
 	name: String!
 	optionGroups: [ProductOptionGroup!]!
 	seo: Seo!
@@ -4036,6 +4043,8 @@ input ProductFilterParameter {
 	id: IDOperators
 	infoUrl: StringOperators
 	languageCode: StringOperators
+	limitPurchasePerMultipleOf: NumberOperators
+	maxQuantityPerOrder: NumberOperators
 	name: StringOperators
 	popularityScore: NumberOperators
 	slug: StringOperators
@@ -4121,6 +4130,8 @@ input ProductSortParameter {
 	description: SortOrder
 	id: SortOrder
 	infoUrl: SortOrder
+	limitPurchasePerMultipleOf: SortOrder
+	maxQuantityPerOrder: SortOrder
 	name: SortOrder
 	popularityScore: SortOrder
 	slug: SortOrder
@@ -4163,8 +4174,6 @@ type ProductVariant implements Node {
 type ProductVariantCustomFields {
 	MRP: Int
 	gtin: String
-	maxPerOrder: Int
-	onlyAllowPer: [String!]
 	releaseDate: DateTime
 }
 
@@ -4177,9 +4186,7 @@ input ProductVariantFilterParameter {
 	gtin: StringOperators
 	id: IDOperators
 	languageCode: StringOperators
-	maxPerOrder: NumberOperators
 	name: StringOperators
-	onlyAllowPer: StringListOperators
 	price: NumberOperators
 	priceWithTax: NumberOperators
 	productId: IDOperators
@@ -4226,7 +4233,6 @@ input ProductVariantSortParameter {
 	createdAt: SortOrder
 	gtin: SortOrder
 	id: SortOrder
-	maxPerOrder: SortOrder
 	name: SortOrder
 	price: SortOrder
 	priceWithTax: SortOrder
@@ -4611,9 +4617,10 @@ type SellerCustomFields {
 	SellerEmailID: String
 	SellerIndustry: String
 	SellerOthersNote: String
-	SellerPhoneNo: Int
+	SellerPhoneNo: String
 	SellerVatNo: String
 	SellerWebsite: String
+	isVerified: Boolean
 }
 
 type Seo {

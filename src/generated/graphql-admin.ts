@@ -992,6 +992,8 @@ export type CreateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
+	maxPerOrder?: InputMaybe<Array<Scalars['String']['input']>>;
+	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
@@ -1023,8 +1025,6 @@ export type CreateProductOptionInput = {
 export type CreateProductVariantCustomFieldsInput = {
 	MRP?: InputMaybe<Scalars['Int']['input']>;
 	gtin?: InputMaybe<Scalars['String']['input']>;
-	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
-	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -1091,7 +1091,7 @@ export type CreateSellerCustomFieldsInput = {
 	SellerEmailID?: InputMaybe<Scalars['String']['input']>;
 	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
 	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
-	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
 	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
@@ -3143,6 +3143,7 @@ export type Mutation = {
 	removeStockLocationsFromChannel: Array<StockLocation>;
 	runPendingSearchIndexUpdates: Success;
 	sendToSendCloud: Scalars['Boolean']['output'];
+	setBulkSellerVerificationStatus?: Maybe<Success>;
 	setCustomerForDraftOrder: SetCustomerForDraftOrderResult;
 	/** Sets the billing address for a draft Order */
 	setDraftOrderBillingAddress: Order;
@@ -3155,6 +3156,7 @@ export type Mutation = {
 	setOrderCustomFields?: Maybe<Order>;
 	/** Allows a different Customer to be assigned to an Order. Added in v2.2.0. */
 	setOrderCustomer?: Maybe<Order>;
+	setSellerVerificationStatus?: Maybe<Seller>;
 	/** Set all webhooks for the current channel. This will overwrite any existing webhooks. */
 	setWebhooks: Array<Webhook>;
 	settlePayment: SettlePaymentResult;
@@ -3721,6 +3723,10 @@ export type MutationSendToSendCloudArgs = {
 	orderId: Scalars['ID']['input'];
 };
 
+export type MutationSetBulkSellerVerificationStatusArgs = {
+	input: SetBulkSellerVerificationStatusInput;
+};
+
 export type MutationSetCustomerForDraftOrderArgs = {
 	customerId?: InputMaybe<Scalars['ID']['input']>;
 	input?: InputMaybe<CreateCustomerInput>;
@@ -3753,6 +3759,10 @@ export type MutationSetOrderCustomFieldsArgs = {
 
 export type MutationSetOrderCustomerArgs = {
 	input: SetOrderCustomerInput;
+};
+
+export type MutationSetSellerVerificationStatusArgs = {
+	input: SetSellerVerificationStatusInput;
 };
 
 export type MutationSetWebhooksArgs = {
@@ -4548,6 +4558,8 @@ export const Permission = {
 	DeleteTaxRate: 'DeleteTaxRate',
 	/** Grants permission to delete Zone */
 	DeleteZone: 'DeleteZone',
+	/** Allows administrator to export orders */
+	ExportOrders: 'ExportOrders',
 	/** Owner means the user owns this entity, e.g. a Customer's own Order */
 	Owner: 'Owner',
 	/** Allows Enable Or Disable */
@@ -4721,6 +4733,8 @@ export type ProductCustomFields = {
 	additionalInfo?: Maybe<Scalars['String']['output']>;
 	facebookImage?: Maybe<Asset>;
 	infoUrl?: Maybe<Scalars['String']['output']>;
+	maxPerOrder?: Maybe<Array<Scalars['String']['output']>>;
+	onlyAllowPer?: Maybe<Array<Scalars['String']['output']>>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
 	seoDescription?: Maybe<Scalars['String']['output']>;
@@ -4739,7 +4753,9 @@ export type ProductFilterParameter = {
 	id?: InputMaybe<IdOperators>;
 	infoUrl?: InputMaybe<StringOperators>;
 	languageCode?: InputMaybe<StringOperators>;
+	maxPerOrder?: InputMaybe<StringListOperators>;
 	name?: InputMaybe<StringOperators>;
+	onlyAllowPer?: InputMaybe<StringListOperators>;
 	popularityScore?: InputMaybe<NumberOperators>;
 	seoDescription?: InputMaybe<StringOperators>;
 	seoTitle?: InputMaybe<StringOperators>;
@@ -4926,8 +4942,6 @@ export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
 	MRP?: Maybe<Scalars['Int']['output']>;
 	gtin?: Maybe<Scalars['String']['output']>;
-	maxPerOrder?: Maybe<Scalars['Int']['output']>;
-	onlyAllowPer?: Maybe<Array<Scalars['String']['output']>>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -4942,9 +4956,7 @@ export type ProductVariantFilterParameter = {
 	gtin?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
 	languageCode?: InputMaybe<StringOperators>;
-	maxPerOrder?: InputMaybe<NumberOperators>;
 	name?: InputMaybe<StringOperators>;
-	onlyAllowPer?: InputMaybe<StringListOperators>;
 	outOfStockThreshold?: InputMaybe<NumberOperators>;
 	price?: InputMaybe<NumberOperators>;
 	priceWithTax?: InputMaybe<NumberOperators>;
@@ -5000,7 +5012,6 @@ export type ProductVariantSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	gtin?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
-	maxPerOrder?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	outOfStockThreshold?: InputMaybe<SortOrder>;
 	price?: InputMaybe<SortOrder>;
@@ -5201,6 +5212,7 @@ export type Query = {
 	asset?: Maybe<Asset>;
 	/** Get a list of Assets */
 	assets: AssetList;
+	availableOrderExportStrategies: Array<Scalars['String']['output']>;
 	/** Get all available Vendure events that can be used to trigger webhooks */
 	availableWebhookEvents: Array<Scalars['String']['output']>;
 	/**
@@ -5886,10 +5898,11 @@ export type SellerCustomFields = {
 	SellerEmailID?: Maybe<Scalars['String']['output']>;
 	SellerIndustry?: Maybe<Scalars['String']['output']>;
 	SellerOthersNote?: Maybe<Scalars['String']['output']>;
-	SellerPhoneNo?: Maybe<Scalars['Int']['output']>;
+	SellerPhoneNo?: Maybe<Scalars['String']['output']>;
 	SellerVatNo?: Maybe<Scalars['String']['output']>;
 	SellerWebsite?: Maybe<Scalars['String']['output']>;
 	connectedAccountId?: Maybe<Scalars['String']['output']>;
+	isVerified?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type SellerFilterParameter = {
@@ -5902,7 +5915,7 @@ export type SellerFilterParameter = {
 	SellerEmailID?: InputMaybe<StringOperators>;
 	SellerIndustry?: InputMaybe<StringOperators>;
 	SellerOthersNote?: InputMaybe<StringOperators>;
-	SellerPhoneNo?: InputMaybe<NumberOperators>;
+	SellerPhoneNo?: InputMaybe<StringOperators>;
 	SellerVatNo?: InputMaybe<StringOperators>;
 	SellerWebsite?: InputMaybe<StringOperators>;
 	_and?: InputMaybe<Array<SellerFilterParameter>>;
@@ -5910,6 +5923,7 @@ export type SellerFilterParameter = {
 	connectedAccountId?: InputMaybe<StringOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	id?: InputMaybe<IdOperators>;
+	isVerified?: InputMaybe<BooleanOperators>;
 	name?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
 };
@@ -5949,6 +5963,7 @@ export type SellerSortParameter = {
 	connectedAccountId?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
+	isVerified?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
 };
@@ -5981,6 +5996,11 @@ export type ServerConfig = {
 	permittedAssetTypes: Array<Scalars['String']['output']>;
 };
 
+export type SetBulkSellerVerificationStatusInput = {
+	areVerified: Scalars['Boolean']['input'];
+	sellerIds: Array<Scalars['ID']['input']>;
+};
+
 export type SetCustomerForDraftOrderResult = EmailAddressConflictError | Order;
 
 export type SetOrderCustomerInput = {
@@ -5994,6 +6014,11 @@ export type SetOrderShippingMethodResult =
 	| NoActiveOrderError
 	| Order
 	| OrderModificationError;
+
+export type SetSellerVerificationStatusInput = {
+	isVerified: Scalars['Boolean']['input'];
+	sellerId: Scalars['ID']['input'];
+};
 
 /** Returned if the Payment settlement fails */
 export type SettlePaymentError = ErrorResult & {
@@ -6731,6 +6756,8 @@ export type UpdateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
 	infoUrl?: InputMaybe<Scalars['String']['input']>;
+	maxPerOrder?: InputMaybe<Array<Scalars['String']['input']>>;
+	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
 	relatedProductsIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 	twitterImageId?: InputMaybe<Scalars['ID']['input']>;
@@ -6763,8 +6790,6 @@ export type UpdateProductOptionInput = {
 export type UpdateProductVariantCustomFieldsInput = {
 	MRP?: InputMaybe<Scalars['Int']['input']>;
 	gtin?: InputMaybe<Scalars['String']['input']>;
-	maxPerOrder?: InputMaybe<Scalars['Int']['input']>;
-	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -6832,7 +6857,7 @@ export type UpdateSellerCustomFieldsInput = {
 	SellerEmailID?: InputMaybe<Scalars['String']['input']>;
 	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
 	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
-	SellerPhoneNo?: InputMaybe<Scalars['Int']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
 	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
@@ -7043,7 +7068,7 @@ export type OrderDetailFragment = {
 					customFields?: {
 						__typename?: 'SellerCustomFields';
 						SellerEmailID?: string | null;
-						SellerPhoneNo?: number | null;
+						SellerPhoneNo?: string | null;
 					} | null;
 				} | null;
 			}>;
@@ -7134,7 +7159,7 @@ export type OrdersQuery = {
 							customFields?: {
 								__typename?: 'SellerCustomFields';
 								SellerEmailID?: string | null;
-								SellerPhoneNo?: number | null;
+								SellerPhoneNo?: string | null;
 							} | null;
 						} | null;
 					}>;
@@ -7241,26 +7266,13 @@ export type Requester<C = {}> = <R, V>(
 ) => Promise<R> | AsyncIterable<R>;
 export function getSdk<C>(requester: Requester<C>) {
 	return {
-		async orders(variables?: OrdersQueryVariables, options?: C): Promise<OrdersQuery> {
-			try {
-				const result = requester<OrdersQuery, OrdersQueryVariables>(
-					OrdersDocument,
-					variables,
-					options
-				);
-
-				// Ensure result is always a Promise
-				if (result instanceof Promise) {
-					return await result;
-				} else {
-					throw new Error('Requester did not return a Promise');
-				}
-			} catch (error) {
-				console.error('Failed to fetch orders:', error);
-				throw new Error('Failed to fetch order details.');
-			}
+		orders(variables?: OrdersQueryVariables, options?: C): Promise<OrdersQuery> {
+			return requester<OrdersQuery, OrdersQueryVariables>(
+				OrdersDocument,
+				variables,
+				options
+			) as Promise<OrdersQuery>;
 		},
 	};
 }
-
 export type Sdk = ReturnType<typeof getSdk>;
