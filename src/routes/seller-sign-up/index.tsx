@@ -1,17 +1,7 @@
 import { $, component$, useStore } from '@builder.io/qwik';
-import type { DocumentNode } from 'graphql';
-import { gql } from 'graphql-tag'; // Ensure you have this or similar to define your GraphQL queries
 import type { MutationRegisterNewSellerArgs } from '~/generated/graphql-shop';
-import { requester } from '~/utils/api'; // Ensure this imports correctly
-
-// Define the GraphQL mutation
-const REGISTER_SELLER_MUTATION: DocumentNode = gql`
-	mutation RegisterNewSeller($input: RegisterNewSellerInput!) {
-		registerNewSeller(input: $input) {
-			id
-		}
-	}
-`;
+import { REGISTER_SELLER_MUTATION } from '~/providers/shop/seller/seller';
+import { requester } from '~/utils/api';
 
 interface SellerFormData {
 	shopName: string;
@@ -41,7 +31,6 @@ export default component$(() => {
 	const handleChange = $((e: Event) => {
 		const target = e.target as HTMLInputElement;
 		const { name, value } = target;
-		console.log(`Changing ${name}: ${value}`); // Console log for debugging
 		state.formData = { ...state.formData, [name]: value };
 	});
 
@@ -60,32 +49,28 @@ export default component$(() => {
 			},
 		};
 
-		console.log('Submitting form with variables:', variables); // Console log for debugging
-
 		try {
-			const response = await requester<any, MutationRegisterNewSellerArgs>(
-				REGISTER_SELLER_MUTATION,
-				variables,
-				{ apiUrl: import.meta.env.VITE_VENDURE_PUBLIC_URL || '/graphql' }
-			);
-			console.log('Response:', response); // Log the response or handle success
+			await requester<any, MutationRegisterNewSellerArgs>(REGISTER_SELLER_MUTATION, variables, {
+				apiUrl: import.meta.env.VITE_VENDURE_PUBLIC_URL || '/graphql',
+			});
 			state.success = true;
 			state.error = null;
 		} catch (err) {
-			console.error('Error during registration:', err); // Handle error
 			state.error = 'Failed to register seller. Please try again.';
 			state.success = false;
 		}
 	});
 
 	return (
-		<div>
-			<h1>Register as a Seller</h1>
-			{state.success && <p>Seller registered successfully!</p>}
-			{state.error && <p style={{ color: 'red' }}>{state.error}</p>}
-			<form onSubmit$={handleSubmit}>
-				<div>
-					<label for="shopName">Shop Name</label>
+		<div class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md mt-12">
+			<h1 class="text-2xl font-bold mb-6">Register as a Seller</h1>
+			{state.success && <p class="text-green-500 mb-6">Seller registered successfully!</p>}
+			{state.error && <p class="text-red-500 mb-6">{state.error}</p>}
+			<form onSubmit$={handleSubmit} method="post" class="space-y-4">
+				<div class="flex flex-col">
+					<label for="shopName" class="font-medium mb-1">
+						Shop Name
+					</label>
 					<input
 						type="text"
 						id="shopName"
@@ -93,10 +78,13 @@ export default component$(() => {
 						value={state.formData.shopName}
 						onInput$={handleChange}
 						required
+						class="border border-gray-300 rounded-md p-2"
 					/>
 				</div>
-				<div>
-					<label for="firstName">First Name</label>
+				<div class="flex flex-col">
+					<label for="firstName" class="font-medium mb-1">
+						First Name
+					</label>
 					<input
 						type="text"
 						id="firstName"
@@ -104,10 +92,13 @@ export default component$(() => {
 						value={state.formData.firstName}
 						onInput$={handleChange}
 						required
+						class="border border-gray-300 rounded-md p-2"
 					/>
 				</div>
-				<div>
-					<label for="lastName">Last Name</label>
+				<div class="flex flex-col">
+					<label for="lastName" class="font-medium mb-1">
+						Last Name
+					</label>
 					<input
 						type="text"
 						id="lastName"
@@ -115,10 +106,13 @@ export default component$(() => {
 						value={state.formData.lastName}
 						onInput$={handleChange}
 						required
+						class="border border-gray-300 rounded-md p-2"
 					/>
 				</div>
-				<div>
-					<label for="emailAddress">Email Address</label>
+				<div class="flex flex-col">
+					<label for="emailAddress" class="font-medium mb-1">
+						Email Address
+					</label>
 					<input
 						type="email"
 						id="emailAddress"
@@ -126,10 +120,13 @@ export default component$(() => {
 						value={state.formData.emailAddress}
 						onInput$={handleChange}
 						required
+						class="border border-gray-300 rounded-md p-2"
 					/>
 				</div>
-				<div>
-					<label for="password">Password</label>
+				<div class="flex flex-col">
+					<label for="password" class="font-medium mb-1">
+						Password
+					</label>
 					<input
 						type="password"
 						id="password"
@@ -137,9 +134,15 @@ export default component$(() => {
 						value={state.formData.password}
 						onInput$={handleChange}
 						required
+						class="border border-gray-300 rounded-md p-2"
 					/>
 				</div>
-				<button type="submit">Register</button>
+				<button
+					type="submit"
+					class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+				>
+					Register
+				</button>
 			</form>
 		</div>
 	);
