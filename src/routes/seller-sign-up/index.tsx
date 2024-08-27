@@ -53,8 +53,12 @@ export default component$(() => {
 			await requester<any, MutationRegisterNewSellerArgs>(REGISTER_SELLER_MUTATION, variables, {
 				apiUrl: import.meta.env.VITE_VENDURE_PUBLIC_URL || '/graphql',
 			});
+			console.log('Before setting success:', state.success);
 			state.success = true;
+			console.log('After setting success:', state.success);
+
 			state.error = null;
+			console.log('Registration successful');
 		} catch (err) {
 			console.error('Registration error:', err); // Debugging line
 			state.error = 'Failed to register seller. Please try again.';
