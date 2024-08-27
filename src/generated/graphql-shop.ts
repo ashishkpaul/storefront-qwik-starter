@@ -5292,6 +5292,15 @@ export type SearchQuery = {
 	};
 };
 
+export type RegisterNewSellerMutationVariables = Exact<{
+	input: RegisterSellerInput;
+}>;
+
+export type RegisterNewSellerMutation = {
+	__typename?: 'Mutation';
+	registerNewSeller?: { __typename: 'Channel'; id: string; code: string; token: string } | null;
+};
+
 export const AddressFragmentDoc = gql`
 	fragment Address on Address {
 		id
@@ -5962,6 +5971,16 @@ export const SearchDocument = gql`
 	}
 	${ListedProductFragmentDoc}
 `;
+export const RegisterNewSellerDocument = gql`
+	mutation registerNewSeller($input: RegisterSellerInput!) {
+		registerNewSeller(input: $input) {
+			__typename
+			id
+			code
+			token
+		}
+	}
+`;
 export type Requester<C = {}> = <R, V>(
 	doc: DocumentNode,
 	vars?: V,
@@ -6325,6 +6344,16 @@ export function getSdk<C>(requester: Requester<C>) {
 				variables,
 				options
 			) as Promise<SearchQuery>;
+		},
+		registerNewSeller(
+			variables: RegisterNewSellerMutationVariables,
+			options?: C
+		): Promise<RegisterNewSellerMutation> {
+			return requester<RegisterNewSellerMutation, RegisterNewSellerMutationVariables>(
+				RegisterNewSellerDocument,
+				variables,
+				options
+			) as Promise<RegisterNewSellerMutation>;
 		},
 	};
 }
