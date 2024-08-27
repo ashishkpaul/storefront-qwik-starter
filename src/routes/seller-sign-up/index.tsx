@@ -56,6 +56,7 @@ export default component$(() => {
 			state.success = true;
 			state.error = null;
 		} catch (err) {
+			console.error('Registration error:', err); // Debugging line
 			state.error = 'Failed to register seller. Please try again.';
 			state.success = false;
 		}
