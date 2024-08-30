@@ -19,5 +19,5 @@ export const registerSellerAccount = async (
 	options: Options,
 	variables: MutationRegisterNewSellerArgs
 ) => {
-	return shopSdk.registerNewSeller(variables, options);
+	return shopSdk.RegisterNewSeller(variables, options);
 };

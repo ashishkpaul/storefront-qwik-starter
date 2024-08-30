@@ -5972,7 +5972,7 @@ export const SearchDocument = gql`
 	${ListedProductFragmentDoc}
 `;
 export const RegisterNewSellerDocument = gql`
-	mutation registerNewSeller($input: RegisterSellerInput!) {
+	mutation RegisterNewSeller($input: RegisterSellerInput!) {
 		registerNewSeller(input: $input) {
 			__typename
 			id
@@ -6345,7 +6345,7 @@ export function getSdk<C>(requester: Requester<C>) {
 				options
 			) as Promise<SearchQuery>;
 		},
-		registerNewSeller(
+		RegisterNewSeller(
 			variables: RegisterNewSellerMutationVariables,
 			options?: C
 		): Promise<RegisterNewSellerMutation> {

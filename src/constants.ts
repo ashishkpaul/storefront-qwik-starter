@@ -15,8 +15,8 @@ export const DEFAULT_METADATA_IMAGE =
 	'https://cloud.dingpack.com/apps/files_sharing/publicpreview/aJB8Anwmry2Eojk?file=/&fileId=137915&x=1365&y=768&a=true&etag=da9211b04084681e5de0ebd71391633e';
 export const DEFAULT_LOCALE = 'en';
 // TODO: replace DEV_API and PROD_API with your dev and prod API urls.
-// export const DEV_API = 'https://seller.buylits.com';
-// export const PROD_API = 'https://seller.buylits.com';
-export const DEV_API = 'http://192.168.1.32:3001';
-export const PROD_API = 'http://192.168.1.32:3001';
-export const LOCAL_API = 'http://192.168.1.32:3001';
+export const DEV_API = 'http://core.vendure.lan';
+export const PROD_API = 'http://core.vendure.lan';
+// export const DEV_API = 'http://192.168.1.32:3001';
+// export const PROD_API = 'http://192.168.1.32:3001';
+export const LOCAL_API = 'http://192.168.1.32:3000';
