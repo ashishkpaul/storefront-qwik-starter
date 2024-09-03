@@ -7,7 +7,7 @@ let GRAPHQL_API = import.meta.env.IS_DEV
 		? LOCAL_API
 		: PROD_API;
 
-GRAPHQL_API = `${GRAPHQL_API}/shop-api-fj6BhSAyXUSBUQ1J`;
+GRAPHQL_API = `${GRAPHQL_API}/shopApi-tm9rc~ziKFM8Ts6GsAm-_Y9ccTxz8VlhYLEYaEDUvFgX7BOKrWljfjxebIySv-3-`;
 
 const config: CodegenConfig = {
 	schema: [

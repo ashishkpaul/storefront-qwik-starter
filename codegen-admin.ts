@@ -6,7 +6,7 @@ let GRAPHQL_API = import.meta.env.IS_DEV
 	: import.meta.env.IS_LOCAL
 		? LOCAL_API
 		: PROD_API;
-GRAPHQL_API = `${GRAPHQL_API}/admin-api-Sq0A7PgXzqmrvEWa`;
+GRAPHQL_API = `${GRAPHQL_API}/adminApi-9eO-do3diI7jjl9qjCysB_5SfQdGASHZKFOIVZCl.MFO953fnce78n~Hm0w7seiX`;
 
 const config: CodegenConfig = {
 	schema: [GRAPHQL_API, 'type Mutation { createStripePaymentIntent: String }'],
