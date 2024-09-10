@@ -75,15 +75,62 @@ If you're working in a development environment, you could switch to HTTP instead
 **Nginx Configuration Example:**
 
 ```nginx
+upstream storefront {
+	server localhost:3000;
+}
+
 server {
     listen 80;
-    server_name core.vendure.lan;
+    server_name storefront.lan www.storefront.lan;
+    # Redirect to www
+    return 301 https://www.storefront.lan$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name www.storefront.lan;
+    access_log /var/log/nginx/storefront-lan.access.log;
+    error_log /var/log/nginx/storefront-lan.error.log;
+    ssl_certificate /etc/nginx/certs/nginx.crt;
+    ssl_certificate_key /etc/nginx/certs/nginx.key;
+    # Optional: Enable SSL ciphers and protocols
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-CBC-SHA256:ECDHE-ECDSA-AES128-CBC-SHA256:ECDHE-RSA-AES256-CBC-SHA:ECDHE-ECDSA-AES256-CBC-SHA:RSA-AES128-CBC-SHA256:RSA-AES256-CBC-SHA;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    # Serve the ACME challenge files directly
+    location ^~ /.well-known/acme-challenge/ {
+        default_type "text/plain";
+        alias /etc/nginx/ssl/.well-known/acme-challenge/;
+    }
+
+    location /dist {
+        root /data/projects/vendure/storefront/stagging/storefront-qwik-starter;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://storefront;
+    }
 
     location / {
-        proxy_pass http://192.168.1.32:3001;
-        # Other proxy settings
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://storefront;
+    }
+
+    # Restrict access to /seller-sign-up/ for specific IP addresses
+    location /seller-sign-up/ {
+        allow 140.238.246.13;
+        allow 140.238.255.121;
+        allow 192.168.1.32;
+        deny all;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_pass http://storefront;
     }
 }
+
 ```
 
 ### Choosing the Right Approach

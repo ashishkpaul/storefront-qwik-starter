@@ -3,7 +3,7 @@ import { Link } from '@builder.io/qwik-city';
 import { APP_STATE, CUSTOMER_NOT_DEFINED_ID } from '~/constants';
 import { logoutMutation } from '~/providers/shop/account/account';
 import { getActiveCustomerQuery } from '~/providers/shop/customer/customer';
-import { DealsLink } from '../DealsLink/DealsLink';
+// import { DealsLink } from '../DealsLink/DealsLink';
 import LogoutIcon from '../icons/LogoutIcon';
 import MenuIcon from '../icons/MenuIcon';
 import ShoppingCartIcon from '../icons/ShoppingCartIcon';
@@ -124,7 +124,7 @@ export default component$(() => {
 						</button>
 					</div>
 				</div>
-				<DealsLink />
+				{/* <DealsLink /> */}
 			</header>
 		</div>
 	);
