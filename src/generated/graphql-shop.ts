@@ -431,23 +431,8 @@ export type CreateCustomerInput = {
 	title?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CreateSellerCustomFieldsInput = {
-	SellerBillingAddress?: InputMaybe<Scalars['String']['input']>;
-	SellerBillingCity?: InputMaybe<Scalars['String']['input']>;
-	SellerBillingCountry?: InputMaybe<Scalars['String']['input']>;
-	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
-	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
-	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
-	SellerEmailID?: InputMaybe<Scalars['String']['input']>;
-	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
-	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
-	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
-	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
-	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type CreateSellerInput = {
-	customFields?: InputMaybe<CreateSellerCustomFieldsInput>;
+	customFields?: InputMaybe<Scalars['JSON']['input']>;
 	emailAddress: Scalars['String']['input'];
 	firstName: Scalars['String']['input'];
 	lastName: Scalars['String']['input'];
@@ -2854,7 +2839,6 @@ export type ProductVariant = Node & {
 export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
 	MRP?: Maybe<Scalars['Int']['output']>;
-	gtin?: Maybe<Scalars['String']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -2864,7 +2848,6 @@ export type ProductVariantFilterParameter = {
 	_or?: InputMaybe<Array<ProductVariantFilterParameter>>;
 	createdAt?: InputMaybe<DateOperators>;
 	currencyCode?: InputMaybe<StringOperators>;
-	gtin?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
 	languageCode?: InputMaybe<StringOperators>;
 	name?: InputMaybe<StringOperators>;
@@ -2899,7 +2882,6 @@ export type ProductVariantListOptions = {
 export type ProductVariantSortParameter = {
 	MRP?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
-	gtin?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	price?: InputMaybe<SortOrder>;
@@ -3289,18 +3271,6 @@ export type Seller = Node & {
 
 export type SellerCustomFields = {
 	__typename?: 'SellerCustomFields';
-	SellerBillingAddress?: Maybe<Scalars['String']['output']>;
-	SellerBillingCity?: Maybe<Scalars['String']['output']>;
-	SellerBillingCountry?: Maybe<Scalars['String']['output']>;
-	SellerBillingCycle?: Maybe<Scalars['String']['output']>;
-	SellerBillingPostalCode?: Maybe<Scalars['String']['output']>;
-	SellerBillingState?: Maybe<Scalars['String']['output']>;
-	SellerEmailID?: Maybe<Scalars['String']['output']>;
-	SellerIndustry?: Maybe<Scalars['String']['output']>;
-	SellerOthersNote?: Maybe<Scalars['String']['output']>;
-	SellerPhoneNo?: Maybe<Scalars['String']['output']>;
-	SellerVatNo?: Maybe<Scalars['String']['output']>;
-	SellerWebsite?: Maybe<Scalars['String']['output']>;
 	isVerified?: Maybe<Scalars['Boolean']['output']>;
 };
 

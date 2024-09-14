@@ -409,23 +409,8 @@ input CreateCustomerInput {
 	title: String
 }
 
-input CreateSellerCustomFieldsInput {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerEmailID: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
-}
-
 input CreateSellerInput {
-	customFields: CreateSellerCustomFieldsInput
+	customFields: JSON
 	emailAddress: String!
 	firstName: String!
 	lastName: String!
@@ -4173,7 +4158,6 @@ type ProductVariant implements Node {
 
 type ProductVariantCustomFields {
 	MRP: Int
-	gtin: String
 	releaseDate: DateTime
 }
 
@@ -4183,7 +4167,6 @@ input ProductVariantFilterParameter {
 	_or: [ProductVariantFilterParameter!]
 	createdAt: DateOperators
 	currencyCode: StringOperators
-	gtin: StringOperators
 	id: IDOperators
 	languageCode: StringOperators
 	name: StringOperators
@@ -4231,7 +4214,6 @@ input ProductVariantListOptions {
 input ProductVariantSortParameter {
 	MRP: SortOrder
 	createdAt: SortOrder
-	gtin: SortOrder
 	id: SortOrder
 	name: SortOrder
 	price: SortOrder
@@ -4608,18 +4590,6 @@ type Seller implements Node {
 }
 
 type SellerCustomFields {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerEmailID: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
 	isVerified: Boolean
 }
 

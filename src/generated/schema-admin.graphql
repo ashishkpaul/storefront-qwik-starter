@@ -75,7 +75,7 @@ enum AdjustmentType {
 
 type Administrator implements Node {
 	createdAt: DateTime!
-	customFields: JSON
+	customFields: AdministratorCustomFields
 	emailAddress: String!
 	firstName: String!
 	id: ID!
@@ -84,7 +84,32 @@ type Administrator implements Node {
 	user: User!
 }
 
+type AdministratorCustomFields {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerVatNo: String
+	SellerWebsite: String
+}
+
 input AdministratorFilterParameter {
+	SellerBillingAddress: StringOperators
+	SellerBillingCity: StringOperators
+	SellerBillingCountry: StringOperators
+	SellerBillingCycle: StringOperators
+	SellerBillingPostalCode: StringOperators
+	SellerBillingState: StringOperators
+	SellerIndustry: StringOperators
+	SellerOthersNote: StringOperators
+	SellerPhoneNo: StringOperators
+	SellerVatNo: StringOperators
+	SellerWebsite: StringOperators
 	_and: [AdministratorFilterParameter!]
 	_or: [AdministratorFilterParameter!]
 	createdAt: DateOperators
@@ -144,6 +169,17 @@ input AdministratorRefundInput {
 }
 
 input AdministratorSortParameter {
+	SellerBillingAddress: SortOrder
+	SellerBillingCity: SortOrder
+	SellerBillingCountry: SortOrder
+	SellerBillingCycle: SortOrder
+	SellerBillingPostalCode: SortOrder
+	SellerBillingState: SortOrder
+	SellerIndustry: SortOrder
+	SellerOthersNote: SortOrder
+	SellerPhoneNo: SortOrder
+	SellerVatNo: SortOrder
+	SellerWebsite: SortOrder
 	createdAt: SortOrder
 	emailAddress: SortOrder
 	firstName: SortOrder
@@ -177,7 +213,7 @@ union ApplyCouponCodeResult =
 	| CouponCodeLimitError
 	| Order
 
-type Artical implements Node {
+type Article implements Node {
 	content: String!
 	createdAt: DateTime!
 	customFields: JSON
@@ -187,9 +223,9 @@ type Artical implements Node {
 	updatedAt: DateTime!
 }
 
-input ArticalFilterParameter {
-	_and: [ArticalFilterParameter!]
-	_or: [ArticalFilterParameter!]
+input ArticleFilterParameter {
+	_and: [ArticleFilterParameter!]
+	_or: [ArticleFilterParameter!]
 	content: StringOperators
 	createdAt: DateOperators
 	id: IDOperators
@@ -198,16 +234,16 @@ input ArticalFilterParameter {
 	updatedAt: DateOperators
 }
 
-type ArticalList implements PaginatedList {
-	items: [Artical!]!
+type ArticleList implements PaginatedList {
+	items: [Article!]!
 	totalItems: Int!
 }
 
-input ArticalListOptions {
+input ArticleListOptions {
 	"""
 	Allows the results to be filtered
 	"""
-	filter: ArticalFilterParameter
+	filter: ArticleFilterParameter
 
 	"""
 	Specifies whether multiple top-level "filter" fields should be combined with a logical AND or OR operation. Defaults to AND.
@@ -222,7 +258,7 @@ input ArticalListOptions {
 	"""
 	Specifies which properties to sort the results by
 	"""
-	sort: ArticalSortParameter
+	sort: ArticleSortParameter
 
 	"""
 	Takes n results, for use in pagination
@@ -230,7 +266,7 @@ input ArticalListOptions {
 	take: Int
 }
 
-input ArticalSortParameter {
+input ArticleSortParameter {
 	content: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
@@ -885,8 +921,22 @@ input CreateAddressInput {
 	streetLine2: String
 }
 
+input CreateAdministratorCustomFieldsInput {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerVatNo: String
+	SellerWebsite: String
+}
+
 input CreateAdministratorInput {
-	customFields: JSON
+	customFields: CreateAdministratorCustomFieldsInput
 	emailAddress: String!
 	firstName: String!
 	lastName: String!
@@ -894,7 +944,7 @@ input CreateAdministratorInput {
 	roleIds: [ID!]!
 }
 
-input CreateArticalInput {
+input CreateArticleInput {
 	content: String!
 	customFields: JSON
 	isPublished: Boolean!
@@ -1072,7 +1122,6 @@ input CreateProductOptionInput {
 
 input CreateProductVariantCustomFieldsInput {
 	MRP: Int
-	gtin: String
 	releaseDate: DateTime
 }
 
@@ -1130,18 +1179,6 @@ input CreateRoleInput {
 }
 
 input CreateSellerCustomFieldsInput {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerEmailID: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
 	connectedAccountId: String
 }
 
@@ -2028,7 +2065,7 @@ which allows custom fields to be defined on user-supplies entities.
 type CustomFields {
 	Address: [CustomFieldConfig!]!
 	Administrator: [CustomFieldConfig!]!
-	Artical: [CustomFieldConfig!]!
+	Article: [CustomFieldConfig!]!
 	Asset: [CustomFieldConfig!]!
 	Channel: [CustomFieldConfig!]!
 	Collection: [CustomFieldConfig!]!
@@ -4047,7 +4084,7 @@ type Mutation {
 	Create a new Administrator
 	"""
 	createAdministrator(input: CreateAdministratorInput!): Administrator!
-	createArtical(input: CreateArticalInput!): Artical!
+	createArticle(input: CreateArticleInput!): Article!
 
 	"""
 	Create a new Asset
@@ -4176,7 +4213,7 @@ type Mutation {
 	Delete multiple Administrators
 	"""
 	deleteAdministrators(ids: [ID!]!): [DeletionResponse!]!
-	deleteArtical(id: ID!): DeletionResponse!
+	deleteArticle(id: ID!): DeletionResponse!
 
 	"""
 	Delete an Asset
@@ -4401,6 +4438,7 @@ type Mutation {
 	Move a Collection to a different parent or index
 	"""
 	moveCollection(input: MoveCollectionInput!): Collection!
+	mySellerMutation(id: ID!): Boolean!
 	refundOrder(input: RefundOrderInput!): RefundOrderResult!
 	reindex: Job!
 
@@ -4539,7 +4577,7 @@ type Mutation {
 	Update an existing Administrator
 	"""
 	updateAdministrator(input: UpdateAdministratorInput!): Administrator!
-	updateArtical(input: UpdateArticalInput!): Artical!
+	updateArticle(input: UpdateArticleInput!): Article!
 
 	"""
 	Update an existing Asset
@@ -6076,7 +6114,6 @@ type ProductVariant implements Node {
 
 type ProductVariantCustomFields {
 	MRP: Int
-	gtin: String
 	releaseDate: DateTime
 }
 
@@ -6088,7 +6125,6 @@ input ProductVariantFilterParameter {
 	currencyCode: StringOperators
 	enabled: BooleanOperators
 	facetValueId: IDOperators
-	gtin: StringOperators
 	id: IDOperators
 	languageCode: StringOperators
 	name: StringOperators
@@ -6157,7 +6193,6 @@ input ProductVariantPriceInput {
 input ProductVariantSortParameter {
 	MRP: SortOrder
 	createdAt: SortOrder
-	gtin: SortOrder
 	id: SortOrder
 	name: SortOrder
 	outOfStockThreshold: SortOrder
@@ -6374,8 +6409,8 @@ type Query {
 	activeChannel: Channel!
 	administrator(id: ID!): Administrator
 	administrators(options: AdministratorListOptions): AdministratorList!
-	artical(id: ID!): Artical
-	articals(options: ArticalListOptions): ArticalList!
+	article(id: ID!): Article
+	articles(options: ArticleListOptions): ArticleList!
 
 	"""
 	Get a single Asset by id
@@ -6439,6 +6474,7 @@ type Query {
 	Get metrics for the given interval and metric types.
 	"""
 	metricSummary(input: MetricSummaryInput): [MetricSummary!]!
+	mySellerQuery(id: ID!): Boolean!
 	order(id: ID!): Order
 	orders(options: OrderListOptions): OrderList!
 	paymentMethod(id: ID!): PaymentMethod
@@ -6868,35 +6904,11 @@ type Seller implements Node {
 }
 
 type SellerCustomFields {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerEmailID: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
 	connectedAccountId: String
 	isVerified: Boolean
 }
 
 input SellerFilterParameter {
-	SellerBillingAddress: StringOperators
-	SellerBillingCity: StringOperators
-	SellerBillingCountry: StringOperators
-	SellerBillingCycle: StringOperators
-	SellerBillingPostalCode: StringOperators
-	SellerBillingState: StringOperators
-	SellerEmailID: StringOperators
-	SellerIndustry: StringOperators
-	SellerOthersNote: StringOperators
-	SellerPhoneNo: StringOperators
-	SellerVatNo: StringOperators
-	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
 	_or: [SellerFilterParameter!]
 	connectedAccountId: StringOperators
@@ -6940,18 +6952,6 @@ input SellerListOptions {
 }
 
 input SellerSortParameter {
-	SellerBillingAddress: SortOrder
-	SellerBillingCity: SortOrder
-	SellerBillingCountry: SortOrder
-	SellerBillingCycle: SortOrder
-	SellerBillingPostalCode: SortOrder
-	SellerBillingState: SortOrder
-	SellerEmailID: SortOrder
-	SellerIndustry: SortOrder
-	SellerOthersNote: SortOrder
-	SellerPhoneNo: SortOrder
-	SellerVatNo: SortOrder
-	SellerWebsite: SortOrder
 	connectedAccountId: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
@@ -7570,7 +7570,7 @@ union TransitionOrderToStateResult = Order | OrderStateTransitionError
 union TransitionPaymentToStateResult = Payment | PaymentStateTransitionError
 
 input UpdateActiveAdministratorInput {
-	customFields: JSON
+	customFields: UpdateAdministratorCustomFieldsInput
 	emailAddress: String
 	firstName: String
 	lastName: String
@@ -7600,8 +7600,22 @@ input UpdateAddressInput {
 	streetLine2: String
 }
 
+input UpdateAdministratorCustomFieldsInput {
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerVatNo: String
+	SellerWebsite: String
+}
+
 input UpdateAdministratorInput {
-	customFields: JSON
+	customFields: UpdateAdministratorCustomFieldsInput
 	emailAddress: String
 	firstName: String
 	id: ID!
@@ -7610,7 +7624,7 @@ input UpdateAdministratorInput {
 	roleIds: [ID!]
 }
 
-input UpdateArticalInput {
+input UpdateArticleInput {
 	content: String
 	customFields: JSON
 	id: ID!
@@ -7827,7 +7841,6 @@ input UpdateProductOptionInput {
 
 input UpdateProductVariantCustomFieldsInput {
 	MRP: Int
-	gtin: String
 	releaseDate: DateTime
 }
 
@@ -7892,18 +7905,6 @@ input UpdateRoleInput {
 }
 
 input UpdateSellerCustomFieldsInput {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerEmailID: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
 	connectedAccountId: String
 }
 

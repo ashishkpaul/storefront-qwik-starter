@@ -88,18 +88,6 @@ gql`
 					id
 					slug
 				}
-				channels {
-					id
-					code
-					token
-					seller {
-						name
-						customFields {
-							SellerEmailID
-							SellerPhoneNo
-						}
-					}
-				}
 			}
 		}
 	}
