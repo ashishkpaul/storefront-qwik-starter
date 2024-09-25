@@ -2592,8 +2592,6 @@ export const Permission = {
 	ReadTaxRate: 'ReadTaxRate',
 	/** Grants permission to read Zone */
 	ReadZone: 'ReadZone',
-	/** Allows setting SendCloud configuration */
-	SetSendCloudConfig: 'SetSendCloudConfig',
 	/** Allows setting a webhook URL */
 	SetWebhook: 'SetWebhook',
 	/** SuperAdmin has unrestricted access to all operations */
@@ -2700,7 +2698,6 @@ export type ProductVariantListArgs = {
 export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	additionalInfo?: Maybe<Scalars['String']['output']>;
-	infoUrl?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
 };
@@ -2713,7 +2710,6 @@ export type ProductFilterParameter = {
 	description?: InputMaybe<StringOperators>;
 	enabled?: InputMaybe<BooleanOperators>;
 	id?: InputMaybe<IdOperators>;
-	infoUrl?: InputMaybe<StringOperators>;
 	languageCode?: InputMaybe<StringOperators>;
 	limitPurchasePerMultipleOf?: InputMaybe<NumberOperators>;
 	maxQuantityPerOrder?: InputMaybe<NumberOperators>;
@@ -2792,7 +2788,6 @@ export type ProductSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	description?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
-	infoUrl?: InputMaybe<SortOrder>;
 	limitPurchasePerMultipleOf?: InputMaybe<SortOrder>;
 	maxQuantityPerOrder?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
@@ -5097,7 +5092,6 @@ export type DetailedProductFragment = {
 	customFields?: {
 		__typename?: 'ProductCustomFields';
 		additionalInfo?: string | null;
-		infoUrl?: string | null;
 		relatedProducts?: Array<{
 			__typename?: 'Product';
 			id: string;
@@ -5177,7 +5171,6 @@ export type ProductQuery = {
 		customFields?: {
 			__typename?: 'ProductCustomFields';
 			additionalInfo?: string | null;
-			infoUrl?: string | null;
 			relatedProducts?: Array<{
 				__typename?: 'Product';
 				id: string;
@@ -5419,7 +5412,6 @@ export const DetailedProductFragmentDoc = gql`
 		}
 		customFields {
 			additionalInfo
-			infoUrl
 			relatedProducts {
 				id
 				name

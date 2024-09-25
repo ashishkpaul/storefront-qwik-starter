@@ -3827,11 +3827,6 @@ enum Permission {
 	ReadZone
 
 	"""
-	Allows setting SendCloud configuration
-	"""
-	SetSendCloudConfig
-
-	"""
 	Allows setting a webhook URL
 	"""
 	SetWebhook
@@ -4013,7 +4008,6 @@ type Product implements Node {
 
 type ProductCustomFields {
 	additionalInfo: String
-	infoUrl: String
 	popularityScore: Int
 	relatedProducts: [Product!]
 }
@@ -4026,7 +4020,6 @@ input ProductFilterParameter {
 	description: StringOperators
 	enabled: BooleanOperators
 	id: IDOperators
-	infoUrl: StringOperators
 	languageCode: StringOperators
 	limitPurchasePerMultipleOf: NumberOperators
 	maxQuantityPerOrder: NumberOperators
@@ -4114,7 +4107,6 @@ input ProductSortParameter {
 	createdAt: SortOrder
 	description: SortOrder
 	id: SortOrder
-	infoUrl: SortOrder
 	limitPurchasePerMultipleOf: SortOrder
 	maxQuantityPerOrder: SortOrder
 	name: SortOrder

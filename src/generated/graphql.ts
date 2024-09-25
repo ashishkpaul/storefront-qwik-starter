@@ -2549,7 +2549,7 @@ export type ProductCustomFields = {
 	printfulProductId?: Maybe<Scalars['String']>;
 	relatedProducts?: Maybe<Array<Product>>;
 	// featuredReview?: Maybe<ProductReview>;
-	infoUrl?: Maybe<Scalars['String']>;
+
 	popularityScore?: Maybe<Scalars['Int']>;
 	primaryCollection?: Maybe<Collection>;
 	reviewCount?: Maybe<Scalars['Float']>;
@@ -4799,7 +4799,7 @@ export type DetailedProductFragment = {
 	customFields?: {
 		__typename?: 'ProductCustomFields';
 		additionalInfo?: string | null;
-		infoUrl?: string | null;
+
 		relatedProducts?: Array<{
 			__typename?: 'Product';
 			id: string;
@@ -4877,7 +4877,7 @@ export type ProductQuery = {
 		customFields?: {
 			__typename?: 'ProductCustomFields';
 			additionalInfo?: string | null;
-			infoUrl?: string | null;
+
 			relatedProducts?: Array<{
 				__typename?: 'Product';
 				id: string;
@@ -5101,7 +5101,7 @@ export const DetailedProductFragmentDoc = gql`
 		}
 		customFields {
 			additionalInfo
-			infoUrl
+
 			relatedProducts {
 				id
 				name

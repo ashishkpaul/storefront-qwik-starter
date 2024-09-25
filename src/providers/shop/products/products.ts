@@ -123,7 +123,7 @@ export const detailedProductFragment = gql`
 		}
 		customFields {
 			additionalInfo
-			infoUrl
+
 			relatedProducts {
 				id
 				name

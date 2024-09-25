@@ -1,8 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
-import { Insights } from '@builder.io/qwik-labs';
 import { DEFAULT_METADATA_TITLE } from '~/constants';
-import { ENV_VARIABLES } from '~/env';
 import { generateDocumentHead } from '~/utils';
 
 export const Head = component$(() => {
@@ -20,7 +18,7 @@ export const Head = component$(() => {
 
 			<link rel="manifest" href="/manifest.json" />
 			<link rel="apple-touch-icon" href="/logo-192-192.png" />
-			<link rel="preconnect" href="https://demo.vendure.io" />
+			<link rel="preconnect" href="https://www.buylits.com" />
 			<link rel="canonical" href={loc.url.toString()} />
 
 			{head.meta.map((m, key) => (
@@ -40,9 +38,7 @@ export const Head = component$(() => {
 				return <style key={key} {...restProps} />;
 			})}
 
-			<meta name="description" content="Dingpack Online Store" />
-
-			<Insights publicApiKey={ENV_VARIABLES.VITE_QWIK_INSIGHTS_KEY} />
+			<meta name="description" content="BuyLits Online Store" />
 		</head>
 	);
 });

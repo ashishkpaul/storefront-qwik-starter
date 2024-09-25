@@ -1089,7 +1089,6 @@ input CreatePaymentMethodInput {
 input CreateProductCustomFieldsInput {
 	additionalInfo: String
 	facebookImageId: ID
-	infoUrl: String
 	maxPerOrder: [String!]
 	onlyAllowPer: [String!]
 	popularityScore: Int
@@ -2802,7 +2801,6 @@ enum HistoryEntryType {
 	ORDER_PAYMENT_TRANSITION
 	ORDER_REFUND_TRANSITION
 	ORDER_STATE_TRANSITION
-	SENDCLOUD_NOTIFICATION
 }
 
 """
@@ -4523,7 +4521,6 @@ type Mutation {
 	"""
 	removeStockLocationsFromChannel(input: RemoveStockLocationsFromChannelInput!): [StockLocation!]!
 	runPendingSearchIndexUpdates: Success!
-	sendToSendCloud(orderId: ID!): Boolean!
 	setBulkSellerVerificationStatus(input: SetBulkSellerVerificationStatusInput!): Success
 	setCustomerForDraftOrder(
 		customerId: ID
@@ -4672,7 +4669,6 @@ type Mutation {
 	Update an existing Seller
 	"""
 	updateSeller(input: UpdateSellerInput!): Seller!
-	updateSendCloudConfig(input: SendCloudConfigInput): SendCloudConfig!
 
 	"""
 	Update an existing ShippingMethod
@@ -5710,11 +5706,6 @@ enum Permission {
 	ReadZone
 
 	"""
-	Allows setting SendCloud configuration
-	"""
-	SetSendCloudConfig
-
-	"""
 	Allows setting a webhook URL
 	"""
 	SetWebhook
@@ -5907,7 +5898,6 @@ type Product implements Node {
 type ProductCustomFields {
 	additionalInfo: String
 	facebookImage: Asset
-	infoUrl: String
 	maxPerOrder: [String!]
 	onlyAllowPer: [String!]
 	popularityScore: Int
@@ -5926,7 +5916,6 @@ input ProductFilterParameter {
 	enabled: BooleanOperators
 	facetValueId: IDOperators
 	id: IDOperators
-	infoUrl: StringOperators
 	languageCode: StringOperators
 	maxPerOrder: StringListOperators
 	name: StringOperators
@@ -6039,7 +6028,6 @@ input ProductSortParameter {
 	description: SortOrder
 	facebookImage: SortOrder
 	id: SortOrder
-	infoUrl: SortOrder
 	name: SortOrder
 	popularityScore: SortOrder
 	seoDescription: SortOrder
@@ -6524,7 +6512,6 @@ type Query {
 	search(input: SearchInput!): SearchResponse!
 	seller(id: ID!): Seller
 	sellers(options: SellerListOptions): SellerList!
-	sendCloudConfig: SendCloudConfig
 	shippingCalculators: [ConfigurableOperationDefinition!]!
 	shippingEligibilityCheckers: [ConfigurableOperationDefinition!]!
 	shippingMethod(id: ID!): ShippingMethod
@@ -6958,19 +6945,6 @@ input SellerSortParameter {
 	isVerified: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
-}
-
-type SendCloudConfig {
-	defaultPhoneNr: String
-	id: ID!
-	publicKey: String
-	secret: String
-}
-
-input SendCloudConfigInput {
-	defaultPhoneNr: String
-	publicKey: String
-	secret: String
 }
 
 type ServerConfig {
@@ -7807,7 +7781,6 @@ input UpdatePaymentMethodInput {
 input UpdateProductCustomFieldsInput {
 	additionalInfo: String
 	facebookImageId: ID
-	infoUrl: String
 	maxPerOrder: [String!]
 	onlyAllowPer: [String!]
 	popularityScore: Int

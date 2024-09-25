@@ -1042,7 +1042,6 @@ export type CreatePaymentMethodInput = {
 export type CreateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
-	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	maxPerOrder?: InputMaybe<Array<Scalars['String']['input']>>;
 	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
@@ -2246,7 +2245,6 @@ export const HistoryEntryType = {
 	OrderPaymentTransition: 'ORDER_PAYMENT_TRANSITION',
 	OrderRefundTransition: 'ORDER_REFUND_TRANSITION',
 	OrderStateTransition: 'ORDER_STATE_TRANSITION',
-	SendcloudNotification: 'SENDCLOUD_NOTIFICATION',
 } as const;
 
 export type HistoryEntryType = (typeof HistoryEntryType)[keyof typeof HistoryEntryType];
@@ -3181,7 +3179,6 @@ export type Mutation = {
 	/** Removes StockLocations from the specified Channel */
 	removeStockLocationsFromChannel: Array<StockLocation>;
 	runPendingSearchIndexUpdates: Success;
-	sendToSendCloud: Scalars['Boolean']['output'];
 	setBulkSellerVerificationStatus?: Maybe<Success>;
 	setCustomerForDraftOrder: SetCustomerForDraftOrderResult;
 	/** Sets the billing address for a draft Order */
@@ -3248,7 +3245,6 @@ export type Mutation = {
 	updateRole: Role;
 	/** Update an existing Seller */
 	updateSeller: Seller;
-	updateSendCloudConfig: SendCloudConfig;
 	/** Update an existing ShippingMethod */
 	updateShippingMethod: ShippingMethod;
 	updateStockLocation: StockLocation;
@@ -3762,10 +3758,6 @@ export type MutationRemoveStockLocationsFromChannelArgs = {
 	input: RemoveStockLocationsFromChannelInput;
 };
 
-export type MutationSendToSendCloudArgs = {
-	orderId: Scalars['ID']['input'];
-};
-
 export type MutationSetBulkSellerVerificationStatusArgs = {
 	input: SetBulkSellerVerificationStatusInput;
 };
@@ -3933,10 +3925,6 @@ export type MutationUpdateRoleArgs = {
 
 export type MutationUpdateSellerArgs = {
 	input: UpdateSellerInput;
-};
-
-export type MutationUpdateSendCloudConfigArgs = {
-	input?: InputMaybe<SendCloudConfigInput>;
 };
 
 export type MutationUpdateShippingMethodArgs = {
@@ -4655,8 +4643,6 @@ export const Permission = {
 	ReadTaxRate: 'ReadTaxRate',
 	/** Grants permission to read Zone */
 	ReadZone: 'ReadZone',
-	/** Allows setting SendCloud configuration */
-	SetSendCloudConfig: 'SetSendCloudConfig',
 	/** Allows setting a webhook URL */
 	SetWebhook: 'SetWebhook',
 	/** SuperAdmin has unrestricted access to all operations */
@@ -4775,7 +4761,6 @@ export type ProductCustomFields = {
 	__typename?: 'ProductCustomFields';
 	additionalInfo?: Maybe<Scalars['String']['output']>;
 	facebookImage?: Maybe<Asset>;
-	infoUrl?: Maybe<Scalars['String']['output']>;
 	maxPerOrder?: Maybe<Array<Scalars['String']['output']>>;
 	onlyAllowPer?: Maybe<Array<Scalars['String']['output']>>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
@@ -4794,7 +4779,6 @@ export type ProductFilterParameter = {
 	enabled?: InputMaybe<BooleanOperators>;
 	facetValueId?: InputMaybe<IdOperators>;
 	id?: InputMaybe<IdOperators>;
-	infoUrl?: InputMaybe<StringOperators>;
 	languageCode?: InputMaybe<StringOperators>;
 	maxPerOrder?: InputMaybe<StringListOperators>;
 	name?: InputMaybe<StringOperators>;
@@ -4899,7 +4883,6 @@ export type ProductSortParameter = {
 	description?: InputMaybe<SortOrder>;
 	facebookImage?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
-	infoUrl?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	popularityScore?: InputMaybe<SortOrder>;
 	seoDescription?: InputMaybe<SortOrder>;
@@ -5321,7 +5304,6 @@ export type Query = {
 	search: SearchResponse;
 	seller?: Maybe<Seller>;
 	sellers: SellerList;
-	sendCloudConfig?: Maybe<SendCloudConfig>;
 	shippingCalculators: Array<ConfigurableOperationDefinition>;
 	shippingEligibilityCheckers: Array<ConfigurableOperationDefinition>;
 	shippingMethod?: Maybe<ShippingMethod>;
@@ -5975,20 +5957,6 @@ export type SellerSortParameter = {
 	isVerified?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
-};
-
-export type SendCloudConfig = {
-	__typename?: 'SendCloudConfig';
-	defaultPhoneNr?: Maybe<Scalars['String']['output']>;
-	id: Scalars['ID']['output'];
-	publicKey?: Maybe<Scalars['String']['output']>;
-	secret?: Maybe<Scalars['String']['output']>;
-};
-
-export type SendCloudConfigInput = {
-	defaultPhoneNr?: InputMaybe<Scalars['String']['input']>;
-	publicKey?: InputMaybe<Scalars['String']['input']>;
-	secret?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ServerConfig = {
@@ -6778,7 +6746,6 @@ export type UpdatePaymentMethodInput = {
 export type UpdateProductCustomFieldsInput = {
 	additionalInfo?: InputMaybe<Scalars['String']['input']>;
 	facebookImageId?: InputMaybe<Scalars['ID']['input']>;
-	infoUrl?: InputMaybe<Scalars['String']['input']>;
 	maxPerOrder?: InputMaybe<Array<Scalars['String']['input']>>;
 	onlyAllowPer?: InputMaybe<Array<Scalars['String']['input']>>;
 	popularityScore?: InputMaybe<Scalars['Int']['input']>;
