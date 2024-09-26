@@ -10,7 +10,7 @@ export const HOMEPAGE_IMAGE = '/homepage.webp';
 export const DEFAULT_METADATA_URL = 'https://www..buylits.com';
 export const DEFAULT_METADATA_TITLE = 'Buylits Local City Online Store';
 export const DEFAULT_METADATA_DESCRIPTION =
-	'Buylits: Control, Connect And Grow Your E-commerce Empire';
+	'Buylits: Your Local City Online Store: Buy and Sell with Ease';
 export const DEFAULT_METADATA_IMAGE =
 	'https://cloud.dingpack.com/apps/files_sharing/publicpreview/aJB8Anwmry2Eojk?file=/&fileId=137915&x=1365&y=768&a=true&etag=da9211b04084681e5de0ebd71391633e';
 export const DEFAULT_LOCALE = 'en';
