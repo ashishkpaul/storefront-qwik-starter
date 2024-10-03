@@ -418,8 +418,8 @@ export type CreateAddressInput = {
 };
 
 export type CreateCustomerCustomFieldsInput = {
+	CustomerPostalCode?: InputMaybe<Scalars['String']['input']>;
 	avatarId?: InputMaybe<Scalars['ID']['input']>;
-	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCustomerInput = {
@@ -431,8 +431,25 @@ export type CreateCustomerInput = {
 	title?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateSellerCustomFieldsInput = {
+	OrderConfirmationEmailId?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingAddress?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCity?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCountry?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
+	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
+	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
+	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
+	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
+	SellerProfilePictureId?: InputMaybe<Scalars['ID']['input']>;
+	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
+	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
+	consent?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type CreateSellerInput = {
-	customFields?: InputMaybe<Scalars['JSON']['input']>;
+	customFields?: InputMaybe<CreateSellerCustomFieldsInput>;
 	emailAddress: Scalars['String']['input'];
 	firstName: Scalars['String']['input'];
 	lastName: Scalars['String']['input'];
@@ -829,11 +846,12 @@ export type CustomerOrdersArgs = {
 
 export type CustomerCustomFields = {
 	__typename?: 'CustomerCustomFields';
+	CustomerPostalCode?: Maybe<Scalars['String']['output']>;
 	avatar?: Maybe<Asset>;
-	websiteUrl?: Maybe<Scalars['String']['output']>;
 };
 
 export type CustomerFilterParameter = {
+	CustomerPostalCode?: InputMaybe<StringOperators>;
 	_and?: InputMaybe<Array<CustomerFilterParameter>>;
 	_or?: InputMaybe<Array<CustomerFilterParameter>>;
 	createdAt?: InputMaybe<DateOperators>;
@@ -844,7 +862,6 @@ export type CustomerFilterParameter = {
 	phoneNumber?: InputMaybe<StringOperators>;
 	title?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
-	websiteUrl?: InputMaybe<StringOperators>;
 };
 
 export type CustomerGroup = Node & {
@@ -881,6 +898,7 @@ export type CustomerListOptions = {
 };
 
 export type CustomerSortParameter = {
+	CustomerPostalCode?: InputMaybe<SortOrder>;
 	avatar?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	emailAddress?: InputMaybe<SortOrder>;
@@ -890,7 +908,6 @@ export type CustomerSortParameter = {
 	phoneNumber?: InputMaybe<SortOrder>;
 	title?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
-	websiteUrl?: InputMaybe<SortOrder>;
 };
 
 /** Operators for filtering on a list of Date fields */
@@ -2700,6 +2717,7 @@ export type ProductCustomFields = {
 	additionalInfo?: Maybe<Scalars['String']['output']>;
 	popularityScore?: Maybe<Scalars['Int']['output']>;
 	relatedProducts?: Maybe<Array<Product>>;
+	weight?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ProductFilterParameter = {
@@ -2717,6 +2735,7 @@ export type ProductFilterParameter = {
 	popularityScore?: InputMaybe<NumberOperators>;
 	slug?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
+	weight?: InputMaybe<NumberOperators>;
 };
 
 export type ProductList = PaginatedList & {
@@ -2794,6 +2813,7 @@ export type ProductSortParameter = {
 	popularityScore?: InputMaybe<SortOrder>;
 	slug?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
+	weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductTranslation = {
@@ -2835,6 +2855,7 @@ export type ProductVariantCustomFields = {
 	__typename?: 'ProductVariantCustomFields';
 	MRP?: Maybe<Scalars['Int']['output']>;
 	releaseDate?: Maybe<Scalars['DateTime']['output']>;
+	weight?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ProductVariantFilterParameter = {
@@ -2853,6 +2874,7 @@ export type ProductVariantFilterParameter = {
 	sku?: InputMaybe<StringOperators>;
 	stockLevel?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
+	weight?: InputMaybe<NumberOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -2886,6 +2908,7 @@ export type ProductVariantSortParameter = {
 	sku?: InputMaybe<SortOrder>;
 	stockLevel?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
+	weight?: InputMaybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {
@@ -3108,8 +3131,8 @@ export type RegisterCustomerAccountResult =
 	| Success;
 
 export type RegisterCustomerCustomFieldsInput = {
+	CustomerPostalCode?: InputMaybe<Scalars['String']['input']>;
 	avatarId?: InputMaybe<Scalars['ID']['input']>;
-	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RegisterCustomerInput = {
@@ -3266,6 +3289,20 @@ export type Seller = Node & {
 
 export type SellerCustomFields = {
 	__typename?: 'SellerCustomFields';
+	OrderConfirmationEmailId?: Maybe<Scalars['String']['output']>;
+	SellerBillingAddress?: Maybe<Scalars['String']['output']>;
+	SellerBillingCity?: Maybe<Scalars['String']['output']>;
+	SellerBillingCountry?: Maybe<Scalars['String']['output']>;
+	SellerBillingCycle?: Maybe<Scalars['String']['output']>;
+	SellerBillingPostalCode?: Maybe<Scalars['String']['output']>;
+	SellerBillingState?: Maybe<Scalars['String']['output']>;
+	SellerIndustry?: Maybe<Scalars['String']['output']>;
+	SellerOthersNote?: Maybe<Scalars['String']['output']>;
+	SellerPhoneNo?: Maybe<Scalars['String']['output']>;
+	SellerProfilePicture?: Maybe<Asset>;
+	SellerVatNo?: Maybe<Scalars['String']['output']>;
+	SellerWebsite?: Maybe<Scalars['String']['output']>;
+	consent?: Maybe<Scalars['Boolean']['output']>;
 	isVerified?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -3507,8 +3544,8 @@ export type UpdateAddressInput = {
 };
 
 export type UpdateCustomerCustomFieldsInput = {
+	CustomerPostalCode?: InputMaybe<Scalars['String']['input']>;
 	avatarId?: InputMaybe<Scalars['ID']['input']>;
-	websiteUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCustomerEmailAddressResult =

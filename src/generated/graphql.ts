@@ -2956,7 +2956,8 @@ export type RegisterCustomerAccountResult =
 	| Success;
 
 export type RegisterCustomerCustomFieldsInput = {
-	websiteUrl?: InputMaybe<Scalars['String']>;
+	CustomerPostalCode?: InputMaybe<Scalars['String']>;
+	avatarId?: InputMaybe<Scalars['ID']>;
 };
 
 export type RegisterCustomerInput = {

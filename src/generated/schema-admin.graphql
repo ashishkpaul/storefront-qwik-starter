@@ -70,7 +70,7 @@ enum AdjustmentType {
 
 type Administrator implements Node {
 	createdAt: DateTime!
-	customFields: AdministratorCustomFields
+	customFields: JSON
 	emailAddress: String!
 	firstName: String!
 	id: ID!
@@ -79,32 +79,7 @@ type Administrator implements Node {
 	user: User!
 }
 
-type AdministratorCustomFields {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
-}
-
 input AdministratorFilterParameter {
-	SellerBillingAddress: StringOperators
-	SellerBillingCity: StringOperators
-	SellerBillingCountry: StringOperators
-	SellerBillingCycle: StringOperators
-	SellerBillingPostalCode: StringOperators
-	SellerBillingState: StringOperators
-	SellerIndustry: StringOperators
-	SellerOthersNote: StringOperators
-	SellerPhoneNo: StringOperators
-	SellerVatNo: StringOperators
-	SellerWebsite: StringOperators
 	_and: [AdministratorFilterParameter!]
 	_or: [AdministratorFilterParameter!]
 	createdAt: DateOperators
@@ -164,17 +139,6 @@ input AdministratorRefundInput {
 }
 
 input AdministratorSortParameter {
-	SellerBillingAddress: SortOrder
-	SellerBillingCity: SortOrder
-	SellerBillingCountry: SortOrder
-	SellerBillingCycle: SortOrder
-	SellerBillingPostalCode: SortOrder
-	SellerBillingState: SortOrder
-	SellerIndustry: SortOrder
-	SellerOthersNote: SortOrder
-	SellerPhoneNo: SortOrder
-	SellerVatNo: SortOrder
-	SellerWebsite: SortOrder
 	createdAt: SortOrder
 	emailAddress: SortOrder
 	firstName: SortOrder
@@ -916,22 +880,8 @@ input CreateAddressInput {
 	streetLine2: String
 }
 
-input CreateAdministratorCustomFieldsInput {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
-}
-
 input CreateAdministratorInput {
-	customFields: CreateAdministratorCustomFieldsInput
+	customFields: JSON
 	emailAddress: String!
 	firstName: String!
 	lastName: String!
@@ -1012,8 +962,8 @@ input CreateCountryInput {
 }
 
 input CreateCustomerCustomFieldsInput {
+	CustomerPostalCode: String
 	avatarId: ID
-	websiteUrl: String
 }
 
 input CreateCustomerGroupInput {
@@ -1089,6 +1039,7 @@ input CreateProductCustomFieldsInput {
 	popularityScore: Int
 	relatedProductsIds: [ID!]
 	twitterImageId: ID
+	weight: Int
 }
 
 input CreateProductInput {
@@ -1117,6 +1068,7 @@ input CreateProductOptionInput {
 input CreateProductVariantCustomFieldsInput {
 	MRP: Int
 	releaseDate: DateTime
+	weight: Int
 }
 
 input CreateProductVariantInput {
@@ -1173,7 +1125,21 @@ input CreateRoleInput {
 }
 
 input CreateSellerCustomFieldsInput {
+	OrderConfirmationEmailId: String
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerProfilePictureId: ID
+	SellerVatNo: String
+	SellerWebsite: String
 	connectedAccountId: String
+	consent: Boolean
 }
 
 input CreateSellerInput {
@@ -2116,12 +2082,13 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
+	CustomerPostalCode: String
 	avatar: Asset
 	stripeCustomerId: String
-	websiteUrl: String
 }
 
 input CustomerFilterParameter {
+	CustomerPostalCode: StringOperators
 	_and: [CustomerFilterParameter!]
 	_or: [CustomerFilterParameter!]
 	createdAt: DateOperators
@@ -2134,7 +2101,6 @@ input CustomerFilterParameter {
 	stripeCustomerId: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
-	websiteUrl: StringOperators
 }
 
 type CustomerGroup implements Node {
@@ -2227,6 +2193,7 @@ input CustomerListOptions {
 }
 
 input CustomerSortParameter {
+	CustomerPostalCode: SortOrder
 	avatar: SortOrder
 	createdAt: SortOrder
 	emailAddress: SortOrder
@@ -2237,7 +2204,6 @@ input CustomerSortParameter {
 	stripeCustomerId: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
-	websiteUrl: SortOrder
 }
 
 """
@@ -5900,6 +5866,7 @@ type ProductCustomFields {
 	seoDescription: String
 	seoTitle: String
 	twitterImage: Asset
+	weight: Int
 }
 
 input ProductFilterParameter {
@@ -5921,6 +5888,7 @@ input ProductFilterParameter {
 	sku: StringOperators
 	slug: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -6030,6 +5998,7 @@ input ProductSortParameter {
 	slug: SortOrder
 	twitterImage: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductTranslation {
@@ -6098,6 +6067,7 @@ type ProductVariant implements Node {
 type ProductVariantCustomFields {
 	MRP: Int
 	releaseDate: DateTime
+	weight: Int
 }
 
 input ProductVariantFilterParameter {
@@ -6123,6 +6093,7 @@ input ProductVariantFilterParameter {
 	trackInventory: StringOperators
 	updatedAt: DateOperators
 	useGlobalOutOfStockThreshold: BooleanOperators
+	weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -6188,6 +6159,7 @@ input ProductVariantSortParameter {
 	stockLevel: SortOrder
 	stockOnHand: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -6490,6 +6462,7 @@ type Query {
 	List ProductVariants either all or for the specific product.
 	"""
 	productVariants(options: ProductVariantListOptions, productId: ID): ProductVariantList!
+	productVariantsWithLowStock: [ProductVariant!]!
 
 	"""
 	List Products
@@ -6886,14 +6859,41 @@ type Seller implements Node {
 }
 
 type SellerCustomFields {
+	OrderConfirmationEmailId: String
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerProfilePicture: Asset
+	SellerVatNo: String
+	SellerWebsite: String
 	connectedAccountId: String
+	consent: Boolean
 	isVerified: Boolean
 }
 
 input SellerFilterParameter {
+	OrderConfirmationEmailId: StringOperators
+	SellerBillingAddress: StringOperators
+	SellerBillingCity: StringOperators
+	SellerBillingCountry: StringOperators
+	SellerBillingCycle: StringOperators
+	SellerBillingPostalCode: StringOperators
+	SellerBillingState: StringOperators
+	SellerIndustry: StringOperators
+	SellerOthersNote: StringOperators
+	SellerPhoneNo: StringOperators
+	SellerVatNo: StringOperators
+	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
 	_or: [SellerFilterParameter!]
 	connectedAccountId: StringOperators
+	consent: BooleanOperators
 	createdAt: DateOperators
 	id: IDOperators
 	isVerified: BooleanOperators
@@ -6934,7 +6934,21 @@ input SellerListOptions {
 }
 
 input SellerSortParameter {
+	OrderConfirmationEmailId: SortOrder
+	SellerBillingAddress: SortOrder
+	SellerBillingCity: SortOrder
+	SellerBillingCountry: SortOrder
+	SellerBillingCycle: SortOrder
+	SellerBillingPostalCode: SortOrder
+	SellerBillingState: SortOrder
+	SellerIndustry: SortOrder
+	SellerOthersNote: SortOrder
+	SellerPhoneNo: SortOrder
+	SellerProfilePicture: SortOrder
+	SellerVatNo: SortOrder
+	SellerWebsite: SortOrder
 	connectedAccountId: SortOrder
+	consent: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
 	isVerified: SortOrder
@@ -7539,7 +7553,7 @@ union TransitionOrderToStateResult = Order | OrderStateTransitionError
 union TransitionPaymentToStateResult = Payment | PaymentStateTransitionError
 
 input UpdateActiveAdministratorInput {
-	customFields: UpdateAdministratorCustomFieldsInput
+	customFields: JSON
 	emailAddress: String
 	firstName: String
 	lastName: String
@@ -7569,22 +7583,8 @@ input UpdateAddressInput {
 	streetLine2: String
 }
 
-input UpdateAdministratorCustomFieldsInput {
-	SellerBillingAddress: String
-	SellerBillingCity: String
-	SellerBillingCountry: String
-	SellerBillingCycle: String
-	SellerBillingPostalCode: String
-	SellerBillingState: String
-	SellerIndustry: String
-	SellerOthersNote: String
-	SellerPhoneNo: String
-	SellerVatNo: String
-	SellerWebsite: String
-}
-
 input UpdateAdministratorInput {
-	customFields: UpdateAdministratorCustomFieldsInput
+	customFields: JSON
 	emailAddress: String
 	firstName: String
 	id: ID!
@@ -7671,8 +7671,8 @@ input UpdateCountryInput {
 }
 
 input UpdateCustomerCustomFieldsInput {
+	CustomerPostalCode: String
 	avatarId: ID
-	websiteUrl: String
 }
 
 input UpdateCustomerGroupInput {
@@ -7781,6 +7781,7 @@ input UpdateProductCustomFieldsInput {
 	popularityScore: Int
 	relatedProductsIds: [ID!]
 	twitterImageId: ID
+	weight: Int
 }
 
 input UpdateProductInput {
@@ -7810,6 +7811,7 @@ input UpdateProductOptionInput {
 input UpdateProductVariantCustomFieldsInput {
 	MRP: Int
 	releaseDate: DateTime
+	weight: Int
 }
 
 input UpdateProductVariantInput {
@@ -7873,7 +7875,21 @@ input UpdateRoleInput {
 }
 
 input UpdateSellerCustomFieldsInput {
+	OrderConfirmationEmailId: String
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerProfilePictureId: ID
+	SellerVatNo: String
+	SellerWebsite: String
 	connectedAccountId: String
+	consent: Boolean
 }
 
 input UpdateSellerInput {

@@ -15,10 +15,10 @@ export default component$(() => {
 			{ name: $localize`Returns`, href: '#', target: '_blank' },
 		],
 		company: [
-			{ name: $localize`About`, href: 'https://saa9vi.com/services/ecom/#about', target: '_blank' },
-			{ name: $localize`Blog`, href: '#', target: '_blank' },
-			{ name: $localize`Corporate responsibility`, href: '#', target: '_blank' },
-			{ name: $localize`Press`, href: '#', target: '_blank' },
+			{ name: $localize`About`, href: '/pages/about-us' },
+			{ name: $localize`Blog`, href: '#' },
+			{ name: $localize`Terms`, href: '/pages/terms-conditions' },
+			{ name: $localize`Press`, href: '#' },
 		],
 	};
 

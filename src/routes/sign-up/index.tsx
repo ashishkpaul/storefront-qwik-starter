@@ -3,6 +3,7 @@ import { Link } from '@builder.io/qwik-city';
 import XCircleIcon from '~/components/icons/XCircleIcon';
 import { registerCustomerAccountMutation } from '~/providers/shop/account/account';
 import { isEnvVariableEnabled } from '~/utils';
+
 export default component$(() => {
 	const email = useSignal('');
 	const firstName = useSignal('');
@@ -11,8 +12,8 @@ export default component$(() => {
 	const confirmPassword = useSignal('');
 	const successSignal = useSignal(false);
 	const error = useSignal('');
-	const websiteUrl = useSignal(''); // Add a signal for the websiteUrl input field
-	const phoneNumber = useSignal(''); // Add a signal for the phoneNumber input field
+	const CustomerPostalCode = useSignal(''); // Signal for the CustomerPostalCode input field
+	const phoneNumber = useSignal(''); // Signal for the phoneNumber input field
 
 	// Use useSignal to create a reference to the container div
 	const containerRef = useSignal<HTMLDivElement>();
@@ -28,31 +29,26 @@ export default component$(() => {
 		} else if (password.value !== confirmPassword.value) {
 			error.value = 'Passwords do not match';
 		} else {
-			if (websiteUrl.value !== '') {
-				// Website URL is not allowed for account registration
-				error.value = 'Invalid registration attempt';
-			} else {
-				// Proceed with account registration if websiteUrl is empty
-				error.value = '';
-				successSignal.value = false;
+			// Proceed with account registration
+			error.value = '';
+			successSignal.value = false;
 
-				const { registerCustomerAccount } = await registerCustomerAccountMutation({
-					input: {
-						emailAddress: email.value,
-						firstName: firstName.value,
-						lastName: lastName.value,
-						password: password.value,
-						phoneNumber: phoneNumber.value, // Include phoneNumber in the mutation input
-						customFields: {
-							websiteUrl: websiteUrl.value,
-						},
+			const { registerCustomerAccount } = await registerCustomerAccountMutation({
+				input: {
+					emailAddress: email.value,
+					firstName: firstName.value,
+					lastName: lastName.value,
+					password: password.value,
+					phoneNumber: phoneNumber.value, // Include phoneNumber in the mutation input
+					customFields: {
+						CustomerPostalCode: CustomerPostalCode.value,
 					},
-				});
-				if (registerCustomerAccount.__typename === 'Success') {
-					successSignal.value = true;
-				} else {
-					error.value = registerCustomerAccount.message;
-				}
+				},
+			});
+			if (registerCustomerAccount.__typename === 'Success') {
+				successSignal.value = true;
+			} else {
+				error.value = registerCustomerAccount.message;
 			}
 		}
 	});
@@ -162,13 +158,19 @@ export default component$(() => {
 								/>
 							</div>
 						</div>
-						<div class="mt-1">
-							<input
-								type="hidden"
-								value={websiteUrl.value}
-								onInput$={(_, el) => (websiteUrl.value = el.value)}
-							/>
+
+						<div>
+							<label class="block text-sm font-medium text-gray-700">Postal Code</label>
+							<div class="mt-1">
+								<input
+									type="text"
+									value={CustomerPostalCode.value}
+									onInput$={(_, el) => (CustomerPostalCode.value = el.value)}
+									class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+								/>
+							</div>
 						</div>
+
 						<div>
 							<label class="block text-sm font-medium text-gray-700">Phone Number</label>
 							<div class="mt-1">
@@ -181,6 +183,7 @@ export default component$(() => {
 								/>
 							</div>
 						</div>
+
 						{error.value !== '' && (
 							<div class="rounded-md bg-red-50 p-4">
 								<div class="flex">

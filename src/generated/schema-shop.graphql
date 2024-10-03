@@ -391,8 +391,8 @@ input CreateAddressInput {
 }
 
 input CreateCustomerCustomFieldsInput {
+	CustomerPostalCode: String
 	avatarId: ID
-	websiteUrl: String
 }
 
 input CreateCustomerInput {
@@ -404,8 +404,25 @@ input CreateCustomerInput {
 	title: String
 }
 
+input CreateSellerCustomFieldsInput {
+	OrderConfirmationEmailId: String
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerProfilePictureId: ID
+	SellerVatNo: String
+	SellerWebsite: String
+	consent: Boolean
+}
+
 input CreateSellerInput {
-	customFields: JSON
+	customFields: CreateSellerCustomFieldsInput
 	emailAddress: String!
 	firstName: String!
 	lastName: String!
@@ -1262,11 +1279,12 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
+	CustomerPostalCode: String
 	avatar: Asset
-	websiteUrl: String
 }
 
 input CustomerFilterParameter {
+	CustomerPostalCode: StringOperators
 	_and: [CustomerFilterParameter!]
 	_or: [CustomerFilterParameter!]
 	createdAt: DateOperators
@@ -1277,7 +1295,6 @@ input CustomerFilterParameter {
 	phoneNumber: StringOperators
 	title: StringOperators
 	updatedAt: DateOperators
-	websiteUrl: StringOperators
 }
 
 type CustomerGroup implements Node {
@@ -1322,6 +1339,7 @@ input CustomerListOptions {
 }
 
 input CustomerSortParameter {
+	CustomerPostalCode: SortOrder
 	avatar: SortOrder
 	createdAt: SortOrder
 	emailAddress: SortOrder
@@ -1331,7 +1349,6 @@ input CustomerSortParameter {
 	phoneNumber: SortOrder
 	title: SortOrder
 	updatedAt: SortOrder
-	websiteUrl: SortOrder
 }
 
 """
@@ -4005,6 +4022,7 @@ type ProductCustomFields {
 	additionalInfo: String
 	popularityScore: Int
 	relatedProducts: [Product!]
+	weight: Int
 }
 
 input ProductFilterParameter {
@@ -4022,6 +4040,7 @@ input ProductFilterParameter {
 	popularityScore: NumberOperators
 	slug: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
 }
 
 type ProductList implements PaginatedList {
@@ -4108,6 +4127,7 @@ input ProductSortParameter {
 	popularityScore: SortOrder
 	slug: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductTranslation {
@@ -4146,6 +4166,7 @@ type ProductVariant implements Node {
 type ProductVariantCustomFields {
 	MRP: Int
 	releaseDate: DateTime
+	weight: Int
 }
 
 input ProductVariantFilterParameter {
@@ -4164,6 +4185,7 @@ input ProductVariantFilterParameter {
 	sku: StringOperators
 	stockLevel: StringOperators
 	updatedAt: DateOperators
+	weight: NumberOperators
 }
 
 type ProductVariantList implements PaginatedList {
@@ -4210,6 +4232,7 @@ input ProductVariantSortParameter {
 	sku: SortOrder
 	stockLevel: SortOrder
 	updatedAt: SortOrder
+	weight: SortOrder
 }
 
 type ProductVariantTranslation {
@@ -4422,8 +4445,8 @@ union RegisterCustomerAccountResult =
 	| Success
 
 input RegisterCustomerCustomFieldsInput {
+	CustomerPostalCode: String
 	avatarId: ID
-	websiteUrl: String
 }
 
 input RegisterCustomerInput {
@@ -4577,6 +4600,20 @@ type Seller implements Node {
 }
 
 type SellerCustomFields {
+	OrderConfirmationEmailId: String
+	SellerBillingAddress: String
+	SellerBillingCity: String
+	SellerBillingCountry: String
+	SellerBillingCycle: String
+	SellerBillingPostalCode: String
+	SellerBillingState: String
+	SellerIndustry: String
+	SellerOthersNote: String
+	SellerPhoneNo: String
+	SellerProfilePicture: Asset
+	SellerVatNo: String
+	SellerWebsite: String
+	consent: Boolean
 	isVerified: Boolean
 }
 
@@ -4810,8 +4847,8 @@ input UpdateAddressInput {
 }
 
 input UpdateCustomerCustomFieldsInput {
+	CustomerPostalCode: String
 	avatarId: ID
-	websiteUrl: String
 }
 
 union UpdateCustomerEmailAddressResult =
