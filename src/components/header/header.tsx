@@ -52,8 +52,8 @@ export default component$(() => {
 						<div class="flex justify-between items-center w-full">
 							<div class="marquee-container mx-auto px-4 lg:px-8 shadow-sides">
 								<p class="marquee text-lg font-serif">
-									Find Everything You Need at DingPack - Shop Fashion, Electronics, Home Goods, and
-									More!
+									Find Everything You Need at Buylits - Shop Fashion, Electronics, Home Goods, and
+									More! Your Trusted Online Marketplace.
 								</p>
 							</div>
 							<div class="flex mr-[60px] 2xl:mr-0">
@@ -89,7 +89,7 @@ export default component$(() => {
 					</button>
 					<h1 class="text-white w-10">
 						<Link href="/">
-							<img src={`/cube-logo-small.webp`} width={40} height={31} alt="DingPack logo" />
+							<img src={`/cube-logo-small.webp`} width={40} height={31} alt="Buylits logo" />
 						</Link>
 					</h1>
 					<div class="hidden space-x-4 sm:block">
