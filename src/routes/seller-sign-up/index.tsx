@@ -5,6 +5,9 @@ import XCircleIcon from '~/components/icons/XCircleIcon';
 import { REGISTER_SELLER_MUTATION } from '~/providers/shop/seller/seller';
 import { requester } from '~/utils/api';
 
+// const shopApi =
+// 	'https://core.vendure.lan/shopApi-tm9rc~ziKFM8Ts6GsAm-_Y9ccTxz8VlhYLEYaEDUvFgX7BOKrWljfjxebIySv-3-';
+
 export default component$(() => {
 	const containerRef = useSignal<HTMLDivElement>();
 
@@ -47,7 +50,8 @@ export default component$(() => {
 
 			try {
 				await requester<any, any>(REGISTER_SELLER_MUTATION, variables, {
-					apiUrl: import.meta.env.VITE_VENDURE_PUBLIC_URL || '/graphql',
+					apiUrl: import.meta.env.VITE_VENDURE_PUBLIC_URL,
+					// apiUrl: shopApi,
 				});
 				successSignal.value = true;
 				// Clear the form fields on successful registration
