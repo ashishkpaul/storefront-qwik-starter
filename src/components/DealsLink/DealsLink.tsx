@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 
 export const DealsLink = component$(() => {
 	return (
-		<a href="#" aria-label="View source on GitHub">
+		<a href="/seller-sign-up" aria-label="View source on GitHub">
 			<svg
 				width="50"
 				height="50"
