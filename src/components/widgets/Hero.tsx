@@ -55,8 +55,7 @@ export default component$(() => {
 								<div class="flex w-full sm:w-auto">
 									<a
 										class="btn btn-primary sm:mb-0 w-full flex items-center justify-center gap-2 text-lg bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg"
-										href="https://seller.buylits.com/get-auth-status"
-										target="_blank"
+										href="/seller-sign-up"
 										rel="noopener"
 									>
 										<SellerCentric />

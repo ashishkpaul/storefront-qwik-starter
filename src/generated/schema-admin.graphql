@@ -367,7 +367,6 @@ input AssignStockLocationsToChannelInput {
 }
 
 input AuthenticationInput {
-	keycloak: KeycloakAuthInput
 	native: NativeAuthInput
 }
 
@@ -2964,10 +2963,6 @@ enum JobState {
 	PENDING
 	RETRYING
 	RUNNING
-}
-
-input KeycloakAuthInput {
-	token: String!
 }
 
 """
@@ -6462,7 +6457,6 @@ type Query {
 	List ProductVariants either all or for the specific product.
 	"""
 	productVariants(options: ProductVariantListOptions, productId: ID): ProductVariantList!
-	productVariantsWithLowStock: [ProductVariant!]!
 
 	"""
 	List Products
