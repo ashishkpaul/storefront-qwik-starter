@@ -961,6 +961,8 @@ input CreateCountryInput {
 }
 
 input CreateCustomerCustomFieldsInput {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatarId: ID
 }
@@ -1131,14 +1133,17 @@ input CreateSellerCustomFieldsInput {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerGeoLocationLAT: Float
+	SellerGeoLocationLONG: Float
 	SellerIndustry: String
-	SellerOthersNote: String
 	SellerPhoneNo: String
 	SellerProfilePictureId: ID
 	SellerVatNo: String
 	SellerWebsite: String
+	averageShippingTime: String
 	connectedAccountId: String
 	consent: Boolean
+	isOpen: Boolean
 }
 
 input CreateSellerInput {
@@ -2035,7 +2040,6 @@ type CustomFields {
 	ExtendedOrder: [CustomFieldConfig!]!
 	ExtendedProduct: [CustomFieldConfig!]!
 	ExtendedProductVariant: [CustomFieldConfig!]!
-	ExtendedSeller: [CustomFieldConfig!]!
 	Facet: [CustomFieldConfig!]!
 	FacetValue: [CustomFieldConfig!]!
 	Fulfillment: [CustomFieldConfig!]!
@@ -2081,12 +2085,16 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatar: Asset
 	stripeCustomerId: String
 }
 
 input CustomerFilterParameter {
+	CustomerGeoLocationLAT: NumberOperators
+	CustomerGeoLocationLONG: NumberOperators
 	CustomerPostalCode: StringOperators
 	_and: [CustomerFilterParameter!]
 	_or: [CustomerFilterParameter!]
@@ -2192,6 +2200,8 @@ input CustomerListOptions {
 }
 
 input CustomerSortParameter {
+	CustomerGeoLocationLAT: SortOrder
+	CustomerGeoLocationLONG: SortOrder
 	CustomerPostalCode: SortOrder
 	avatar: SortOrder
 	createdAt: SortOrder
@@ -4835,6 +4845,8 @@ type OrderAddress {
 
 type OrderCustomFields {
 	customerNote: String
+	deliveryLat: String
+	deliveryLng: String
 	referralCode: String
 	vatId: String
 }
@@ -4849,6 +4861,8 @@ input OrderFilterParameter {
 	currencyCode: StringOperators
 	customerLastName: StringOperators
 	customerNote: StringOperators
+	deliveryLat: StringOperators
+	deliveryLng: StringOperators
 	id: IDOperators
 	orderPlacedAt: DateOperators
 	referralCode: StringOperators
@@ -5068,6 +5082,8 @@ input OrderSortParameter {
 	createdAt: SortOrder
 	customerLastName: SortOrder
 	customerNote: SortOrder
+	deliveryLat: SortOrder
+	deliveryLng: SortOrder
 	id: SortOrder
 	orderPlacedAt: SortOrder
 	referralCode: SortOrder
@@ -6457,6 +6473,7 @@ type Query {
 	List ProductVariants either all or for the specific product.
 	"""
 	productVariants(options: ProductVariantListOptions, productId: ID): ProductVariantList!
+	productVariantsWithLowStock: [ProductVariant!]!
 
 	"""
 	List Products
@@ -6860,14 +6877,17 @@ type SellerCustomFields {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerGeoLocationLAT: Float
+	SellerGeoLocationLONG: Float
 	SellerIndustry: String
-	SellerOthersNote: String
 	SellerPhoneNo: String
 	SellerProfilePicture: Asset
 	SellerVatNo: String
 	SellerWebsite: String
+	averageShippingTime: String
 	connectedAccountId: String
 	consent: Boolean
+	isOpen: Boolean
 	isVerified: Boolean
 }
 
@@ -6879,17 +6899,20 @@ input SellerFilterParameter {
 	SellerBillingCycle: StringOperators
 	SellerBillingPostalCode: StringOperators
 	SellerBillingState: StringOperators
+	SellerGeoLocationLAT: NumberOperators
+	SellerGeoLocationLONG: NumberOperators
 	SellerIndustry: StringOperators
-	SellerOthersNote: StringOperators
 	SellerPhoneNo: StringOperators
 	SellerVatNo: StringOperators
 	SellerWebsite: StringOperators
 	_and: [SellerFilterParameter!]
 	_or: [SellerFilterParameter!]
+	averageShippingTime: StringOperators
 	connectedAccountId: StringOperators
 	consent: BooleanOperators
 	createdAt: DateOperators
 	id: IDOperators
+	isOpen: BooleanOperators
 	isVerified: BooleanOperators
 	name: StringOperators
 	updatedAt: DateOperators
@@ -6935,16 +6958,19 @@ input SellerSortParameter {
 	SellerBillingCycle: SortOrder
 	SellerBillingPostalCode: SortOrder
 	SellerBillingState: SortOrder
+	SellerGeoLocationLAT: SortOrder
+	SellerGeoLocationLONG: SortOrder
 	SellerIndustry: SortOrder
-	SellerOthersNote: SortOrder
 	SellerPhoneNo: SortOrder
 	SellerProfilePicture: SortOrder
 	SellerVatNo: SortOrder
 	SellerWebsite: SortOrder
+	averageShippingTime: SortOrder
 	connectedAccountId: SortOrder
 	consent: SortOrder
 	createdAt: SortOrder
 	id: SortOrder
+	isOpen: SortOrder
 	isVerified: SortOrder
 	name: SortOrder
 	updatedAt: SortOrder
@@ -7665,6 +7691,8 @@ input UpdateCountryInput {
 }
 
 input UpdateCustomerCustomFieldsInput {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatarId: ID
 }
@@ -7735,6 +7763,8 @@ input UpdateOrderAddressInput {
 
 input UpdateOrderCustomFieldsInput {
 	customerNote: String
+	deliveryLat: String
+	deliveryLng: String
 	referralCode: String
 	vatId: String
 }
@@ -7876,14 +7906,17 @@ input UpdateSellerCustomFieldsInput {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerGeoLocationLAT: Float
+	SellerGeoLocationLONG: Float
 	SellerIndustry: String
-	SellerOthersNote: String
 	SellerPhoneNo: String
 	SellerProfilePictureId: ID
 	SellerVatNo: String
 	SellerWebsite: String
+	averageShippingTime: String
 	connectedAccountId: String
 	consent: Boolean
+	isOpen: Boolean
 }
 
 input UpdateSellerInput {

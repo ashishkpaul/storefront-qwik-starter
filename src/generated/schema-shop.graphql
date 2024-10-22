@@ -391,6 +391,8 @@ input CreateAddressInput {
 }
 
 input CreateCustomerCustomFieldsInput {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatarId: ID
 }
@@ -412,13 +414,16 @@ input CreateSellerCustomFieldsInput {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerGeoLocationLAT: Float
+	SellerGeoLocationLONG: Float
 	SellerIndustry: String
-	SellerOthersNote: String
 	SellerPhoneNo: String
 	SellerProfilePictureId: ID
 	SellerVatNo: String
 	SellerWebsite: String
+	averageShippingTime: String
 	consent: Boolean
+	isOpen: Boolean
 }
 
 input CreateSellerInput {
@@ -1279,11 +1284,15 @@ type Customer implements Node {
 }
 
 type CustomerCustomFields {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatar: Asset
 }
 
 input CustomerFilterParameter {
+	CustomerGeoLocationLAT: NumberOperators
+	CustomerGeoLocationLONG: NumberOperators
 	CustomerPostalCode: StringOperators
 	_and: [CustomerFilterParameter!]
 	_or: [CustomerFilterParameter!]
@@ -1339,6 +1348,8 @@ input CustomerListOptions {
 }
 
 input CustomerSortParameter {
+	CustomerGeoLocationLAT: SortOrder
+	CustomerGeoLocationLONG: SortOrder
 	CustomerPostalCode: SortOrder
 	avatar: SortOrder
 	createdAt: SortOrder
@@ -3069,6 +3080,8 @@ type OrderAddress {
 
 type OrderCustomFields {
 	customerNote: String
+	deliveryLat: String
+	deliveryLng: String
 	referralCode: String
 	vatId: String
 }
@@ -3081,6 +3094,8 @@ input OrderFilterParameter {
 	createdAt: DateOperators
 	currencyCode: StringOperators
 	customerNote: StringOperators
+	deliveryLat: StringOperators
+	deliveryLng: StringOperators
 	id: IDOperators
 	orderPlacedAt: DateOperators
 	referralCode: StringOperators
@@ -3266,6 +3281,8 @@ input OrderSortParameter {
 	code: SortOrder
 	createdAt: SortOrder
 	customerNote: SortOrder
+	deliveryLat: SortOrder
+	deliveryLng: SortOrder
 	id: SortOrder
 	orderPlacedAt: SortOrder
 	referralCode: SortOrder
@@ -4347,6 +4364,7 @@ type Query {
 	A list of Facets available to the shop
 	"""
 	facets(options: FacetListOptions): FacetList!
+	findAllRestaurants(options: RestaurantListingOptions): RestaurantListing!
 	generateBraintreeClientToken(includeCustomerId: Boolean, orderId: ID): String
 
 	"""
@@ -4372,6 +4390,7 @@ type Query {
 	general anonymous access to Order data.
 	"""
 	orderByCode(code: String!): Order
+	ordersBySeller(sellerId: ID!): [Order!]!
 
 	"""
 	Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result.
@@ -4382,6 +4401,7 @@ type Query {
 	Get a list of Products
 	"""
 	products(options: ProductListOptions): ProductList!
+	restaurantById(id: ID!): SellerResponse
 
 	"""
 	Search Products based on the criteria set by the `SearchInput`
@@ -4445,6 +4465,8 @@ union RegisterCustomerAccountResult =
 	| Success
 
 input RegisterCustomerCustomFieldsInput {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatarId: ID
 }
@@ -4496,6 +4518,17 @@ union ResetPasswordResult =
 	| PasswordResetTokenExpiredError
 	| PasswordResetTokenInvalidError
 	| PasswordValidationError
+
+type RestaurantListing {
+	items: [Seller!]!
+	totalItems: Int!
+}
+
+input RestaurantListingOptions {
+	onlyOpen: Boolean
+	skip: Int
+	take: Int
+}
 
 type Role implements Node {
 	channels: [Channel!]!
@@ -4607,14 +4640,22 @@ type SellerCustomFields {
 	SellerBillingCycle: String
 	SellerBillingPostalCode: String
 	SellerBillingState: String
+	SellerGeoLocationLAT: Float
+	SellerGeoLocationLONG: Float
 	SellerIndustry: String
-	SellerOthersNote: String
 	SellerPhoneNo: String
 	SellerProfilePicture: Asset
 	SellerVatNo: String
 	SellerWebsite: String
+	averageShippingTime: String
 	consent: Boolean
+	isOpen: Boolean
 	isVerified: Boolean
+}
+
+type SellerResponse {
+	channelToken: String!
+	seller: Seller!
 }
 
 type Seo {
@@ -4847,6 +4888,8 @@ input UpdateAddressInput {
 }
 
 input UpdateCustomerCustomFieldsInput {
+	CustomerGeoLocationLAT: Float
+	CustomerGeoLocationLONG: Float
 	CustomerPostalCode: String
 	avatarId: ID
 }
@@ -4873,6 +4916,8 @@ union UpdateCustomerPasswordResult =
 
 input UpdateOrderCustomFieldsInput {
 	customerNote: String
+	deliveryLat: String
+	deliveryLng: String
 	referralCode: String
 	vatId: String
 }

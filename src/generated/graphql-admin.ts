@@ -919,6 +919,8 @@ export type CreateCountryInput = {
 };
 
 export type CreateCustomerCustomFieldsInput = {
+	CustomerGeoLocationLAT?: InputMaybe<Scalars['Float']['input']>;
+	CustomerGeoLocationLONG?: InputMaybe<Scalars['Float']['input']>;
 	CustomerPostalCode?: InputMaybe<Scalars['String']['input']>;
 	avatarId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -1088,14 +1090,17 @@ export type CreateSellerCustomFieldsInput = {
 	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
 	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
 	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
+	SellerGeoLocationLAT?: InputMaybe<Scalars['Float']['input']>;
+	SellerGeoLocationLONG?: InputMaybe<Scalars['Float']['input']>;
 	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
-	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
 	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
 	SellerProfilePictureId?: InputMaybe<Scalars['ID']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
+	averageShippingTime?: InputMaybe<Scalars['String']['input']>;
 	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
 	consent?: InputMaybe<Scalars['Boolean']['input']>;
+	isOpen?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CreateSellerInput = {
@@ -1526,7 +1531,6 @@ export type CustomFields = {
 	ExtendedOrder: Array<CustomFieldConfig>;
 	ExtendedProduct: Array<CustomFieldConfig>;
 	ExtendedProductVariant: Array<CustomFieldConfig>;
-	ExtendedSeller: Array<CustomFieldConfig>;
 	Facet: Array<CustomFieldConfig>;
 	FacetValue: Array<CustomFieldConfig>;
 	Fulfillment: Array<CustomFieldConfig>;
@@ -1583,12 +1587,16 @@ export type CustomerOrdersArgs = {
 
 export type CustomerCustomFields = {
 	__typename?: 'CustomerCustomFields';
+	CustomerGeoLocationLAT?: Maybe<Scalars['Float']['output']>;
+	CustomerGeoLocationLONG?: Maybe<Scalars['Float']['output']>;
 	CustomerPostalCode?: Maybe<Scalars['String']['output']>;
 	avatar?: Maybe<Asset>;
 	stripeCustomerId?: Maybe<Scalars['String']['output']>;
 };
 
 export type CustomerFilterParameter = {
+	CustomerGeoLocationLAT?: InputMaybe<NumberOperators>;
+	CustomerGeoLocationLONG?: InputMaybe<NumberOperators>;
 	CustomerPostalCode?: InputMaybe<StringOperators>;
 	_and?: InputMaybe<Array<CustomerFilterParameter>>;
 	_or?: InputMaybe<Array<CustomerFilterParameter>>;
@@ -1673,6 +1681,8 @@ export type CustomerListOptions = {
 };
 
 export type CustomerSortParameter = {
+	CustomerGeoLocationLAT?: InputMaybe<SortOrder>;
+	CustomerGeoLocationLONG?: InputMaybe<SortOrder>;
 	CustomerPostalCode?: InputMaybe<SortOrder>;
 	avatar?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
@@ -4070,6 +4080,8 @@ export type OrderAddress = {
 export type OrderCustomFields = {
 	__typename?: 'OrderCustomFields';
 	customerNote?: Maybe<Scalars['String']['output']>;
+	deliveryLat?: Maybe<Scalars['String']['output']>;
+	deliveryLng?: Maybe<Scalars['String']['output']>;
 	referralCode?: Maybe<Scalars['String']['output']>;
 	vatId?: Maybe<Scalars['String']['output']>;
 };
@@ -4084,6 +4096,8 @@ export type OrderFilterParameter = {
 	currencyCode?: InputMaybe<StringOperators>;
 	customerLastName?: InputMaybe<StringOperators>;
 	customerNote?: InputMaybe<StringOperators>;
+	deliveryLat?: InputMaybe<StringOperators>;
+	deliveryLng?: InputMaybe<StringOperators>;
 	id?: InputMaybe<IdOperators>;
 	orderPlacedAt?: InputMaybe<DateOperators>;
 	referralCode?: InputMaybe<StringOperators>;
@@ -4246,6 +4260,8 @@ export type OrderSortParameter = {
 	createdAt?: InputMaybe<SortOrder>;
 	customerLastName?: InputMaybe<SortOrder>;
 	customerNote?: InputMaybe<SortOrder>;
+	deliveryLat?: InputMaybe<SortOrder>;
+	deliveryLng?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
 	orderPlacedAt?: InputMaybe<SortOrder>;
 	referralCode?: InputMaybe<SortOrder>;
@@ -5256,6 +5272,7 @@ export type Query = {
 	productVariant?: Maybe<ProductVariant>;
 	/** List ProductVariants either all or for the specific product. */
 	productVariants: ProductVariantList;
+	productVariantsWithLowStock: Array<ProductVariant>;
 	/** List Products */
 	products: ProductList;
 	promotion?: Maybe<Promotion>;
@@ -5889,14 +5906,17 @@ export type SellerCustomFields = {
 	SellerBillingCycle?: Maybe<Scalars['String']['output']>;
 	SellerBillingPostalCode?: Maybe<Scalars['String']['output']>;
 	SellerBillingState?: Maybe<Scalars['String']['output']>;
+	SellerGeoLocationLAT?: Maybe<Scalars['Float']['output']>;
+	SellerGeoLocationLONG?: Maybe<Scalars['Float']['output']>;
 	SellerIndustry?: Maybe<Scalars['String']['output']>;
-	SellerOthersNote?: Maybe<Scalars['String']['output']>;
 	SellerPhoneNo?: Maybe<Scalars['String']['output']>;
 	SellerProfilePicture?: Maybe<Asset>;
 	SellerVatNo?: Maybe<Scalars['String']['output']>;
 	SellerWebsite?: Maybe<Scalars['String']['output']>;
+	averageShippingTime?: Maybe<Scalars['String']['output']>;
 	connectedAccountId?: Maybe<Scalars['String']['output']>;
 	consent?: Maybe<Scalars['Boolean']['output']>;
+	isOpen?: Maybe<Scalars['Boolean']['output']>;
 	isVerified?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -5908,17 +5928,20 @@ export type SellerFilterParameter = {
 	SellerBillingCycle?: InputMaybe<StringOperators>;
 	SellerBillingPostalCode?: InputMaybe<StringOperators>;
 	SellerBillingState?: InputMaybe<StringOperators>;
+	SellerGeoLocationLAT?: InputMaybe<NumberOperators>;
+	SellerGeoLocationLONG?: InputMaybe<NumberOperators>;
 	SellerIndustry?: InputMaybe<StringOperators>;
-	SellerOthersNote?: InputMaybe<StringOperators>;
 	SellerPhoneNo?: InputMaybe<StringOperators>;
 	SellerVatNo?: InputMaybe<StringOperators>;
 	SellerWebsite?: InputMaybe<StringOperators>;
 	_and?: InputMaybe<Array<SellerFilterParameter>>;
 	_or?: InputMaybe<Array<SellerFilterParameter>>;
+	averageShippingTime?: InputMaybe<StringOperators>;
 	connectedAccountId?: InputMaybe<StringOperators>;
 	consent?: InputMaybe<BooleanOperators>;
 	createdAt?: InputMaybe<DateOperators>;
 	id?: InputMaybe<IdOperators>;
+	isOpen?: InputMaybe<BooleanOperators>;
 	isVerified?: InputMaybe<BooleanOperators>;
 	name?: InputMaybe<StringOperators>;
 	updatedAt?: InputMaybe<DateOperators>;
@@ -5951,16 +5974,19 @@ export type SellerSortParameter = {
 	SellerBillingCycle?: InputMaybe<SortOrder>;
 	SellerBillingPostalCode?: InputMaybe<SortOrder>;
 	SellerBillingState?: InputMaybe<SortOrder>;
+	SellerGeoLocationLAT?: InputMaybe<SortOrder>;
+	SellerGeoLocationLONG?: InputMaybe<SortOrder>;
 	SellerIndustry?: InputMaybe<SortOrder>;
-	SellerOthersNote?: InputMaybe<SortOrder>;
 	SellerPhoneNo?: InputMaybe<SortOrder>;
 	SellerProfilePicture?: InputMaybe<SortOrder>;
 	SellerVatNo?: InputMaybe<SortOrder>;
 	SellerWebsite?: InputMaybe<SortOrder>;
+	averageShippingTime?: InputMaybe<SortOrder>;
 	connectedAccountId?: InputMaybe<SortOrder>;
 	consent?: InputMaybe<SortOrder>;
 	createdAt?: InputMaybe<SortOrder>;
 	id?: InputMaybe<SortOrder>;
+	isOpen?: InputMaybe<SortOrder>;
 	isVerified?: InputMaybe<SortOrder>;
 	name?: InputMaybe<SortOrder>;
 	updatedAt?: InputMaybe<SortOrder>;
@@ -6634,6 +6660,8 @@ export type UpdateCountryInput = {
 };
 
 export type UpdateCustomerCustomFieldsInput = {
+	CustomerGeoLocationLAT?: InputMaybe<Scalars['Float']['input']>;
+	CustomerGeoLocationLONG?: InputMaybe<Scalars['Float']['input']>;
 	CustomerPostalCode?: InputMaybe<Scalars['String']['input']>;
 	avatarId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -6704,6 +6732,8 @@ export type UpdateOrderAddressInput = {
 
 export type UpdateOrderCustomFieldsInput = {
 	customerNote?: InputMaybe<Scalars['String']['input']>;
+	deliveryLat?: InputMaybe<Scalars['String']['input']>;
+	deliveryLng?: InputMaybe<Scalars['String']['input']>;
 	referralCode?: InputMaybe<Scalars['String']['input']>;
 	vatId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -6839,14 +6869,17 @@ export type UpdateSellerCustomFieldsInput = {
 	SellerBillingCycle?: InputMaybe<Scalars['String']['input']>;
 	SellerBillingPostalCode?: InputMaybe<Scalars['String']['input']>;
 	SellerBillingState?: InputMaybe<Scalars['String']['input']>;
+	SellerGeoLocationLAT?: InputMaybe<Scalars['Float']['input']>;
+	SellerGeoLocationLONG?: InputMaybe<Scalars['Float']['input']>;
 	SellerIndustry?: InputMaybe<Scalars['String']['input']>;
-	SellerOthersNote?: InputMaybe<Scalars['String']['input']>;
 	SellerPhoneNo?: InputMaybe<Scalars['String']['input']>;
 	SellerProfilePictureId?: InputMaybe<Scalars['ID']['input']>;
 	SellerVatNo?: InputMaybe<Scalars['String']['input']>;
 	SellerWebsite?: InputMaybe<Scalars['String']['input']>;
+	averageShippingTime?: InputMaybe<Scalars['String']['input']>;
 	connectedAccountId?: InputMaybe<Scalars['String']['input']>;
 	consent?: InputMaybe<Scalars['Boolean']['input']>;
+	isOpen?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateSellerInput = {
