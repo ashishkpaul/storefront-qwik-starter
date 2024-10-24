@@ -18,7 +18,7 @@ export default component$(
 			return null;
 		}
 
-		const formattedMRP = formatPrice(MRP || 0, currencyCode || 'INR'); // Pre-format MRP (if always available)
+		const formattedMRP = formatPrice(MRP || 0, currencyCode || 'INR');
 
 		let calculatedDiscountPercentage = null;
 		let discountAmount = 0;

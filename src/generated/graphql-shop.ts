@@ -3021,7 +3021,6 @@ export type Query = {
 	facet?: Maybe<Facet>;
 	/** A list of Facets available to the shop */
 	facets: FacetList;
-	findAllRestaurants: RestaurantListing;
 	generateBraintreeClientToken?: Maybe<Scalars['String']['output']>;
 	/** Returns information about the current authenticated User */
 	me?: Maybe<CurrentUser>;
@@ -3039,12 +3038,10 @@ export type Query = {
 	 * general anonymous access to Order data.
 	 */
 	orderByCode?: Maybe<Order>;
-	ordersBySeller: Array<Order>;
 	/** Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
 	product?: Maybe<Product>;
 	/** Get a list of Products */
 	products: ProductList;
-	restaurantById?: Maybe<SellerResponse>;
 	/** Search Products based on the criteria set by the `SearchInput` */
 	search: SearchResponse;
 };
@@ -3066,10 +3063,6 @@ export type QueryFacetsArgs = {
 	options?: InputMaybe<FacetListOptions>;
 };
 
-export type QueryFindAllRestaurantsArgs = {
-	options?: InputMaybe<RestaurantListingOptions>;
-};
-
 export type QueryGenerateBraintreeClientTokenArgs = {
 	includeCustomerId?: InputMaybe<Scalars['Boolean']['input']>;
 	orderId?: InputMaybe<Scalars['ID']['input']>;
@@ -3083,10 +3076,6 @@ export type QueryOrderByCodeArgs = {
 	code: Scalars['String']['input'];
 };
 
-export type QueryOrdersBySellerArgs = {
-	sellerId: Scalars['ID']['input'];
-};
-
 export type QueryProductArgs = {
 	id?: InputMaybe<Scalars['ID']['input']>;
 	slug?: InputMaybe<Scalars['String']['input']>;
@@ -3094,10 +3083,6 @@ export type QueryProductArgs = {
 
 export type QueryProductsArgs = {
 	options?: InputMaybe<ProductListOptions>;
-};
-
-export type QueryRestaurantByIdArgs = {
-	id: Scalars['ID']['input'];
 };
 
 export type QuerySearchArgs = {
@@ -3217,18 +3202,6 @@ export type ResetPasswordResult =
 	| PasswordResetTokenExpiredError
 	| PasswordResetTokenInvalidError
 	| PasswordValidationError;
-
-export type RestaurantListing = {
-	__typename?: 'RestaurantListing';
-	items: Array<Seller>;
-	totalItems: Scalars['Int']['output'];
-};
-
-export type RestaurantListingOptions = {
-	onlyOpen?: InputMaybe<Scalars['Boolean']['input']>;
-	skip?: InputMaybe<Scalars['Int']['input']>;
-	take?: InputMaybe<Scalars['Int']['input']>;
-};
 
 export type Role = Node & {
 	__typename?: 'Role';
@@ -3353,12 +3326,6 @@ export type SellerCustomFields = {
 	consent?: Maybe<Scalars['Boolean']['output']>;
 	isOpen?: Maybe<Scalars['Boolean']['output']>;
 	isVerified?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export type SellerResponse = {
-	__typename?: 'SellerResponse';
-	channelToken: Scalars['String']['output'];
-	seller: Seller;
 };
 
 export type Seo = {

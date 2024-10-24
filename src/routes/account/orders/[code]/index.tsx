@@ -111,6 +111,7 @@ export default component$(() => {
 				<p class="text-base font-medium">{store.order?.shippingAddress?.streetLine1}</p>
 				<p class="text-base font-medium">{store.order?.shippingAddress?.city}</p>
 				<p class="text-base font-medium">{store.order?.shippingAddress?.province}</p>
+				<p class="text-base font-medium">{store.order?.shippingAddress?.postalCode}</p>
 			</div>
 		</div>
 	) : (

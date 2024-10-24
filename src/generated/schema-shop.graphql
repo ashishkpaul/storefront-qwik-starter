@@ -4364,7 +4364,6 @@ type Query {
 	A list of Facets available to the shop
 	"""
 	facets(options: FacetListOptions): FacetList!
-	findAllRestaurants(options: RestaurantListingOptions): RestaurantListing!
 	generateBraintreeClientToken(includeCustomerId: Boolean, orderId: ID): String
 
 	"""
@@ -4390,7 +4389,6 @@ type Query {
 	general anonymous access to Order data.
 	"""
 	orderByCode(code: String!): Order
-	ordersBySeller(sellerId: ID!): [Order!]!
 
 	"""
 	Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result.
@@ -4401,7 +4399,6 @@ type Query {
 	Get a list of Products
 	"""
 	products(options: ProductListOptions): ProductList!
-	restaurantById(id: ID!): SellerResponse
 
 	"""
 	Search Products based on the criteria set by the `SearchInput`
@@ -4518,17 +4515,6 @@ union ResetPasswordResult =
 	| PasswordResetTokenExpiredError
 	| PasswordResetTokenInvalidError
 	| PasswordValidationError
-
-type RestaurantListing {
-	items: [Seller!]!
-	totalItems: Int!
-}
-
-input RestaurantListingOptions {
-	onlyOpen: Boolean
-	skip: Int
-	take: Int
-}
 
 type Role implements Node {
 	channels: [Channel!]!
@@ -4651,11 +4637,6 @@ type SellerCustomFields {
 	consent: Boolean
 	isOpen: Boolean
 	isVerified: Boolean
-}
-
-type SellerResponse {
-	channelToken: String!
-	seller: Seller!
 }
 
 type Seo {
